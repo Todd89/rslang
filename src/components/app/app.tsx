@@ -1,7 +1,7 @@
 
 function App() {
   return (
-    <>RS Lang</>
+    <p>RS Lang</p>
   );
 }
 
