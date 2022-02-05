@@ -1,4 +1,4 @@
-import { teamMembers } from "../../const/const";
+import { teamMembers } from "../../../const/const";
 
 const OurTeam: React.FC = () => {
   return (
