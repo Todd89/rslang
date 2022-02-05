@@ -1,5 +1,5 @@
 import GameBlock from '../sprint-game-block/sprint-game-block';
-import './sprint-main-block.css'
+import './sprint-main-block.css';
 
 const MainBlock: React.FC = () => {
   

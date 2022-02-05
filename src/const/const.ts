@@ -4,3 +4,15 @@ export const enum AppRoute {
   SPRINT = "/sprint",
   TEXTBOOK = "/textbook",
 }
+
+export const enum Methods {
+  PUT = "PUT",
+  GET = "GET",
+  POST = "POST",
+  DELETE = "DELETE",
+}
+
+export const enum Url {
+  DOMEN = "https://react-app-learnwords.herokuapp.com",
+}
+
