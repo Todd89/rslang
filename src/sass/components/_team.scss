@@ -1,0 +1,145 @@
+.team {
+  display: flex;
+  margin-bottom: 40px;
+}
+
+.team__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.team__title {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 55px;
+  padding-top: 60px;
+
+  text-align: center;
+
+  @media (min-width: $tablet-width) {
+    font-size: 44px;
+  }
+}
+
+.team__list {
+  position: relative;
+  display: grid;
+  grid-row-gap: 25px;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: $tablet-width) {
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.team__item {
+  display: flex;
+  
+  &:last-child {
+    @media (min-width: $tablet-width) {
+      position: relative;
+      transform: translateX(50%);
+    }
+
+    @media (min-width: 1200px) {
+      position: static;
+      transform: none;
+    }
+  }
+}
+
+.team__card {
+  display: flex;
+  flex-direction: column;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  padding-top: 35px;
+  padding-bottom: 42px;
+  padding-left: 28px;
+  padding-right: 28px;
+
+  box-sizing: border-box;
+  max-width: 360px;
+
+  background-color: $basic-white;
+  box-shadow: 
+      0 14px 28px rgb(196 172 40 / 10%),
+      0 10px 10px rgb(0 0 0 / 10%);
+
+  border-radius: 24px;
+
+  @media (min-width: 1200px) {
+    .team__item:nth-child(1) & {
+      margin-right: 0;
+    }
+
+    .team__item:nth-child(3) & {
+      margin-left: 0;
+    }
+  }
+}
+
+.team__name {
+  margin: 0;
+  margin-bottom: 5px;
+
+  font-family: $title-font;
+  font-size: 26px;
+  font-weight: 500;
+
+  @media (min-width: 1200px) {
+    font-size: 32px;
+    margin-bottom: 9px;
+  }
+}
+
+.team__role {
+  margin-bottom: 15px;
+  font-size: 21px;
+  color: $dark;
+
+  @media (min-width: 1200px) {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+}
+
+.team__avatar {
+  margin-bottom: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  
+  width: 80%;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+
+.team__work {
+  margin: 0;
+  margin-bottom: 15px;
+  font-family: $main-font;
+  font-size: 18px;
+  line-height: 24px;
+  color: $dark;
+}
+
+.team__gh-icon {
+  fill: black;
+  
+  &:hover,
+  &:focus {
+    fill: $green;
+  }
+}
