@@ -94,10 +94,10 @@ const MainFeature = () => {
               <h3 className="feature__item-title">Спринт</h3>
               <div className="feature__card-wrapper">
                 <img 
-                  className="feature__image feature__image--audio"
+                  className="feature__image"
                   width="450" 
                   height="450" 
-                  src="assets/images/listening-girl.png" 
+                  src="assets/images/girl-writes.png" 
                   alt="Девушка в наушниках" 
                 />
                 <p className="feature__item-text">
