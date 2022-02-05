@@ -14,7 +14,7 @@ const Header: React.FC = () => {
         <nav className={isOpenNav ? "header__nav nav nav--open" : "header__nav nav" }>
             <ul className="nav__list">
                 <li className="nav__item">
-                  <Link to={AppRoute.ROOT} className="nav__link nav__link--active">
+                  <Link to={AppRoute.TEXTBOOK} className="nav__link nav__link--active">
                     Учебник
                   </Link>
                 </li>
