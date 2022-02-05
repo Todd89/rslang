@@ -5,7 +5,13 @@ const Stats:React.FC = () => {
   return (
     <>
       <Header />
-      <h1>Stats</h1>
+      
+      <main className="stats">
+        <div className="stats__wrapper container">
+          <h1>Stats</h1>
+        </div>
+      </main>
+
       <Footer />
     </>
   );
