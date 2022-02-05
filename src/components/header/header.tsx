@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { AppRoute } from '../../const/const';
 
 const Header: React.FC = () => {
+  const [isOpenNav, setIsOpenNav] = useState(false)
 
   return (
     <header className="header">
@@ -9,7 +11,7 @@ const Header: React.FC = () => {
         <Link className="header__logo" to={AppRoute.ROOT}>
           RS Lang
         </Link>
-        <nav className="header__nav nav">
+        <nav className={isOpenNav ? "header__nav nav nav--open" : "header__nav nav" }>
             <ul className="nav__list">
                 <li className="nav__item">
                   <Link to={AppRoute.ROOT} className="nav__link nav__link--active">
@@ -34,7 +36,16 @@ const Header: React.FC = () => {
                 </li>
             </ul>
         </nav>
-        <button className="header__login">login</button>
+
+        <button 
+            className="menu-toggle" 
+            type="button"
+            onClick={() => {setIsOpenNav((prev) => !prev)}}
+        >
+          <span className="visually-hidden">Toggle button</span>
+        </button>
+
+        <button className="btn header__login">Войти</button>
       </div>
     </header>
   );

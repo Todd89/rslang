@@ -1,0 +1,58 @@
+.btn {
+  width: auto;
+  margin-right: auto;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  padding-left: 25px;
+  padding-right: 25px;
+
+
+  color: #fff;
+  border-radius: 12px;
+
+  font-family: $title-font;
+  font-weight: 400;
+  background: transparent;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+    7px 7px 20px 0px rgba(0, 0, 0, .1),
+    4px 4px 5px 0px rgba(0, 0, 0, .1);
+  outline: none;
+
+  background: $violet;
+  border: none;
+  z-index: 1;
+}
+
+.btn:after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 100%;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  background-color: $orange;
+  border-radius: 12px;
+  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+    7px 7px 20px 0px rgba(0, 0, 0, .1),
+    4px 4px 5px 0px rgba(0, 0, 0, .1);
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  color: #fff;
+}
+
+.btn:hover:after {
+  left: 0;
+  width: 100%;
+}
+
+.btn:active {
+  top: 2px;
+}
