@@ -20,6 +20,17 @@ class HTTPClient {
     return data;
   }
 
+  async getChunkOfWords(pageNum: string, groupNum: string) {
+    const data = await fetch(`https://react-app-learnwords.herokuapp.com/words/?page=${pageNum}&group=${groupNum}`)
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
+  }
+
   async getWord(id: string) {
     const data = await fetch(
       `https://react-app-learnwords.herokuapp.com/words/${id}`
