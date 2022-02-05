@@ -1,4 +1,4 @@
-import './game-block.css';
+import './sprint-game-block.css';
 
 const GameBlock: React.FC = () => {
   return (  

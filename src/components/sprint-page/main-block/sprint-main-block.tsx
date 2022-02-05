@@ -1,6 +1,5 @@
-import GameBlock from '../game-block/game-block';
-import httpClient  from '../../../services/http-client';
-import './main-block.css'
+import GameBlock from '../sprint-game-block/sprint-game-block';
+import './sprint-main-block.css'
 
 const MainBlock: React.FC = () => {
   
@@ -9,7 +8,7 @@ const MainBlock: React.FC = () => {
         <div className='sprint-container container'>
         <div>
           <img
-            src='/assets/images/png/sprint_girl.png' alt="girl"
+            src='/assets/images/png/sprint_girl.png' alt="девочка"
           />
         </div>
         <GameBlock />
