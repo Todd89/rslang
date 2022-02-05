@@ -3,6 +3,7 @@ export const enum AppRoute {
   AUDIO_CHALLENGE = "/audio-challenge",
   SPRINT = "/sprint",
   TEXTBOOK = "/textbook",
+  STATS = "/stats",
 }
 
 export const teamMembers = [
