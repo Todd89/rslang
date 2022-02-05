@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="footer__container container">
         <a href="">logo</a>
         <nav className="header__nav nav container">
-            <ul className="nav__list">
+            <ul className="nav__list nav__list--footer">
                 <li className="nav__item">
                   <a className="nav__link nav__link--active">Учебник</a>
                 </li>
