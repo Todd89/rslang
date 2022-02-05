@@ -8,7 +8,7 @@ const Header: React.FC = () => {
   return (
     <header className="header">
       <div className="header__wrapper container">
-        <Link className="header__logo" to={AppRoute.ROOT}>
+        <Link className="header__logo logo" to={AppRoute.ROOT}>
           RS Lang
         </Link>
         <nav className={isOpenNav ? "header__nav nav nav--open" : "header__nav nav" }>
@@ -30,7 +30,7 @@ const Header: React.FC = () => {
                 </li>
                 
                 <li className="nav__item">
-                  <Link to={AppRoute.ROOT} className="nav__link">
+                  <Link to={AppRoute.STATS} className="nav__link">
                     Статистика
                   </Link>
                 </li>
