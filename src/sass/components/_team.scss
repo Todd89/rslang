@@ -1,6 +1,10 @@
 .team {
   display: flex;
   margin-bottom: 40px;
+
+  @media (min-width: $tablet-width) {
+    margin-bottom: 70px;
+  }
 }
 
 .team__wrapper {

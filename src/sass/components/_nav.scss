@@ -1,5 +1,12 @@
 .nav {
   position: relative;
+  display: flex;
+
+  @media (min-width: $tablet-width) {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+  }
 }
 
 .nav__list {
@@ -45,15 +52,27 @@
     box-sizing: border-box;
     width: 100%;
   }
-
-  @media (min-width: $desktop-width) {}
 }
 
 .nav__list--footer {
+  display: flex;
   position: static;
   top: auto;
-  display: flex;
   flex-direction: column;
+  transition: all 0.3s;
+
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media (min-width: $tablet-width) {
+    flex-direction: row;
+  }
+
+  .nav__link:hover {
+    color: $dark;
+  }
+
 }
 
 .nav__item {
@@ -93,5 +112,9 @@
 
   &:hover {
     color: $dark;
+  }
+
+  .nav--footer & {
+    color: $basic-white;
   }
 }

@@ -32,7 +32,7 @@
     background-image: linear-gradient(#ecd1b1 0%, orange 100%);
     
     @media (min-width: $tablet-width) {
-      background-image: linear-gradient(#ecd1b1 0%, orange 100%);
+      background-image: linear-gradient(#ebecb1 0%, orange 100%);
       top: 210px;
       left: 6vw;
       width: 90vw;
@@ -41,7 +41,7 @@
     }
     
     @media (min-width: $desktop-width) {
-      top: 280px;
+      top: 240px;
       width: 70vw;
       left: 15vw;
     }
