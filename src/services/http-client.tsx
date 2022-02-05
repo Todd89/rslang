@@ -6,11 +6,13 @@ import {
   UserWord,
 } from "../interface/interface";
 
+import {Url, Methods} from '../const/const'
+
 class HTTPClient {
   // Words
 
   async getWords() {
-    const data = await fetch("https://react-app-learnwords.herokuapp.com/words")
+    const data = await fetch(`${Url.DOMEN}/words"`)
       .then((response) => {
         return response.json();
       })
@@ -21,7 +23,7 @@ class HTTPClient {
   }
 
   async getChunkOfWords(pageNum: string, groupNum: string) {
-    const data = await fetch(`https://react-app-learnwords.herokuapp.com/words/?page=${pageNum}&group=${groupNum}`)
+    const data = await fetch(`${Url.DOMEN}/words/?page=${pageNum}&group=${groupNum}`)
       .then((response) => {
         return response.json();
       })
@@ -33,7 +35,7 @@ class HTTPClient {
 
   async getWord(id: string) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/words/${id}`
+      `${Url.DOMEN}/words/${id}`
     )
       .then((response) => {
         return response.json();
@@ -48,9 +50,9 @@ class HTTPClient {
 
   async createUser(user: User) {
     const data = await fetch(
-      "https://react-app-learnwords.herokuapp.com/users",
+      `${Url.DOMEN}/users`,
       {
-        method: "POST",
+        method: `${Methods.POST}`,
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -69,9 +71,9 @@ class HTTPClient {
 
   async getUser({ userId, token }: UserData) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}`,
+      `${Url.DOMEN}/users/${userId}`,
       {
-        method: "GET",
+        method: `${Methods.GET}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -90,9 +92,9 @@ class HTTPClient {
 
   async deleteUser({ userId, token }: UserData) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}`,
+      `${Url.DOMEN}/users/${userId}`,
       {
-        method: "DELETE",
+        method:`${Methods.DELETE}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -111,9 +113,9 @@ class HTTPClient {
 
   async getNewUserToken({ userId, token }: UserData) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/tokens`,
+      `${Url.DOMEN}/users/${userId}/tokens`,
       {
-        method: "GET",
+        method: `${Methods.GET}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -134,9 +136,9 @@ class HTTPClient {
 
   async getAllUserWords({ userId, token }: UserData) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/words`,
+      `${Url.DOMEN}/users/${userId}/words`,
       {
-        method: "GET",
+        method: `${Methods.GET}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -155,9 +157,9 @@ class HTTPClient {
 
   async createUserWord({ userId, wordId, word, token }: UserWord) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
-        method: "POST",
+        method: `${Methods.POST}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -176,9 +178,9 @@ class HTTPClient {
 
   async getUserWord({ userId, wordId, token }: UserWord) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
-        method: "GET",
+        method: `${Methods.GET}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -195,9 +197,9 @@ class HTTPClient {
 
   async updateUserWord({ userId, wordId, token, word }: UserWord) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
-        method: "PUT",
+        method: `${Methods.PUT}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -216,9 +218,9 @@ class HTTPClient {
 
   async deleteUserWord({ userId, wordId, token }: UserWord) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
-        method: "DELETE",
+        method: `${Methods.DELETE}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -237,9 +239,9 @@ class HTTPClient {
 
   async getUserStatistic({ userId, token }: UserData) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/statistics`,
+      `${Url.DOMEN}/users/${userId}/statistics`,
       {
-        method: "GET",
+        method: `${Methods.GET}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -256,9 +258,9 @@ class HTTPClient {
 
   async putUserStatistic({ userId, token }: UserData, statistic: Statistic) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/statistics`,
+      `${Url.DOMEN}/users/${userId}/statistics`,
       {
-        method: "PUT",
+        method: `${Methods.PUT}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -278,9 +280,9 @@ class HTTPClient {
 
   async getUserSettings({ userId, token }: UserData) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/statistics`,
+      `${Url.DOMEN}/users/${userId}/statistics`,
       {
-        method: "GET",
+        method: `${Methods.GET}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -297,9 +299,9 @@ class HTTPClient {
 
   async putUserSettings({ userId, token }: UserData, statistic: Settings) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/users/${userId}/statistics`,
+      `${Url.DOMEN}/users/${userId}/statistics`,
       {
-        method: "PUT",
+        method: `${Methods.PUT}`,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -319,9 +321,9 @@ class HTTPClient {
 
   async signIn(user: User) {
     const data = await fetch(
-      `https://react-app-learnwords.herokuapp.com/signin`,
+      `${Url.DOMEN}/signin`,
       {
-        method: "POST",
+        method: `${Methods.POST}`,
         headers: {
           "content-type": "application/json",
         },
