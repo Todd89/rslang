@@ -1,17 +1,16 @@
 import Header from "../header/header";
+import MainBlock from './main-block/sprint-main-block';
+
+import "./sprint-page.css";
+
 
 const SprintPage: React.FC = () => {
   return (
     <>
       <Header />
-
-      <main>
-        <div className="container">
-          <h1>Sprint</h1>
-        </div>
-      </main>
+      <MainBlock />
     </>
   );
-}
+};
 
 export default SprintPage;
