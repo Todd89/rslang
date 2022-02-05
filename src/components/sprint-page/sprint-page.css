@@ -1,0 +1,7 @@
+
+.main-sprint-block {
+  flex-grow: 1;
+  height: 85vh;
+  background: linear-gradient(180deg, rgba(60,183,126,0.896796218487395) 40%, rgba(255,255,255,1) 100%);
+}
+

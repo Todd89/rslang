@@ -6,6 +6,17 @@ export const enum AppRoute {
   STATS = "/stats",
 }
 
+export const enum Methods {
+  PUT = "PUT",
+  GET = "GET",
+  POST = "POST",
+  DELETE = "DELETE",
+}
+
+export const enum Url {
+  DOMEN = "https://react-app-learnwords.herokuapp.com",
+}
+
 export const teamMembers = [
   {
     id: 1,
