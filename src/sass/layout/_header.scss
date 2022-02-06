@@ -1,8 +1,12 @@
 .header {
   display: flex;
-  margin-bottom: 10px;
   padding-top: 15px;
   padding-bottom: 15px;
+  
+  @media (min-width: $tablet-width) {
+    margin-bottom: 10px;
+  }
+  
 }
 
 .header__wrapper {
@@ -11,69 +15,36 @@
   box-sizing: border-box;
 }
 
-.header__logo {
-  display: flex;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  padding-left: 15px;
-  padding-right: 15px;
-
-  font-family: $main-font;
-  font-size: 27px;
-  font-weight: 500;
-  min-width: 100px;
-} 
-
-.header__nav {
-  display: flex;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .header__login {
-  display: flex;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  padding-left: 15px;
-  padding-right: 15px;
-
-  font-family: $main-font;
-  font-size: 27px;
-  font-weight: 500;
-  min-width: 100px;
-}
-
-.nav__list {
-  display: flex;
-  justify-content: space-around;
-  flex-direction: row;
-
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.nav__item {
-  margin-right: 15px;
-}
-
-
-.nav__link {
   display: block;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  padding-left: 15px;
-  padding-right: 15px;
+  margin: 0;
+  margin-left: auto;
+  margin-right: 30px;
 
-  font-size: 24px;
-  font-family: $main-font;
-  line-height: 28px;
+  padding: 0;
+  padding: 2px;
 
-  border-radius: 4px;
+  order: -2;
 
-  box-sizing: border-box;
-
+  background-color: transparent;
+  border: 2px solid $green;
   color: $green;
+
+  border-radius: 12px;
+  
+  font-family: $main-font;
+  font-size: 21px;
+  font-weight: 400;
+  min-width: 100px;
+  
+  @media (min-width: $tablet-width) {
+    order: 1;
+    display: flex;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  @media (min-width: $desktop-width) {}
 }

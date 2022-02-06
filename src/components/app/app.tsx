@@ -4,6 +4,7 @@ import MainPage from '../main-page/main-page';
 import AudioChallenge from '../audio-page/audio-page';
 import SprintPage from '../sprint-page/sprint-page';
 import TextBook from '../text-book/text-book';
+import Stats from '../stats/stats';
 
 function App() {
   return (
@@ -24,7 +25,10 @@ function App() {
         <Route exact path={AppRoute.SPRINT}>
           <SprintPage />
         </Route>
-        
+
+        <Route exact path={AppRoute.STATS}>
+          <Stats />
+        </Route>
       </Switch>
     </BrowserRouter>
   );

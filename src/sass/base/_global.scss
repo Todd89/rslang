@@ -1,23 +1,34 @@
 body {
   display: flex;
+  min-height: 100vh;
 
   position: relative;
   margin: 0;
   padding: 0;
 
   width: 100%;
+  min-width: 320px;
 
   box-sizing: border-box;
 
   background-color: $background-color;
 
   background: $background-color;
-  font-family: $main-font;
+  font-family: $title-font;
   font-style: normal;
   font-weight: 400;
   font-size: 24px;
   line-height: 28px;
   color: $green;
+}
+
+// sticky footer
+main {
+  flex: 1;
+}
+
+footer {
+  flex-shrink: 0;
 }
 
 #root {
