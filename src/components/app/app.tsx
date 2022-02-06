@@ -9,19 +9,19 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path={AppRoute.ROOT}>
+        <Route exact path={AppRoute.ROOT}>
           <MainPage />
         </Route>
 
-        <Route path={AppRoute.TEXTBOOK}>
+        <Route exact path={AppRoute.TEXTBOOK}>
           <TextBook />
         </Route>
 
-        <Route path={AppRoute.AUDIO_CHALLENGE}>
+        <Route exact path={AppRoute.AUDIO_CHALLENGE}>
           <AudioPage />
         </Route>
 
-        <Route path={AppRoute.SPRINT}>
+        <Route exact path={AppRoute.SPRINT}>
           <SprintPage />
         </Route>
       </Switch>

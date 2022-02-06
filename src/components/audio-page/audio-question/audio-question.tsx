@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
+import "./audio-question.css";
 
 import {
   AUDIO_PATH_DATA_AUDIO,

@@ -1,18 +1,22 @@
 import { useState } from "react";
 import ReactDOM from "react-dom";
 import "./audiochallenge.css";
+import Header from "../../header/header";
 
 import {
   AUDIO_ANSWER_TIME,
   AUDIO_LIVES_AMOUNT,
   AUDIO_EMPTY_WORD,
 } from "../../../const/const-audio";
-import { IAudioQuestion, IWord, IAudioResult } from "../../../interface/interface-audio";
+import {
+  IAudioQuestion,
+  IWord,
+  IAudioResult,
+} from "../../../interface/interface-audio";
 import { Question } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
 import { AudioLives } from "../audio-lives/audio-lives";
 import { createArrayOfQuestions } from "../audio-utils/audio-utils";
-
 
 interface IProps {
   arrQuestions: Array<IAudioQuestion>;
@@ -23,12 +27,11 @@ export function game() {
   console.log(arrQuestions);
   ReactDOM.render(
     <Audiochallenge key={Math.random()} arrQuestions={arrQuestions} />,
-    document.getElementById("main")
+    document.getElementById("root")
   );
 }
 
 function Audiochallenge(props: IProps) {
-  console.log("Audiochallenge");
   const { arrQuestions } = props;
 
   const [showResult, setShowResult] = useState(false);
@@ -109,34 +112,38 @@ function Audiochallenge(props: IProps) {
   }
 
   return (
-    <div className="game__section">
-      <div className="game__wrapper vertical">
-        <h2>Audiochallenge</h2>
-        {showResult ? (
-          <div className="game__wrapper horizontal">
-            <div className="game__finish-image"></div>
+    <>
+      <main>
+        <div className="container">
+          <h1>Audio Challenge</h1>
+          <div className="game__section">
             <div className="game__wrapper vertical">
-              <button className="btn btn-repeate" onClick={() => game()}>
-                Повторить игру
-              </button>
-              <Result gameResult={gameResult} />
-            </div>
-          </div>
-        ) : (
-          <div className="game__wrapper horizontal">
-            <div className="game__left-image"></div>
-            <div className="game__wrapper vertical">
-              <AudioLives amount={lives} />
+              {showResult ? (
+                <div className="game__wrapper horizontal">
+                  <div className="game__finish-image"></div>
+                  <div className="game__wrapper vertical">
+                    <button className="btn btn-repeate" onClick={() => game()}>
+                      Повторить игру
+                    </button>
+                    <Result gameResult={gameResult} />
+                  </div>
+                </div>
+              ) : (
+                <div className="game__wrapper horizontal">
+                  <div className="game__left-image"></div>
+                  <div className="game__wrapper vertical">
+                    <AudioLives amount={lives} />
 
-              <div className="game__container">
-                <Question {...paramQuestion} />
-              </div>
+                    <div className="game__container">
+                      <Question {...paramQuestion} />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </main>
+    </>
   );
 }
-
-

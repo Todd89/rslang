@@ -16,7 +16,7 @@ function AudioPage() {
             <div className="game__levels-image"></div>
             <div className="game__rules-section game__wrapper vertical">
               <h2>Правила игры</h2>
-              <span className="game_rules-text">{AUDIO_RULES}</span>
+              <p className="game_rules-text">{AUDIO_RULES}</p>
               <div className="game__leves">
                 {arrLevels.map((item) => {
                   return <AudioLevel id={item} key={item} />;

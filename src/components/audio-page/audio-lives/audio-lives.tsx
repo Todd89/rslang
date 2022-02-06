@@ -1,4 +1,4 @@
-import {AUDIO_LIVES_AMOUNT} from "../../../const/const-audio";
+import { AUDIO_LIVES_AMOUNT } from "../../../const/const-audio";
 import "./audio-lives.css";
 
 interface IPropsLives {
@@ -14,11 +14,11 @@ export function AudioLives(props: IPropsLives) {
 
   return (
     <div className="game__lives">
-      {arrLives.map((item) => {
+      {arrLives.map((item, index) => {
         return item ? (
-          <div className="game__life"></div>
+          <div key={index} className="game__life life-left"></div>
         ) : (
-          <div className="game__life-lost"></div>
+          <div className="game__life life-lost"></div>
         );
       })}
     </div>

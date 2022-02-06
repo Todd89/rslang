@@ -1,3 +1,13 @@
+:root {
+  --basic-white: #ffffff;
+  --basic-black: #000000;
+  --light-mint: #effcf5;
+  --mint-color: #e2faed;
+  --orange: #ffba43;
+  --green: #3cb77e;
+  --dark: #635f5f;
+  --violet: #b621fe;
+}
 .game__section {
   margin: 0 auto;
   display: flex;
@@ -6,6 +16,7 @@
 
 .game__wrapper {
   display: flex;
+  align-items: center;
 }
 
 .vertical {
@@ -27,7 +38,7 @@
 
 .btn-repeate {
   align-self: flex-start;
-  margin: 1rem;
+  margin: 10px;
 }
 
 .game__left-image {
@@ -43,9 +54,9 @@
   flex-direction: column;
   width: 60vw;
   height: 20vh;
-  margin: 20rem 0;
-  padding: 2rem;
-  background-color: var(--color-contrast);
-  border: 0.2rem solid var(--color-border);
-  border-radius: 2rem;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: var(--basic-white);
+  border: 2px solid var(--violet);
+  border-radius: 20px;
 }
