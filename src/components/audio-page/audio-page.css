@@ -1,0 +1,63 @@
+.game__wrapper {
+  display: flex;
+}
+
+.vertical {
+  flex-direction: column;
+  align-items: center;
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.game__levels-image {
+  height: 70vh;
+  width: 60vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("/public/assets/images/girl-sitting-with-headphones.png");
+}
+
+.game__rules-section {
+  width: 60vw;
+  height: 60vh;
+  border: 3px solid var(--color-border);
+  border-radius: 10px;
+  background-color: var(--color-rules);
+}
+
+.game_rules-text {
+  padding: 20px;
+  color: var(--color-contrast);
+  border-bottom: 0.3rem solid var(--color-border);
+  font-size: 30px;
+}
+
+.game__leves {
+  display: flex;
+  margin: 30px;
+  padding: 30px;
+
+  column-gap: 10px;
+}
+
+.btn__level {
+  width: 40px;
+  height: 40px;
+}
+
+.game__section {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.game__left-image {
+  height: 70vh;
+  width: 35vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/public/assets/images/girl-thinking.png");
+}
