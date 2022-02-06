@@ -1,9 +1,9 @@
 import './sprint-game-block.css';
-import { IWordInArray } from '../../../interface/interface';
+import { IGameBlockProps } from '../../../interface/interface';
 
 
 
-const GameBlock: React.FC< IWordInArray & any> = ({word, changeWordCount}) => {
+const GameBlock: React.FC<IGameBlockProps> = ({word, changeWordCount}) => {
     
   return (
       <div>

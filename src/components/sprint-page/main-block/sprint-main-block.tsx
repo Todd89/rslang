@@ -60,7 +60,7 @@ const MainBlock: React.FC = () => {
     return (
       <main className='main-sprint-block'>
         <div className='sprint-container container'>
-          <GameBlock word={word} changeWordCount={changeWordCount}/>
+          <GameBlock word={word as IWordInArray} changeWordCount={changeWordCount}/>
         </div>
       </main>
     );

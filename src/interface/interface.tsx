@@ -61,3 +61,8 @@ export interface IWordInArray {
 export interface IWordsOfArrays {
   words:IWordInArray[][]
 }
+
+export interface IGameBlockProps {
+  word: IWordInArray,
+  changeWordCount: () => void,
+}
