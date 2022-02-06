@@ -16,3 +16,9 @@ export const enum Url {
   DOMEN = "https://react-app-learnwords.herokuapp.com",
 }
 
+export const enum SprintNums {
+  PAGE_COUNT = 30,
+}
+
+export const BUTTONS_NUMS = [1, 2, 3, 4, 5, 6];
+

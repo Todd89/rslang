@@ -3,7 +3,6 @@ import MainBlock from './main-block/sprint-main-block';
 
 import "./sprint-page.css";
 
-
 const SprintPage: React.FC = () => {
   return (
     <>

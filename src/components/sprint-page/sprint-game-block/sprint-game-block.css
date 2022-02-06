@@ -1,5 +1,5 @@
 .game-sprint-block {
-  background-color:  rgba(255, 186, 67, .5);
+  background-color:  rgba(255, 186, 67, .2);
   position: absolute;
   margin-left: 29vw;
   margin-top: 5vh;
@@ -31,4 +31,9 @@
   border: none;
   background-color: #ffba43;
   border-radius: 10px;
+}
+
+.girl-image{
+  position: absolute;
+  z-index: 0;
 }
