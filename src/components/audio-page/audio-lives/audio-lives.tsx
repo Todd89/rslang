@@ -1,12 +1,15 @@
+import {AUDIO_LIVES_AMOUNT} from "../../../const/const-audio";
+import "./audio-lives.css";
+
 interface IPropsLives {
   amount: number;
 }
 
-function LivesLeft(props: IPropsLives) {
+export function AudioLives(props: IPropsLives) {
   const { amount } = props;
   const arrLives = [
     ...Array(amount).fill(true),
-    ...Array(LIVES_AMOUNT - amount).fill(false),
+    ...Array(AUDIO_LIVES_AMOUNT - amount).fill(false),
   ];
 
   return (

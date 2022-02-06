@@ -8,9 +8,10 @@ export const AUDIO_MAX_QUESTION_AMOUNT = 3;
 export const AUDIO_ANSWER_AMOUNT = 4;
 export const AUDIO_LIVES_AMOUNT = 2;
 export const AUDIO_ANSWER_TIME = 6000;
-export const AUDIO_PATH_DATA_AUDIO = "/assets/";//убрать
+export const AUDIO_PATH_DATA_AUDIO = "/assets/"; //убрать
 export const AUDIO_PATH_UTILS_AUDIO = "/assets/sound/";
 export const AUDIO_PATH_IMAGES = "/assets/";
+//export const AUDIO_ASSETS = "../../../../public/assets/";
 export const AUDIO_EMPTY_WORD: IWord = {
   id: "-1",
   group: -1,

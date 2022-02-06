@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ReactDOM from "react-dom";
+import "./audiochallenge.css";
 
 import {
-  ANSWER_TIME,
-  LIVES_AMOUNT,
-  EMPTY_WORD,
-} from "./constants-audiochallenge";
-import { IQuestion, IWord, IResult } from "./project-interfaces";
-import { Question } from "./question";
-import { Result } from "./result";
-import { createArrayOfQuestions } from "./utils";
+  AUDIO_ANSWER_TIME,
+  AUDIO_LIVES_AMOUNT,
+  AUDIO_EMPTY_WORD,
+} from "../../../const/const-audio";
+import { IAudioQuestion, IWord, IAudioResult } from "../../../interface/interface-audio";
+import { Question } from "../audio-question/audio-question";
+import { Result } from "../audio-result/audio-result";
+import { AudioLives } from "../audio-lives/audio-lives";
+import { createArrayOfQuestions } from "../audio-utils/audio-utils";
+
 
 interface IProps {
-  arrQuestions: Array<IQuestion>;
+  arrQuestions: Array<IAudioQuestion>;
 }
 
 export function game() {
@@ -20,7 +23,7 @@ export function game() {
   console.log(arrQuestions);
   ReactDOM.render(
     <Audiochallenge key={Math.random()} arrQuestions={arrQuestions} />,
-    document.getElementById("root")
+    document.getElementById("main")
   );
 }
 
@@ -38,9 +41,9 @@ function Audiochallenge(props: IProps) {
   const [questionsAnswered, setQuestionsAnswered] = useState(
     Array(arrQuestions.length).fill(false)
   );
-  const [lives, setLives] = useState(LIVES_AMOUNT);
+  const [lives, setLives] = useState(AUDIO_LIVES_AMOUNT);
 
-  const initialStateResult: Array<IResult> = [];
+  const initialStateResult: Array<IAudioResult> = [];
   const [gameResult, setGameResult] = useState(initialStateResult);
 
   const questionsAmount = arrQuestions.length;
@@ -60,11 +63,11 @@ function Audiochallenge(props: IProps) {
     timerId = setTimeout(() => {
       answerNorReceived();
       clearTimeout(timerId);
-    }, ANSWER_TIME);
+    }, AUDIO_ANSWER_TIME);
   }
 
   function answerNorReceived(): void {
-    afterAnswer(EMPTY_WORD, paramQuestion.questionWord);
+    afterAnswer(AUDIO_EMPTY_WORD, paramQuestion.questionWord);
   }
 
   function afterAnswer(answer: IWord, correctAnswer: IWord): void {
@@ -123,7 +126,7 @@ function Audiochallenge(props: IProps) {
           <div className="game__wrapper horizontal">
             <div className="game__left-image"></div>
             <div className="game__wrapper vertical">
-              <LivesLeft amount={lives} />
+              <AudioLives amount={lives} />
 
               <div className="game__container">
                 <Question {...paramQuestion} />

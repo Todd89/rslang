@@ -1,0 +1,50 @@
+.result__section {
+  width: 60vw;
+  padding: 1rem;
+  background-color: var(--color-contrast);
+  border: 0.2rem solid var(--color-border);
+  border-radius: 2rem;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  font-size: 20px;
+  color: var(--color-black);
+}
+
+.result__line {
+  display: flex;
+  align-items: center;
+}
+
+.result__icon {
+  width: 3rem;
+  height: 3rem;
+  background-color: transparent;
+  border: none;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.result__audio {
+  margin: 1.5rem;
+  background-color: transparent;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("/public/assets/icons/sound-result.svg");
+}
+
+.result__word {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-result);
+  margin-right: 1rem;
+}
+
+.result__translation {
+  font-size: 2.5rem;
+}

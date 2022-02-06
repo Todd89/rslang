@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { IWord, IResult } from "./project-interfaces";
-import { PATH_DATA_AUDIO } from "./constants-audiochallenge";
+
+import { IWord, IAudioResult } from "../../../interface/interface-audio";
+import { AUDIO_PATH_DATA_AUDIO } from "../../../const/const-audio";
+import "./audio-result.css";
 
 interface IProps {
-  gameResult: Array<IResult>;
+  gameResult: Array<IAudioResult>;
 }
 
 export function Result(props: IProps) {
@@ -14,7 +16,7 @@ export function Result(props: IProps) {
   audio.volume = 0.2;
 
   function playAudio(word: IWord) {
-    const path = `${PATH_DATA_AUDIO}${word.audio}`;
+    const path = `${AUDIO_PATH_DATA_AUDIO}${word.audio}`;
 
     audio.src = path;
     audio.load();

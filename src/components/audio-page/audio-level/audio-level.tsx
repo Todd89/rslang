@@ -1,9 +1,9 @@
-import {AUDIO_CURRENT_GAME_PARAMETERS} from "../../../const/const-audio"
-import "./audio-page.css";
-import {game} from "../audiochallenge/audiochallenge";
+import { AUDIO_CURRENT_GAME_PARAMETERS } from "../../../const/const-audio";
+import "./audio-level.css";
+import { game } from "../audiochallenge/audiochallenge";
 
 interface IProps {
-  id: number
+  id: number;
 }
 
 export function AudioLevel(props: IProps) {

@@ -7,10 +7,9 @@ import {
   AUDIO_PATH_IMAGES,
 } from "../../../const/const-audio";
 
-import { IWord, IQuestion } from "../../../interface/interface-audio";
+import { IWord, IAudioQuestion } from "../../../interface/interface-audio";
 
-import { Answer } from "./answer";
-import { render } from "@testing-library/react";
+import { AudioAnswer } from "../audio-answer/audio-answer";
 
 interface IProps {
   questionWord: IWord;
@@ -34,7 +33,7 @@ export function Question(props: IProps) {
   audio.volume = 0.2;
 
   function playAudio(word: IWord) {
-    const path = `${PATH_DATA_AUDIO}${word.audio}`;
+    const path = `${AUDIO_PATH_DATA_AUDIO}${word.audio}`;
 
     audio.src = path;
     audio.load();
@@ -43,8 +42,8 @@ export function Question(props: IProps) {
 
   function playAudioAfterAnswer(isCorrectAnswer: boolean) {
     const path = isCorrectAnswer
-      ? `${PATH_UTILS_AUDIO}right.mp3`
-      : `${PATH_UTILS_AUDIO}wrong.mp3`;
+      ? `${AUDIO_PATH_UTILS_AUDIO}right.mp3`
+      : `${AUDIO_PATH_UTILS_AUDIO}wrong.mp3`;
 
     audio.src = path;
     audio.load();
@@ -67,7 +66,7 @@ export function Question(props: IProps) {
 
   if (answerReceived) {
     const style = {
-      backgroundImage: `url('${PATH_IMAGES}${questionWord.image}')`,
+      backgroundImage: `url('${AUDIO_PATH_IMAGES}${questionWord.image}')`,
     };
     return (
       <div className="question__section">
@@ -99,7 +98,7 @@ export function Question(props: IProps) {
               word: item,
               onClick: onClick,
             };
-            return <Answer key={item.id} {...paramAnswer} />;
+            return <AudioAnswer key={item.id} {...paramAnswer} />;
           })}
         </div>
       </div>

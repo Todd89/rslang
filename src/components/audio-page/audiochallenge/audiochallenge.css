@@ -1,0 +1,51 @@
+.game__section {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.game__wrapper {
+  display: flex;
+}
+
+.vertical {
+  flex-direction: column;
+  align-items: center;
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.game__finish-image {
+  height: 40vh;
+  width: 40vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/public/assets/images/png/sprint_girl.png");
+}
+
+.btn-repeate {
+  align-self: flex-start;
+  margin: 1rem;
+}
+
+.game__left-image {
+  height: 70vh;
+  width: 35vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/public/assets/images/png/girl-thinking.png");
+}
+
+.game__container {
+  display: flex;
+  flex-direction: column;
+  width: 60vw;
+  height: 20vh;
+  margin: 20rem 0;
+  padding: 2rem;
+  background-color: var(--color-contrast);
+  border: 0.2rem solid var(--color-border);
+  border-radius: 2rem;
+}

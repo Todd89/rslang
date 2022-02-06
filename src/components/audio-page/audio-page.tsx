@@ -3,7 +3,7 @@ import { AUDIO_RULES } from "../../const/const-audio";
 import { AudioLevel } from "./audio-level/audio-level";
 import "./audio-page.css";
 
-export function AudioPage(){
+function AudioPage() {
   const arrLevels = [1, 2, 3, 4, 5, 6];
 
   return (
@@ -19,7 +19,7 @@ export function AudioPage(){
               <span className="game_rules-text">{AUDIO_RULES}</span>
               <div className="game__leves">
                 {arrLevels.map((item) => {
-                return <AudioLevel id={item} game = {game} key={item} />;
+                  return <AudioLevel id={item} key={item} />;
                 })}
               </div>
             </div>
@@ -30,5 +30,4 @@ export function AudioPage(){
   );
 }
 
-
-
+export default AudioPage;

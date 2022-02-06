@@ -1,22 +1,22 @@
 import {
-  MAX_QUESTION_AMOUNT,
-  ANSWER_AMOUNT,
-  CURRENT_GAME_PARAMETERS,
-} from "./constants-audiochallenge";
-import { IQuestion, IWord } from "./project-interfaces";
-import { Question } from "./question";
+  AUDIO_MAX_QUESTION_AMOUNT,
+  AUDIO_ANSWER_AMOUNT,
+  AUDIO_CURRENT_GAME_PARAMETERS,
+} from "../../../const/const-audio";
+import { IAudioQuestion, IWord } from "../../../interface/interface-audio";
+import { Question } from "../audio-question/audio-question";
 import { WordsArray } from "./test-server-words";
 
-export function createArrayOfQuestions(): Array<IQuestion> {
-  const questionArray: Array<IQuestion> = [];
+export function createArrayOfQuestions(): Array<IAudioQuestion> {
+  const questionArray: Array<IAudioQuestion> = [];
   const wordsForQuestions: Array<IWord> = [];
-  const { group, page } = CURRENT_GAME_PARAMETERS;
+  const { group, page } = AUDIO_CURRENT_GAME_PARAMETERS;
 
   const arrAvailableWords = getFilteredArray(group, page);
 
   const questionAmount = Math.min(
     arrAvailableWords.length,
-    MAX_QUESTION_AMOUNT
+    AUDIO_MAX_QUESTION_AMOUNT
   );
 
   while (wordsForQuestions.length < questionAmount) {
@@ -44,7 +44,7 @@ export function createArrayOfQuestions(): Array<IQuestion> {
     const arrAnswers: Array<IWord> = [];
     arrAnswers.push(questionWord);
 
-    while (arrAnswers.length < ANSWER_AMOUNT) {
+    while (arrAnswers.length < AUDIO_ANSWER_AMOUNT) {
       const answer = getRandomWord();
       if (!arrAnswers.includes(answer)) {
         arrAnswers.push(answer);
