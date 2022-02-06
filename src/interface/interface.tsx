@@ -38,7 +38,9 @@ export interface  IChangePageState {
 export interface IChangeWords {
   changeWords: () => void;
 }
-
+export interface IChangeWordCount {
+  changeWords: () => void;
+}
 export interface IWordInArray {
   audio: string;
   audioExample: string;

@@ -1,17 +1,10 @@
-import { useEffect, useState } from 'react';
-import httpClient from '../../../services/http-client';
-import { getWordsFromGroup, randomNum, makeTreeRandomPage, shuffle, makeWordsForWork } from '../sprint-methods/sprint-methods'
 import './sprint-game-block.css';
-import { IWordInArray, IWordsOfArrays } from '../../../interface/interface'
-
-const GameBlock: React.FC<IWordsOfArrays & any> = ({words, changeWordsCount}) => {
+import { IWordInArray } from '../../../interface/interface';
 
 
-  
-  const WORDS_FOR_WORK = makeWordsForWork(words);
 
-  console.log(WORDS_FOR_WORK);
-
+const GameBlock: React.FC< IWordInArray & any> = ({word, changeWordCount}) => {
+    
   return (
       <div>
         <div className='girl-image'>
@@ -21,12 +14,24 @@ const GameBlock: React.FC<IWordsOfArrays & any> = ({words, changeWordsCount}) =>
         </div>  
         <div className='game-sprint-block'>
           <div className='game-sprint-block__top-lights'></div>
-          <div className='game-sprint-block__quastion'></div>
+          <div className='game-sprint-block__quastion'>
+            <div className='game-sprint-block__english-word'>{word.word.toUpperCase()}</div>
+            <div className='game-sprint-block__russian-word'>{word.wordTranslate.toUpperCase()}</div>
+          </div>
           <div className='game-sprint-block__buttons-block'>
             <button className='game-sprint-block__button game-sprint-block__button_wrong'
-            onClick={() => changeWordsCount()}
+            onClick={(e) => {
+              e.stopPropagation()
+              console.log('click')
+              changeWordCount()
+            }
+            }
             >Неверно</button>
-            <button className='game-sprint-block__button game-sprint-block__button_right'>Правильно</button>
+            <button className='game-sprint-block__button game-sprint-block__button_right'
+            onClick={() => {
+              changeWordCount()
+            }}
+            >Правильно</button>
           </div>
         </div>
       </div>

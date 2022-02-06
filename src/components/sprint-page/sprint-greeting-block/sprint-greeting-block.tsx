@@ -1,10 +1,9 @@
 import "./sprint-greeting-block.css";
-import { IChangePageState, IChangeWords } from "../../../interface/interface";
-import httpClient from "../../../services/http-client";
-import { SprintNums, BUTTONS_NUMS } from '../../../const/const'
-import { getWordsFromGroup } from '../sprint-methods/sprint-methods'
+import { IChangePageState } from "../../../interface/interface";
+import { BUTTONS_NUMS } from '../../../const/const'
+import { getWordsFromGroup } from '../sprint-methods/sprint-methods';
 
-const SprintrGreetingBlock: React.FC<IChangePageState & any> = ({ changePageState, changeWords }) => {
+const SprintrGreetingBlock: React.FC<IChangePageState & any> = ({ changePageState, changeWords, setFirstWord, makeRandomWordsForWork }) => {
 
   const BUTTONS = BUTTONS_NUMS.map((item) => {
     const ID = item.toString();
@@ -40,7 +39,9 @@ const SprintrGreetingBlock: React.FC<IChangePageState & any> = ({ changePageStat
         style={ {backgroundColor: color} }
         className='greeting-sprint-block__button'
         onClick={async() => {
-          await getWordsFromGroup((Number(ID) - 1).toString(), changeWords);
+          const WORDS = await getWordsFromGroup((Number(ID) - 1).toString(), changeWords);
+          const WORDS_FOR_WORK = await  makeRandomWordsForWork(WORDS);
+          await setFirstWord(WORDS_FOR_WORK);
           changePageState();
         }}
       >

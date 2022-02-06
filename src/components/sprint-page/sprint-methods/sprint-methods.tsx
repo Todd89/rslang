@@ -1,16 +1,23 @@
 import httpClient from "../../../services/http-client";
-import { SprintNums, BUTTONS_NUMS } from '../../../const/const'
-import { IChangePageState, IChangeWords, IWordInArray  } from "../../../interface/interface";
+import { SprintNums } from '../../../const/const'
+import { IWordInArray  } from "../../../interface/interface";
 
 const getWordsFromGroup = async (group:string, changeWords:any) => {
   const PROMIS_ARR = [];
+  let RESULT: Array<Array<IWordInArray>> = [];
   for (let i = 0; i < SprintNums.PAGE_COUNT; i++) {
-    const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group);
+    const WORDS_CHUNK =  httpClient.getChunkOfWords(i.toString(), group);
     PROMIS_ARR.push(WORDS_CHUNK)
   }
-  
-  await Promise.all(PROMIS_ARR).then((values) => values.forEach((el) => changeWords(el)))
+
+  await Promise.all(PROMIS_ARR).then((values) => {
+    changeWords(values);
+    RESULT =  values;
+  })
+
+  return RESULT
 }
+
 
 function randomNum (max:number) {
   const RANDOM_NUM = Math.floor(Math.random() * max);
@@ -46,10 +53,10 @@ const makeTreeRandomPage = () => {
 }
 
 
-const makeWordsForWork= (words:any) => {
+const makeRandomWordsForWork= (words:Array<IWordInArray>) => {
   const WORDS = words; 
   const RANDOM_PAGES_NUMS: number[] = makeTreeRandomPage();
-  const RESULT_WORDS: IWordInArray[][] = [];
+  const RESULT_WORDS: IWordInArray[] = [];
   
   RANDOM_PAGES_NUMS.forEach((el) => {
     RESULT_WORDS.push(WORDS[el])
@@ -59,5 +66,4 @@ const makeWordsForWork= (words:any) => {
 }
 
 
-
-export { getWordsFromGroup, randomNum, makeTreeRandomPage, shuffle, makeWordsForWork }
+export { getWordsFromGroup, randomNum, makeTreeRandomPage, shuffle, makeRandomWordsForWork }
