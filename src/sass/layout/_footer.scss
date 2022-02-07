@@ -1,0 +1,96 @@
+.footer {
+  padding-top: 40px;
+  padding-bottom: 30px;
+
+  display: flex;
+  background-color: $green;
+}
+
+.footer__container {
+  display: flex;
+}
+
+.footer__logo-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 15px;
+}
+
+
+.footer__year {
+  color: $basic-white;
+  text-align: center;
+  font-size: 21px;
+}
+
+
+.footer__gh-icon {
+  margin-right: 10px;
+
+  .footer__author-link:hover & {
+    fill: $dark;
+  }
+}
+
+.footer__logo {
+  position: relative;
+  left: -15px;
+}
+
+.footer__member-name {
+ color: $basic-white;
+}
+
+.footer__link--rss {
+  margin-left: auto;
+}
+
+.footer__gh-list {
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+
+  margin: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 0;
+  list-style: none;
+
+  @media (min-width: $tablet-width) {
+    flex-direction: row;
+  }
+}
+
+.footer__gh-item {
+  margin-right: 25px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.footer__member-name {
+  transition: all 0.3s;
+}
+
+
+.footer__author-link {
+  display: block;
+
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  font-size: 21px;
+  
+  transition: all 0.3s;
+
+  &:hover .footer__member-name {
+    color: $dark;
+  }
+}
