@@ -9,11 +9,17 @@
 }
 
 .authorization__close {
+  z-index: 1000;
   top: 22px;
   right: 25px;
 
+  display: block;
+  width: 40px;
+  height: 40px;
+
   background-color: transparent;
   border: none;
+  cursor: pointer;
 }
 
 .authorization__form {

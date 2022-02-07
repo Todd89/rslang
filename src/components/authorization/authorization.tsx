@@ -7,6 +7,7 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
     <>
       <div className="modal authorization" id="modal">
         <button 
+            type="button"
             className="modal__close authorization__close"
             onClick={() => toggleForm()}
         >
@@ -67,7 +68,7 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
         </div>
       </div>
 
-      <div className="modal__overlay" id="modal-overlay"></div>
+      <div className="overlay" id="modal-overlay"></div>
     </>
   );
 }
