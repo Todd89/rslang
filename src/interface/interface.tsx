@@ -31,3 +31,9 @@ export interface UserWord {
   word?: Word,
 }
 
+export interface AuthorizationComponentProps {
+  isRegistration: boolean;
+  changeForm: (evt: React.MouseEvent) => void;
+  toggleForm: () => void;
+}
+

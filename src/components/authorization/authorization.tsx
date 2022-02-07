@@ -1,13 +1,8 @@
-import React from "react";
+import { AuthorizationComponentProps } from "../../interface/interface";
 
-interface AuthorizationComponentProps {
-  isRegistration: boolean;
-  changeForm: (evt: React.MouseEvent) => void;
-  toggleForm: () => void;
-}
-
-const Authorization: React.FC<AuthorizationComponentProps> = ({ isRegistration, changeForm, toggleForm }) => {
-  
+const Authorization: React.FC<AuthorizationComponentProps> = ({ 
+  isRegistration, changeForm, toggleForm 
+}) => {
   return (
     <>
       <div className="modal authorization" id="modal">
