@@ -1,17 +1,21 @@
 import { SetStateAction, useEffect, useState } from "react";
 import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
+import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
-import { IWordInArray  } from '../../../interface/interface';
+import { IWordInArray, IWordInAnswerArray  } from '../../../interface/interface';
 import {  makeTreeRandomPage, shuffle,  } from '../sprint-methods/sprint-methods'
 
 
 const MainBlock: React.FC = () => {
-  const [pageState, setPage] = useState<boolean>(false);
-  const [words, setWords] = useState<Array<Array<IWordInArray>>>([]);
+  let [pageState, setPage] = useState<string>('greeting');
+  const [words, setWords] = useState<Array<Array<IWordInArray>> | Array<IWordInArray>>([]);
   const [wordsInGame, setwordsInGame] = useState<Array<IWordInArray>>([]);
   const [word, setWord] = useState<IWordInArray>();
+  const [answersArray, setAnswersArray] =useState<Array<IWordInAnswerArray>>([]);
   let [wordCount, setCount] = useState<number>(0);
+
+  console.log(answersArray, 'main');
 
    useEffect(() => {
      if(words?.length > 0) {
@@ -20,17 +24,23 @@ const MainBlock: React.FC = () => {
      }
    }, [wordCount])
 
-  const changePageState = () => {
-    setPage(true);
+
+  const changeAnswersArray = (arr:any) => {
+    const NEW_ARR = arr.slice()
+    setAnswersArray(NEW_ARR)
+  }
+
+  const changePageState = (name:string) => {
+    setPage(name);
   };
 
   const changeWordCount = ()=> {
     setCount(wordCount+=1);
   };
 
-  const changeWords = (arr:Array<IWordInArray>) => {
-    const NEW_ARR: any= []
-    arr.forEach((el) => NEW_ARR.push(el));
+  const changeWords = (arr:Array<IWordInArray> | undefined) => {
+    const NEW_ARR: Array<IWordInArray>= []
+    arr?.forEach((el) => NEW_ARR.push(el));
 
     setWords(NEW_ARR);
 
@@ -54,26 +64,32 @@ const MainBlock: React.FC = () => {
 
     return RANDOM_WORDS_FOR_WORK
   }
-
   
-  if (pageState) {
+  if (pageState === 'game') {
     return (
       <main className='main-sprint-block'>
         <div className='sprint-container container'>
-          <GameBlock word={word as IWordInArray} changeWordCount={changeWordCount}/>
+          <GameBlock word={word as IWordInArray} changeWordCount={changeWordCount} wordsInGame={wordsInGame} changePageState={changePageState} changeAnswersArray={changeAnswersArray}/>
+        </div>
+      </main>
+    );
+  } else if (pageState === 'congratulation') {
+    return (
+      <main className=''>
+        <div className=''>
+          <CongratulationBlock answersArray={answersArray}/>
         </div>
       </main>
     );
   }
-
-  
-  return (
-    <main className='main-sprint-block'>
-      <div className='sprint-container container'>
-        <SprintrGreetingBlock changePageState={changePageState} changeWords={changeWords} setFirstWord={setFirstWord} makeRandomWordsForWork={makeRandomWordsForWork}/>
-      </div>
-    </main>
-  );
+    return (
+      <main className='main-sprint-block'>
+        <div className='sprint-container container'>
+          <SprintrGreetingBlock changePageState={changePageState} changeWords={changeWords} setFirstWord={setFirstWord} makeRandomWordsForWork={makeRandomWordsForWork}/>
+        </div>
+      </main>
+    );
+ 
 };
 
 export default MainBlock;

@@ -32,7 +32,7 @@ export interface IUserWord {
 }
 
 export interface  IChangePageState {
-  pageState: () => void;
+  changePageState: (name:string) => void;
 }
 
 export interface IChangeWords {
@@ -58,6 +58,10 @@ export interface IWordInArray {
   wordTranslate: string;
 }
 
+export interface IWordInAnswerArray extends IWordInArray{
+  isAnwserTrue: boolean;
+}
+
 export interface IWordsOfArrays {
   words:IWordInArray[][]
 }
@@ -65,4 +69,14 @@ export interface IWordsOfArrays {
 export interface IGameBlockProps {
   word: IWordInArray,
   changeWordCount: () => void,
+  wordsInGame:Array<IWordInArray>,
+  changePageState:(name:string) => void,
+  changeAnswersArray: (arr:IWordInAnswerArray[]) => void
+}
+
+export interface IGreetingBlockProps {
+  changePageState: (name:string) => void,
+  changeWords: (arr:Array<IWordInArray> | undefined) => void,
+  setFirstWord: (arr:Array<IWordInArray>) => void,
+  makeRandomWordsForWork: (wordsInGame:any) => any,
 }
