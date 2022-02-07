@@ -1,16 +1,15 @@
 import {
   AUDIO_MAX_QUESTION_AMOUNT,
   AUDIO_ANSWER_AMOUNT,
-  AUDIO_CURRENT_GAME_PARAMETERS,
+  AUDIO_QUESTIONS_ARRAY,
+  //  AUDIO_CURRENT_GAME_PARAMETERS,
 } from "../../../const/const-audio";
 import { IAudioQuestion, IWord } from "../../../interface/interface-audio";
-import { Question } from "../audio-question/audio-question";
 import { WordsArray } from "./test-server-words";
 
-export function createArrayOfQuestions(): Array<IAudioQuestion> {
-  const questionArray: Array<IAudioQuestion> = [];
+export function createArrayOfQuestions(group: number, page: number): void {
+  AUDIO_QUESTIONS_ARRAY.length = 0;
   const wordsForQuestions: Array<IWord> = [];
-  const { group, page } = AUDIO_CURRENT_GAME_PARAMETERS;
 
   const arrAvailableWords = getFilteredArray(group, page);
 
@@ -28,7 +27,7 @@ export function createArrayOfQuestions(): Array<IAudioQuestion> {
   }
 
   wordsForQuestions.forEach((word) => {
-    questionArray.push({
+    AUDIO_QUESTIONS_ARRAY.push({
       questionWord: word,
       answers: getAnswersForQuestion(word),
     });
@@ -53,7 +52,6 @@ export function createArrayOfQuestions(): Array<IAudioQuestion> {
     arrAnswers.sort(() => Math.random() - 0.5);
     return arrAnswers;
   }
-  return questionArray;
 }
 
 function getFilteredArray(group: number, page: number): Array<IWord> {

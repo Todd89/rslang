@@ -16,7 +16,7 @@ export function AudioLives(props: IPropsLives) {
     <div className="game__lives">
       {arrLives.map((item, index) => {
         return item ? (
-          <div key={index} className="game__life life-left"></div>
+          <div key={Math.random()} className="game__life life-left"></div>
         ) : (
           <div className="game__life life-lost"></div>
         );

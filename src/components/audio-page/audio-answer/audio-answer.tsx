@@ -11,6 +11,7 @@ interface Iprops {
 }
 
 export function AudioAnswer(props: Iprops) {
+  //console.log("AudioAnswer");
   const { word, questionWord, onClick } = props;
   return (
     <button

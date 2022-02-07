@@ -7,32 +7,35 @@ import {
   AUDIO_ANSWER_TIME,
   AUDIO_LIVES_AMOUNT,
   AUDIO_EMPTY_WORD,
+  AUDIO_QUESTIONS_ARRAY,
+  // AUDIO_CURRENT_GAME_PARAMETERS,
 } from "../../../const/const-audio";
 import {
   IAudioQuestion,
   IWord,
   IAudioResult,
 } from "../../../interface/interface-audio";
-import { Question } from "../audio-question/audio-question";
+import { AudioQuestion } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
 import { AudioLives } from "../audio-lives/audio-lives";
-import { createArrayOfQuestions } from "../audio-utils/audio-utils";
 
 interface IProps {
-  arrQuestions: Array<IAudioQuestion>;
+  // arrQuestions: Array<IAudioQuestion>;
+  audioGroup: number;
+  audioPage: number;
+  isGameOn: boolean;
+  changeState: (
+    group: number,
+    page: number,
+    isOn: boolean
+    //  isRepeat: boolean
+  ) => void;
 }
 
-export function game() {
-  const arrQuestions = createArrayOfQuestions();
-  console.log(arrQuestions);
-  ReactDOM.render(
-    <Audiochallenge key={Math.random()} arrQuestions={arrQuestions} />,
-    document.getElementById("root")
-  );
-}
-
-function Audiochallenge(props: IProps) {
-  const { arrQuestions } = props;
+export function Audiochallenge(props: IProps) {
+  //console.log("Audiochallenge");
+  //const { arrQuestions } = props;
+  const { audioGroup, audioPage, isGameOn, changeState } = props;
 
   const [showResult, setShowResult] = useState(false);
 
@@ -42,18 +45,18 @@ function Audiochallenge(props: IProps) {
   const [answerReceived, setAnswerReceived] = useState(false);
 
   const [questionsAnswered, setQuestionsAnswered] = useState(
-    Array(arrQuestions.length).fill(false)
+    Array(AUDIO_QUESTIONS_ARRAY.length).fill(false)
   );
   const [lives, setLives] = useState(AUDIO_LIVES_AMOUNT);
 
   const initialStateResult: Array<IAudioResult> = [];
   const [gameResult, setGameResult] = useState(initialStateResult);
 
-  const questionsAmount = arrQuestions.length;
+  const questionsAmount = AUDIO_QUESTIONS_ARRAY.length;
 
   const paramQuestion = {
-    questionWord: arrQuestions[currentQuestion].questionWord,
-    answers: arrQuestions[currentQuestion].answers,
+    questionWord: AUDIO_QUESTIONS_ARRAY[currentQuestion].questionWord,
+    answers: AUDIO_QUESTIONS_ARRAY[currentQuestion].answers,
     rightAnswer: rightAnswer,
     answerReceived: answerReceived,
     onClick: afterAnswer,
@@ -78,7 +81,7 @@ function Audiochallenge(props: IProps) {
       clearTimeout(timerId);
     }
     setAnswerReceived(true);
-    console.log();
+    //console.log();
     if (answer === correctAnswer) {
       setRightAnswer(true);
     } else {
@@ -100,7 +103,7 @@ function Audiochallenge(props: IProps) {
       setAnswerReceived(false);
       setCurrentQuestion(nextQuestion);
     } else {
-      const arrResult = arrQuestions.map((item, index) => {
+      const arrResult = AUDIO_QUESTIONS_ARRAY.map((item, index) => {
         return {
           questionWord: item.questionWord,
           isAnswerCorrect: questionsAnswered[index],
@@ -112,38 +115,55 @@ function Audiochallenge(props: IProps) {
   }
 
   return (
-    <>
-      <main>
-        <div className="container">
-          <h1>Audio Challenge</h1>
-          <div className="game__section">
-            <div className="game__wrapper vertical">
-              {showResult ? (
+    <div className="container">
+      <h1>Audio Challenge</h1>
+      <div className="game__section">
+        <div className="game__wrapper vertical">
+          {showResult ? (
+            <div className="game__wrapper horizontal">
+              <div className="game__finish-image"></div>
+              <div className="game__wrapper vertical">
                 <div className="game__wrapper horizontal">
-                  <div className="game__finish-image"></div>
-                  <div className="game__wrapper vertical">
-                    <button className="btn btn-repeate" onClick={() => game()}>
-                      Повторить игру
-                    </button>
-                    <Result gameResult={gameResult} />
-                  </div>
+                  <button
+                    className="btn btn-repeate"
+                    onClick={() => {
+                      changeState(audioGroup, audioPage, true);
+                      setQuestionsAnswered(
+                        Array(AUDIO_QUESTIONS_ARRAY.length).fill(false)
+                      );
+                    }}
+                  >
+                    Повторить игру
+                  </button>
+                  <button
+                    className="btn btn-repeate"
+                    onClick={() => {
+                      changeState(audioGroup, audioPage, false);
+                      setQuestionsAnswered(
+                        Array(AUDIO_QUESTIONS_ARRAY.length).fill(false)
+                      );
+                    }}
+                  >
+                    Новая игра с выбором уровней
+                  </button>
                 </div>
-              ) : (
-                <div className="game__wrapper horizontal">
-                  <div className="game__left-image"></div>
-                  <div className="game__wrapper vertical">
-                    <AudioLives amount={lives} />
-
-                    <div className="game__container">
-                      <Question {...paramQuestion} />
-                    </div>
-                  </div>
-                </div>
-              )}
+                <Result gameResult={gameResult} />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="game__wrapper horizontal">
+              <div className="game__left-image"></div>
+              <div className="game__wrapper vertical">
+                <AudioLives amount={lives} />
+
+                <div className="game__container">
+                  <AudioQuestion {...paramQuestion} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      </main>
-    </>
+      </div>
+    </div>
   );
 }

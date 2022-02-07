@@ -1,13 +1,21 @@
-import { AUDIO_CURRENT_GAME_PARAMETERS } from "../../../const/const-audio";
+//import { AUDIO_CURRENT_GAME_PARAMETERS } from "../../../const/const-audio";
 import "./audio-level.css";
-import { game } from "../audiochallenge/audiochallenge";
+//import { game } from "../audiochallenge/audiochallenge";
+import { createArrayOfQuestions } from "../audio-utils/audio-utils";
 
 interface IProps {
   id: number;
+  changeState: (
+    group: number,
+    page: number,
+    isOn: boolean
+    //  isRepeat: boolean
+  ) => void;
 }
 
 export function AudioLevel(props: IProps) {
-  const { id } = props;
+  //console.log("AudioLevel");
+  const { id, changeState } = props;
 
   function btnColor(id: number) {
     let color: string;
@@ -41,9 +49,8 @@ export function AudioLevel(props: IProps) {
     <button
       className="btn__level"
       onClick={() => {
-        AUDIO_CURRENT_GAME_PARAMETERS.group = id - 1;
-        AUDIO_CURRENT_GAME_PARAMETERS.page = -1;
-        game();
+        createArrayOfQuestions(id - 1, -1);
+        changeState(id - 1, -1, true);
       }}
       style={{
         backgroundColor: btnColor(id),

@@ -1,9 +1,10 @@
-import { IWord } from "../interface/interface-audio";
+import { IWord, IAudioQuestion } from "../interface/interface-audio";
 
-export const AUDIO_CURRENT_GAME_PARAMETERS = {
+/*export const AUDIO_CURRENT_GAME_PARAMETERS = {
+  isGameOn: false,
   group: -1,
   page: -1,
-};
+};*/
 export const AUDIO_MAX_QUESTION_AMOUNT = 3;
 export const AUDIO_ANSWER_AMOUNT = 4;
 export const AUDIO_LIVES_AMOUNT = 2;
@@ -12,6 +13,7 @@ export const AUDIO_PATH_DATA_AUDIO = "/assets/"; //убрать
 export const AUDIO_PATH_UTILS_AUDIO = "/assets/sound/";
 export const AUDIO_PATH_IMAGES = "/assets/";
 //export const AUDIO_ASSETS = "../../../../public/assets/";
+export const AUDIO_QUESTIONS_ARRAY: Array<IAudioQuestion> = [];
 export const AUDIO_EMPTY_WORD: IWord = {
   id: "-1",
   group: -1,

@@ -21,7 +21,8 @@ interface IProps {
   onClickNext: () => void;
 }
 
-export function Question(props: IProps) {
+export function AudioQuestion(props: IProps) {
+  //console.log("Question");
   const {
     questionWord,
     answers,
@@ -30,6 +31,7 @@ export function Question(props: IProps) {
     onClick,
     onClickNext,
   } = props;
+  //console.log(props);
   const audio = new Audio();
   audio.volume = 0.2;
 
@@ -99,7 +101,7 @@ export function Question(props: IProps) {
               word: item,
               onClick: onClick,
             };
-            return <AudioAnswer key={item.id} {...paramAnswer} />;
+            return <AudioAnswer key={Math.random()} {...paramAnswer} />;
           })}
         </div>
       </div>
