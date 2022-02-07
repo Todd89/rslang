@@ -51,8 +51,8 @@ const Footer = () => {
         </nav>
         
         <ul className="footer__gh-list">
-          {teamMembers.map(({name}) => (
-            <li className="footer__gh-item">
+          {teamMembers.map(({ id, name }) => (
+            <li key={id} className="footer__gh-item">
               <a 
                   className="footer__author-link" 
                   href="https://github.com/Romnasi"
