@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import { useEffect } from "react";
 import "./audio-question.css";
 
 import {
@@ -8,7 +7,7 @@ import {
   AUDIO_PATH_IMAGES,
 } from "../../../const/const-audio";
 
-import { IWord, IAudioQuestion } from "../../../interface/interface-audio";
+import { IWord } from "../../../interface/interface-audio";
 
 import { AudioAnswer } from "../audio-answer/audio-answer";
 
@@ -19,10 +18,10 @@ interface IProps {
   answerReceived: boolean;
   onClick: (answer: IWord, correctAnswer: IWord) => void;
   onClickNext: () => void;
+  isTimerOn: boolean;
 }
 
 export function AudioQuestion(props: IProps) {
-  //console.log("Question");
   const {
     questionWord,
     answers,
@@ -30,8 +29,8 @@ export function AudioQuestion(props: IProps) {
     answerReceived,
     onClick,
     onClickNext,
+    isTimerOn,
   } = props;
-  //console.log(props);
   const audio = new Audio();
   audio.volume = 0.2;
 
@@ -54,13 +53,13 @@ export function AudioQuestion(props: IProps) {
   }
 
   useEffect(() => {
-    if (!answerReceived) {
+    if (!answerReceived && isTimerOn) {
       playAudio(questionWord);
     }
   });
 
   useEffect(() => {
-    if (answerReceived && rightAnswer) {
+    if (answerReceived && rightAnswer && !isTimerOn) {
       playAudioAfterAnswer(true);
     } else if (answerReceived && !rightAnswer) {
       playAudioAfterAnswer(false);
@@ -73,11 +72,7 @@ export function AudioQuestion(props: IProps) {
     };
     return (
       <div className="question__section">
-        <div
-          key={Math.random()}
-          className="question__image question__answered"
-          style={style}
-        ></div>
+        <div className="question__image question__answered" style={style}></div>
         <span className="questionText">
           {questionWord.word} - {questionWord.transcription} -{" "}
           {questionWord.wordTranslate}

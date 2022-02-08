@@ -2,13 +2,55 @@ import {
   AUDIO_MAX_QUESTION_AMOUNT,
   AUDIO_ANSWER_AMOUNT,
   AUDIO_QUESTIONS_ARRAY,
-  //  AUDIO_CURRENT_GAME_PARAMETERS,
 } from "../../../const/const-audio";
-import { IAudioQuestion, IWord } from "../../../interface/interface-audio";
-import { WordsArray } from "./test-server-words";
+import { IWord } from "../../../interface/interface-audio";
 
-export function createArrayOfQuestions(group: number, page: number): void {
+import { PAGES_PER_GROUP } from "../../../const/const-audio";
+import httpClient from "../../../services/http-client";
+
+const wordsArray: Array<IWord> = [];
+
+async function getWords(group: number, page: number): Promise<void> {
+  const promiseArray = [];
+  for (let i = 0; i < PAGES_PER_GROUP; i += 1) {
+    const wordsServer = httpClient.getChunkOfWords(String(i), String(group));
+    promiseArray.push(wordsServer);
+  }
+
+  await Promise.all(promiseArray).then((values) => {
+    for (let i = 0; i < values.length; i++) {
+      values[i].forEach(
+        (item: {
+          id: any;
+          group: any;
+          page: any;
+          word: any;
+          image: any;
+          audio: any;
+          transcription: any;
+          wordTranslate: any;
+        }) => {
+          const itemWord = {
+            id: item.id,
+            group: item.group,
+            page: item.page,
+            word: item.word,
+            image: item.image,
+            audio: item.audio,
+            transcription: item.transcription,
+            wordTranslate: item.wordTranslate,
+          };
+          wordsArray.push(itemWord);
+        }
+      );
+    }
+  });
+}
+
+export async function createArrayOfQuestions(group: number, page: number) {
   AUDIO_QUESTIONS_ARRAY.length = 0;
+
+  await getWords(group, page);
   const wordsForQuestions: Array<IWord> = [];
 
   const arrAvailableWords = getFilteredArray(group, page);
@@ -55,9 +97,9 @@ export function createArrayOfQuestions(group: number, page: number): void {
 }
 
 function getFilteredArray(group: number, page: number): Array<IWord> {
-  let arrAvailableWords: Array<IWord> = [...WordsArray];
+  let arrAvailableWords: Array<IWord> = [...wordsArray];
   if (group >= 0) {
-    arrAvailableWords = WordsArray.filter((word) => word.group === group);
+    arrAvailableWords = wordsArray.filter((word) => word.group === group);
   }
   if (page >= 0) {
     const arrPageFiltered = arrAvailableWords.filter(

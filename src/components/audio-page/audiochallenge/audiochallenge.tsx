@@ -1,41 +1,26 @@
-import { useState } from "react";
-import ReactDOM from "react-dom";
+import { useEffect, useState, useRef } from "react";
 import "./audiochallenge.css";
-import Header from "../../header/header";
 
 import {
   AUDIO_ANSWER_TIME,
   AUDIO_LIVES_AMOUNT,
   AUDIO_EMPTY_WORD,
   AUDIO_QUESTIONS_ARRAY,
-  // AUDIO_CURRENT_GAME_PARAMETERS,
 } from "../../../const/const-audio";
-import {
-  IAudioQuestion,
-  IWord,
-  IAudioResult,
-} from "../../../interface/interface-audio";
+import { IWord, IAudioResult } from "../../../interface/interface-audio";
 import { AudioQuestion } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
 import { AudioLives } from "../audio-lives/audio-lives";
 
 interface IProps {
-  // arrQuestions: Array<IAudioQuestion>;
-  audioGroup: number;
-  audioPage: number;
-  isGameOn: boolean;
-  changeState: (
-    group: number,
-    page: number,
-    isOn: boolean
-    //  isRepeat: boolean
-  ) => void;
+  changeState: (isOn: boolean) => void;
+  changeGameLoadedStatus: (isLoad: boolean) => void;
 }
 
 export function Audiochallenge(props: IProps) {
   //console.log("Audiochallenge");
-  //const { arrQuestions } = props;
-  const { audioGroup, audioPage, isGameOn, changeState } = props;
+
+  const { changeState, changeGameLoadedStatus } = props;
 
   const [showResult, setShowResult] = useState(false);
 
@@ -43,6 +28,7 @@ export function Audiochallenge(props: IProps) {
 
   const [rightAnswer, setRightAnswer] = useState(false);
   const [answerReceived, setAnswerReceived] = useState(false);
+  const [isTimerOn, setIsTimerOn] = useState(false);
 
   const [questionsAnswered, setQuestionsAnswered] = useState(
     Array(AUDIO_QUESTIONS_ARRAY.length).fill(false)
@@ -52,36 +38,56 @@ export function Audiochallenge(props: IProps) {
   const initialStateResult: Array<IAudioResult> = [];
   const [gameResult, setGameResult] = useState(initialStateResult);
 
+  const timerId: { current: NodeJS.Timeout | null } = useRef(null);
+
   const questionsAmount = AUDIO_QUESTIONS_ARRAY.length;
 
-  const paramQuestion = {
-    questionWord: AUDIO_QUESTIONS_ARRAY[currentQuestion].questionWord,
-    answers: AUDIO_QUESTIONS_ARRAY[currentQuestion].answers,
-    rightAnswer: rightAnswer,
-    answerReceived: answerReceived,
-    onClick: afterAnswer,
-    onClickNext: nextQuestion,
-  };
+  const questionWord = AUDIO_QUESTIONS_ARRAY[currentQuestion].questionWord;
 
-  let timerId: ReturnType<typeof setTimeout> = setTimeout(() => "", 1000);
-
-  if (!answerReceived && !showResult) {
-    timerId = setTimeout(() => {
-      answerNorReceived();
-      clearTimeout(timerId);
-    }, AUDIO_ANSWER_TIME);
+  function resetParameters(isOn: boolean, isLoad: boolean) {
+    changeState(isOn);
+    changeGameLoadedStatus(isLoad);
+    setShowResult(false);
+    setCurrentQuestion(0);
+    setRightAnswer(false);
+    setAnswerReceived(false);
+    setIsTimerOn(false);
+    setQuestionsAnswered(Array(AUDIO_QUESTIONS_ARRAY.length).fill(false));
+    setLives(AUDIO_LIVES_AMOUNT);
+    setGameResult(initialStateResult);
   }
 
+  useEffect(() => {
+    if (!answerReceived && !showResult && !isTimerOn) {
+      console.log("timer on", questionWord, answerReceived);
+      setIsTimerOn(true);
+      timerId.current = setTimeout(() => {
+        console.log("before off", timerId.current);
+        if (timerId.current) {
+          answerNorReceived();
+          console.log("timer off");
+          setIsTimerOn(false);
+          return clearTimeout(timerId.current);
+        }
+      }, AUDIO_ANSWER_TIME);
+    }
+  }, [answerReceived, showResult, isTimerOn, questionWord, answerNorReceived]);
+
   function answerNorReceived(): void {
-    afterAnswer(AUDIO_EMPTY_WORD, paramQuestion.questionWord);
+    setAnswerReceived(true);
+    afterAnswer(AUDIO_EMPTY_WORD, questionWord);
   }
 
   function afterAnswer(answer: IWord, correctAnswer: IWord): void {
-    if (timerId) {
-      clearTimeout(timerId);
+    if (timerId.current) {
+      console.log("before stop", timerId.current);
+      console.log("timer stopped");
+      clearTimeout(timerId.current);
+      setIsTimerOn(false);
     }
+
     setAnswerReceived(true);
-    //console.log();
+    //console.log("answer", answer);
     if (answer === correctAnswer) {
       setRightAnswer(true);
     } else {
@@ -114,9 +120,18 @@ export function Audiochallenge(props: IProps) {
     }
   }
 
+  const paramQuestion = {
+    questionWord: questionWord,
+    answers: AUDIO_QUESTIONS_ARRAY[currentQuestion].answers,
+    rightAnswer: rightAnswer,
+    answerReceived: answerReceived,
+    onClick: afterAnswer,
+    onClickNext: nextQuestion,
+    isTimerOn: isTimerOn,
+  };
+
   return (
     <div className="container">
-      <h1>Audio Challenge</h1>
       <div className="game__section">
         <div className="game__wrapper vertical">
           {showResult ? (
@@ -127,21 +142,15 @@ export function Audiochallenge(props: IProps) {
                   <button
                     className="btn btn-repeate"
                     onClick={() => {
-                      changeState(audioGroup, audioPage, true);
-                      setQuestionsAnswered(
-                        Array(AUDIO_QUESTIONS_ARRAY.length).fill(false)
-                      );
+                      resetParameters(true, true);
                     }}
                   >
-                    Повторить игру
+                    Повторить эту же игру
                   </button>
                   <button
                     className="btn btn-repeate"
                     onClick={() => {
-                      changeState(audioGroup, audioPage, false);
-                      setQuestionsAnswered(
-                        Array(AUDIO_QUESTIONS_ARRAY.length).fill(false)
-                      );
+                      resetParameters(true, false);
                     }}
                   >
                     Новая игра с выбором уровней
@@ -155,7 +164,6 @@ export function Audiochallenge(props: IProps) {
               <div className="game__left-image"></div>
               <div className="game__wrapper vertical">
                 <AudioLives amount={lives} />
-
                 <div className="game__container">
                   <AudioQuestion {...paramQuestion} />
                 </div>

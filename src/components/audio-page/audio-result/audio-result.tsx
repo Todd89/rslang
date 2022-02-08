@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import { IWord, IAudioResult } from "../../../interface/interface-audio";
 import {
@@ -13,7 +13,6 @@ interface IProps {
 
 export function Result(props: IProps) {
   const { gameResult } = props;
-  //console.log(gameResult);
 
   const audio = new Audio();
   audio.volume = 0.2;
@@ -41,10 +40,10 @@ export function Result(props: IProps) {
   return (
     <div className="result__section">
       <ul className="result">
-        {gameResult.map((item) => {
+        {gameResult.map((item, index) => {
           const question = item.questionWord;
           return (
-            <li key={Math.random()} className="result__line">
+            <li key={index} className="result__line">
               <div
                 className={
                   item.isAnswerCorrect

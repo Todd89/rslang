@@ -1,21 +1,35 @@
-//import { AUDIO_CURRENT_GAME_PARAMETERS } from "../../../const/const-audio";
 import "./audio-level.css";
-//import { game } from "../audiochallenge/audiochallenge";
 import { createArrayOfQuestions } from "../audio-utils/audio-utils";
 
 interface IProps {
   id: number;
-  changeState: (
-    group: number,
-    page: number,
-    isOn: boolean
-    //  isRepeat: boolean
-  ) => void;
+  isGameLoaded: boolean;
+  changeState: (isOn: boolean) => void;
+  changeGameLoadedStatus: (isLoad: boolean) => void;
+  changeIsGameChosen: (isCh: boolean) => void;
 }
 
 export function AudioLevel(props: IProps) {
   //console.log("AudioLevel");
-  const { id, changeState } = props;
+
+  const {
+    id,
+    isGameLoaded,
+    changeState,
+    changeGameLoadedStatus,
+    changeIsGameChosen,
+  } = props;
+
+  function loadGame() {
+    changeIsGameChosen(true);
+    (async () => {
+      if (!isGameLoaded) {
+        await createArrayOfQuestions(id - 1, -1);
+        changeState(true);
+        changeGameLoadedStatus(true);
+      }
+    })();
+  }
 
   function btnColor(id: number) {
     let color: string;
@@ -49,8 +63,7 @@ export function AudioLevel(props: IProps) {
     <button
       className="btn__level"
       onClick={() => {
-        createArrayOfQuestions(id - 1, -1);
-        changeState(id - 1, -1, true);
+        loadGame();
       }}
       style={{
         backgroundColor: btnColor(id),
