@@ -2,9 +2,15 @@
   border-radius: 21px;
   color: $basic-white;
   background-color: $green;
+  height: 570px;
 
   @media (min-width: $tablet-width) {
-    height: 330px;
+    height: 425px;
+  }
+
+  @media (min-width: $desktop-width) {
+    height: 315px;
+    width: 900px;
   }
 }
 
@@ -51,9 +57,13 @@
 
   @media (min-width: $tablet-width) {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     grid-column-gap: 25px;
     margin-bottom: 35px;
+  }
+
+  @media (min-width: $desktop-width) {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -64,7 +74,7 @@
     margin-bottom: 0;
   }
 
-  @media (min-width: $tablet-width) {
+  @media (min-width: $desktop-width) {
     margin-bottom: 0;
   }
 } 
@@ -72,10 +82,21 @@
 .authorization__label {
   display: block;
   margin-bottom: 11px;
+  font-size: 24px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.authorization__condition {
+  margin: 0;
+
+  font-size: 14px;
 }
 
 .authorization__control,
-.authorization__control ::placeholder{
+.authorization__control ::placeholder {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 12px;
@@ -89,6 +110,10 @@
   box-sizing: border-box;
   font-size: 24px;
   font-family: $main-font;
+}
+
+.authorization__control::placeholder {
+  color: rgb(211, 206, 188);
 }
 
 .authorization__control:focus {
@@ -136,4 +161,8 @@
   &:focus {
     color: yellow;
   }
+}
+
+.authorization__star {
+  color: $orange;
 }
