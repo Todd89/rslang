@@ -63,12 +63,13 @@ const Header: React.FC = () => {
               type="button"
               onClick={() => {setIsOpenNav((prev) => !prev)}}
           >
-            <span className="visually-hidden">Toggle button</span>
+            <span className="visually-hidden">Menu toggle</span>
           </button>
   
           <button 
             className="btn header__authorization"
             onClick={() => toggleForm()}
+            disabled={isOpenNav}
           >
             Войти
           </button>
