@@ -7,15 +7,17 @@ import { IWord } from "../../../interface/interface-audio";
 interface Iprops {
   questionWord: IWord;
   word: IWord;
+  id: string;
   onClick: (answer: IWord, correctAnswer: IWord) => void;
 }
 
 export function AudioAnswer(props: Iprops) {
   //console.log("AudioAnswer");
-  const { word, questionWord, onClick } = props;
+  const { word, questionWord, id, onClick } = props;
   return (
     <button
       className="btn"
+      id={`id-${id}`}
       key={word.id}
       onClick={() => onClick(word, questionWord)}
     >

@@ -1,7 +1,7 @@
 import Header from "../header/header";
 import { useState } from "react";
 import { Audiochallenge } from "./audiochallenge/audiochallenge";
-import "./audio-page.css";
+import "./audiopage.css";
 
 import { AudioLevels } from "./audio-levels/audio-levels";
 

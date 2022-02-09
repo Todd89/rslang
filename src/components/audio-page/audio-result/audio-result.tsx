@@ -57,12 +57,8 @@ export function Result(props: IProps) {
               ></button>
               <span className="result__word">{question.word}: </span>
               <span className="result__translation">
-                {question.transcription}
+                {question.transcription} - {question.wordTranslate}
               </span>{" "}
-              -
-              <span className="result__translation">
-                {question.wordTranslate}
-              </span>
             </li>
           );
         })}

@@ -1,5 +1,7 @@
 .game__wrapper {
   display: flex;
+  align-items: center;
+  margin: 20px 0;
 }
 
 .vertical {
@@ -9,11 +11,12 @@
 
 .horizontal {
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .game__levels-image {
   height: 70vh;
-  width: 40%;
+  width: 35%;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
@@ -21,7 +24,7 @@
 }
 
 .game__rules-section {
-  width: 60%;
+  width: 55%;
   border: 3px solid var(--violet);
   border-radius: 10px;
   background-color: var(--mint-color);
@@ -50,6 +53,21 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
+}
+
+.game__loading {
+  width: 60%;
+  height: 80px;
+  align-self: center;
+  background-image: url("/public/assets/icons/spinner.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.wrapper-screen {
+  height: 70vh;
+  width: 100%;
 }
 
 @media (max-width: 1440px) {
@@ -93,17 +111,9 @@
   }
 }
 
-.game__loading {
-  width: 60%;
-  height: 80px;
-  align-self: center;
-  background-image: url("/public/assets/icons/spinner.gif");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-.wrapper-screen {
-  height: 70vh;
-  width: 100%;
+@media (max-width: 768px) {
+  .game__section {
+    margin: 10px 0;
+    align-self: center;
+  }
 }

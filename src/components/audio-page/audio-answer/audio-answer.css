@@ -8,3 +8,19 @@
   --dark: #635f5f;
   --violet: #b621fe;
 }
+
+#id-0,
+#id-1,
+#id-2,
+#id-3 {
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  #id-0,
+  #id-1,
+  #id-2,
+  #id-3 {
+    width: 200px;
+  }
+}

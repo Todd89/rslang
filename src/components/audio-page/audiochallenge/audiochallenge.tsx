@@ -141,6 +141,7 @@ export function Audiochallenge(props: IProps) {
                 <div className="game__wrapper horizontal">
                   <button
                     className="btn btn-repeate"
+                    id="btn-repeate"
                     onClick={() => {
                       resetParameters(true, true);
                     }}
@@ -149,6 +150,7 @@ export function Audiochallenge(props: IProps) {
                   </button>
                   <button
                     className="btn btn-repeate"
+                    id="btn-repeate"
                     onClick={() => {
                       resetParameters(true, false);
                     }}

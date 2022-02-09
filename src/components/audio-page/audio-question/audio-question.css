@@ -41,6 +41,11 @@
   }
 }
 
+#btn__next {
+  align-self: center;
+  margin: 0 auto;
+}
+
 .question__unanswered {
   background-image: url("/public/assets/icons/sound.svg");
 }
@@ -62,4 +67,10 @@
   justify-content: space-around;
   width: 100%;
   margin: 50px 20px 0 20px;
+}
+
+@media (max-width: 1024px) {
+  .answers__section {
+    flex-direction: column;
+  }
 }

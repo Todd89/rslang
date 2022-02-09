@@ -26,7 +26,7 @@ export function AudioLevels(props: IProps) {
           <div className="game__section game__wrapper horizontal">
             <div className="game__levels-image"></div>
             <div className="game__rules-section game__wrapper vertical">
-              <h2>Правила игры</h2>
+              <h3>Правила игры</h3>
               <p className="game_rules-text">{AUDIO_RULES}</p>
               <div className="game__leves">
                 {arrLevels.map((item) => {

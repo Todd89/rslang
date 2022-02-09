@@ -77,7 +77,7 @@ export function AudioQuestion(props: IProps) {
           {questionWord.word} - {questionWord.transcription} -{" "}
           {questionWord.wordTranslate}
         </span>
-        <button className="btn btn__next" onClick={onClickNext}>
+        <button className="btn" id="btn__next" onClick={onClickNext}>
           Следующий
         </button>
       </div>
@@ -90,13 +90,19 @@ export function AudioQuestion(props: IProps) {
           className="question__image question__unanswered animation"
         ></div>
         <div className="answers__section">
-          {answers.map((item) => {
+          {answers.map((item, index) => {
             const paramAnswer = {
               questionWord: questionWord,
               word: item,
               onClick: onClick,
             };
-            return <AudioAnswer key={Math.random()} {...paramAnswer} />;
+            return (
+              <AudioAnswer
+                key={Math.random()}
+                id={String(index)}
+                {...paramAnswer}
+              />
+            );
           })}
         </div>
       </div>

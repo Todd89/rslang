@@ -27,6 +27,7 @@
 
 .result__line {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
 }
 
@@ -74,8 +75,33 @@
   cursor: pointer;
 }
 
+@media (max-width: 1200px) {
+  .result {
+    font-size: 18px;
+  }
+
+  .result__word,
+  .result__translation {
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 1024px) {
   .result {
     font-size: 16px;
+  }
+
+  .result__word,
+  .result__translation {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .result__section {
+    width: 70vw;
+  }
+  .game__finish-image {
+    width: 0;
   }
 }
