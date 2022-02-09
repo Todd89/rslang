@@ -5,6 +5,8 @@ $light-mint: #effcf5;
 $mint-color: #e2faed;
 $orange: #ffba43;
 $green: #3cb77e;
+$dark: #635f5f;
+$violet: #b621fe;
 
 $background-color: $light-mint;
 
@@ -13,5 +15,13 @@ $background-color: $light-mint;
 $btn: rgba(127, 255, 212, 0.1);
 $btn-active: rgba(127, 255, 212, 0.5);
 
-$main-font: 'Oswald', Arial, sans-serif;
+// Fonts
+$title-font: 'Oswald', Arial, sans-serif;
+$main-font: Arial, sans-serif;
+
+// Sizes
 $mobile-width-min: 320px;
+
+$mobile-width: 320px;
+$tablet-width: 768px;
+$desktop-width: 1440px;

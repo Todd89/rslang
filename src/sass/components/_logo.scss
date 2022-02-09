@@ -1,0 +1,17 @@
+.logo {
+  display: flex;
+  order: -2;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  font-family: $title-font;
+  font-size: 32px;
+  font-weight: 500;
+  min-width: 100px;
+
+  @media (min-width: $tablet-width) {
+    order: -1;
+  }
+}

@@ -1,9 +1,9 @@
 import {
-  Statistic,
-  Settings,
-  User,
-  UserData,
-  UserWord,
+  IStatistic,
+  ISettings,
+  IUser,
+  IUserData,
+  IUserWord,
 } from "../interface/interface";
 
 import { Url, Methods } from "../const/const";
@@ -48,7 +48,7 @@ class HTTPClient {
 
   //Users
 
-  async createUser(user: User) {
+  async createUser(user: IUser) {
     const data = await fetch(`${Url.DOMEN}/users`, {
       method: `${Methods.POST}`,
       headers: {
@@ -66,7 +66,7 @@ class HTTPClient {
     return data;
   }
 
-  async getUser({ userId, token }: UserData) {
+  async getUser({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}`, {
       method: `${Methods.GET}`,
       headers: {
@@ -84,7 +84,7 @@ class HTTPClient {
     return data;
   }
 
-  async deleteUser({ userId, token }: UserData) {
+  async deleteUser({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}`, {
       method: `${Methods.DELETE}`,
       headers: {
@@ -102,7 +102,7 @@ class HTTPClient {
     return data;
   }
 
-  async getNewUserToken({ userId, token }: UserData) {
+  async getNewUserToken({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/tokens`, {
       method: `${Methods.GET}`,
       headers: {
@@ -122,7 +122,7 @@ class HTTPClient {
 
   // User Words
 
-  async getAllUserWords({ userId, token }: UserData) {
+  async getAllUserWords({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/words`, {
       method: `${Methods.GET}`,
       headers: {
@@ -140,7 +140,7 @@ class HTTPClient {
     return data;
   }
 
-  async createUserWord({ userId, wordId, word, token }: UserWord) {
+  async createUserWord({ userId, wordId, word, token }: IUserWord) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
       method: `${Methods.POST}`,
       headers: {
@@ -153,13 +153,16 @@ class HTTPClient {
       .then((response) => {
         return response.json();
       })
+      .then((response) => {
+        return response.json();
+      })
       .catch((error) => {
         console.log(console.log(error));
       });
     return data;
   }
 
-  async getUserWord({ userId, wordId, token }: UserWord) {
+  async getUserWord({ userId, wordId, token }: IUserWord) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
       method: `${Methods.GET}`,
       headers: {
@@ -170,13 +173,16 @@ class HTTPClient {
       .then((response) => {
         return response.json();
       })
+      .then((response) => {
+        return response.json();
+      })
       .catch((error) => {
         console.log(console.log(error));
       });
     return data;
   }
 
-  async updateUserWord({ userId, wordId, token, word }: UserWord) {
+  async updateUserWord({ userId, wordId, token, word }: IUserWord) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
       method: `${Methods.PUT}`,
       headers: {
@@ -189,13 +195,16 @@ class HTTPClient {
       .then((response) => {
         return response.json();
       })
+      .then((response) => {
+        return response.json();
+      })
       .catch((error) => {
         console.log(console.log(error));
       });
     return data;
   }
 
-  async deleteUserWord({ userId, wordId, token }: UserWord) {
+  async deleteUserWord({ userId, wordId, token }: IUserWord) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
       method: `${Methods.DELETE}`,
       headers: {
@@ -203,6 +212,9 @@ class HTTPClient {
         Accept: "application/json",
       },
     })
+      .then((response) => {
+        return response.json();
+      })
       .then((response) => {
         return response.json();
       })
@@ -214,7 +226,7 @@ class HTTPClient {
 
   // AggregatedWords
 
-  async getUserStatistic({ userId, token }: UserData) {
+  async getUserStatistic({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
       method: `${Methods.GET}`,
       headers: {
@@ -225,13 +237,16 @@ class HTTPClient {
       .then((response) => {
         return response.json();
       })
+      .then((response) => {
+        return response.json();
+      })
       .catch((error) => {
         console.log(console.log(error));
       });
     return data;
   }
 
-  async putUserStatistic({ userId, token }: UserData, statistic: Statistic) {
+  async putUserStatistic({ userId, token }: IUserData, statistic: IStatistic) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
       method: `${Methods.PUT}`,
       headers: {
@@ -240,6 +255,9 @@ class HTTPClient {
       },
       body: JSON.stringify(statistic),
     })
+      .then((response) => {
+        return response.json();
+      })
       .then((response) => {
         return response.json();
       })
@@ -251,7 +269,7 @@ class HTTPClient {
 
   // Settings
 
-  async getUserSettings({ userId, token }: UserData) {
+  async getUserSettings({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
       method: `${Methods.GET}`,
       headers: {
@@ -262,13 +280,16 @@ class HTTPClient {
       .then((response) => {
         return response.json();
       })
+      .then((response) => {
+        return response.json();
+      })
       .catch((error) => {
         console.log(console.log(error));
       });
     return data;
   }
 
-  async putUserSettings({ userId, token }: UserData, statistic: Settings) {
+  async putUserSettings({ userId, token }: IUserData, statistic: ISettings) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
       method: `${Methods.PUT}`,
       headers: {
@@ -280,6 +301,9 @@ class HTTPClient {
       .then((response) => {
         return response.json();
       })
+      .then((response) => {
+        return response.json();
+      })
       .catch((error) => {
         console.log(console.log(error));
       });
@@ -288,7 +312,7 @@ class HTTPClient {
 
   // SignIn
 
-  async signIn(user: User) {
+  async signIn(user: IUser) {
     const data = await fetch(`${Url.DOMEN}/signin`, {
       method: `${Methods.POST}`,
       headers: {
@@ -296,6 +320,9 @@ class HTTPClient {
       },
       body: JSON.stringify(user),
     })
+      .then((response) => {
+        return response.json();
+      })
       .then((response) => {
         return response.json();
       })

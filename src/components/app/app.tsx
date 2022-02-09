@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 import { Switch, Route, BrowserRouter } from "react-router-dom";
 import { AppRoute } from "../../const/const";
 import MainPage from "../main-page/main-page";
 import AudioPage from "../audio-page/audio-page";
 import SprintPage from "../sprint-page/sprint-page";
 import TextBook from "../text-book/text-book";
+=======
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { AppRoute } from '../../const/const';
+import MainPage from '../main-page/main-page';
+import AudioChallenge from '../audio-page/audio-page';
+import SprintPage from '../sprint-page/sprint-page';
+import TextBook from '../text-book/text-book';
+import Stats from '../stats/stats';
+>>>>>>> develop
 
 function App() {
   return (
@@ -24,6 +34,13 @@ function App() {
         <Route exact path={AppRoute.SPRINT}>
           <SprintPage />
         </Route>
+<<<<<<< HEAD
+=======
+
+        <Route exact path={AppRoute.STATS}>
+          <Stats />
+        </Route>
+>>>>>>> develop
       </Switch>
     </BrowserRouter>
   );

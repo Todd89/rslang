@@ -1,0 +1,54 @@
+.girl-image{
+  position: absolute;
+  z-index: 0;
+}
+
+.greeting-sprint-levelchange-block{
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5vh;
+  height: 65vh;
+  width: 40vw;
+  background-color: rgba(121, 6, 252, .2);
+  z-index: 1;
+  border: 2px solid rgb(121, 6, 252);
+  border-radius: 20px;
+}
+
+.greeting-sprint-levelchange-block__rules{
+  height: 70%;
+  border-bottom: 2px solid rgb(121, 6, 252);
+}
+
+.greeting-sprint-levelchange-block__levels{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.greeting-sprint-levelchange-block__rules-text {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  color: black;
+}
+
+.greeting-sprint-levelchange-block__levels-buttons{
+  display: flex;
+  justify-content: center;
+  column-gap: 8px;
+  width: 70%;
+  margin-top: 5%;
+}
+
+
+.greeting-sprint-block__button{
+  width: 40px;
+  height: 40px;
+  background-color: rgb(183, 0, 255);
+  border: 1px solid rgb(121, 6, 252);
+  border-radius: 25%;
+}
