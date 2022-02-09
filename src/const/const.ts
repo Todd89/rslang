@@ -13,6 +13,10 @@ export const enum Methods {
   DELETE = "DELETE",
 }
 
+export const enum ResponseStatus {
+  OK = 200,
+}
+
 export const enum Url {
   DOMEN = "https://react-app-learnwords.herokuapp.com",
 }

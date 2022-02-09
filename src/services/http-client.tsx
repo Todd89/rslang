@@ -6,7 +6,7 @@ import {
   UserWord,
 } from "../interface/interface";
 
-import {Url, Methods} from '../const/const'
+import {Url, Methods, ResponseStatus} from '../const/const'
 
 class HTTPClient {
   // Words
@@ -47,26 +47,19 @@ class HTTPClient {
   }
 
   //Users
-
-  async createUser(user: User) {
-    const data = await fetch(
-      `${Url.DOMEN}/users`,
-      {
-        method: `${Methods.POST}`,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
+  async createUser (user: User) {
+    try {
+      const res = await fetch(`${Url.DOMEN}/users`, {
+        method: Methods.POST,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
-      }
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
       });
-    return data;
+      if (res.status === ResponseStatus.OK) {
+        return res.json();
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   }
 
   async getUser({ userId, token }: UserData) {
@@ -318,24 +311,19 @@ class HTTPClient {
   }
 
   // SignIn
-
   async signIn(user: User) {
-    const data = await fetch(
-      `${Url.DOMEN}/signin`,
-      {
-        method: `${Methods.POST}`,
-        headers: {
-          "content-type": "application/json",
-        },
+    try {
+      const res = await fetch(`${Url.DOMEN}/signin`, {
+        method: Methods.POST,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
+      });
+      if (res.status === ResponseStatus.OK) {
+        return res.json();
       }
-    ).then((response) => {
-      return response.json();
-    })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   }
 }
 
