@@ -57,6 +57,11 @@ class HTTPClient {
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
+      if (res.status === ResponseStatus.EXPECTATION_FAILED) {
+        return ResponseStatus.EXPECTATION_FAILED;
+      } else {
+        return null;
+      }
     } catch (error) {
       console.error("Error: ", error);
     }
