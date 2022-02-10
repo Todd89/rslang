@@ -2,15 +2,42 @@
   border-radius: 21px;
   color: $basic-white;
   background-color: $green;
-  height: 570px;
+  height: 610px;
 
   @media (min-width: $tablet-width) {
-    height: 425px;
+    height: 435px;
   }
 
   @media (min-width: $desktop-width) {
     height: 315px;
     width: 900px;
+  }
+}
+
+.authorization__error {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+
+
+  font-size: 18px;
+  color: rgb(255, 147, 147);
+  font-family: $main-font;
+}
+
+.authorization--sign-in {
+  height: 530px;
+
+  @media (min-width: $tablet-width) {
+    height: 345px;
+  }
+
+  @media (min-width: $desktop-width) {
+    height: 315px;
+    width: 700px;
   }
 }
 
@@ -23,7 +50,7 @@
   width: 40px;
   height: 40px;
 
-  background-color: transparent;
+  background-color: $green;
   border: none;
   cursor: pointer;
 }
@@ -64,6 +91,10 @@
 
   @media (min-width: $desktop-width) {
     grid-template-columns: repeat(3, 1fr);
+    
+    .authorization--sign-in & {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 
@@ -122,6 +153,7 @@
 
 
 .authorization__buttons-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;

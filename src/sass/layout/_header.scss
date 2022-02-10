@@ -48,3 +48,7 @@
 
   @media (min-width: $desktop-width) {}
 }
+
+.header .header__authorization--authorized {
+  background-color: rgb(135, 193, 201);
+}
