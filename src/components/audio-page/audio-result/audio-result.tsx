@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
-import { IWord, IAudioResult } from "../../../interface/interface-audio";
+import { IWordAudio, IAudioResult } from "../../../interface/interface-audio";
+
 import {
   AUDIO_PATH_DATA_AUDIO,
   AUDIO_PATH_UTILS_AUDIO,
@@ -17,7 +18,7 @@ export function Result(props: IProps) {
   const audio = new Audio();
   audio.volume = 0.2;
 
-  function playAudio(word: IWord) {
+  function playAudio(word: IWordAudio) {
     const path = `${AUDIO_PATH_DATA_AUDIO}${word.audio}`;
 
     audio.src = path;

@@ -7,7 +7,11 @@ import {
   AUDIO_EMPTY_WORD,
   AUDIO_QUESTIONS_ARRAY,
 } from "../../../const/const-audio";
-import { IWord, IAudioResult } from "../../../interface/interface-audio";
+import {
+  IWordAudio,
+  IAudioResult,
+  IUserWord,
+} from "../../../interface/interface-audio";
 import { AudioQuestion } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
 import { AudioLives } from "../audio-lives/audio-lives";
@@ -18,7 +22,13 @@ interface IProps {
 }
 
 export function Audiochallenge(props: IProps) {
-  //console.log("Audiochallenge");
+  //User functions
+  const userAuthorized = true; //заменить на state из Appa
+  const userId = "user";
+  const initialUserWords: Array<IUserWord> = []; //заменить на получение информации с сервера
+  const [userWords, setUserWords] = useState(initialUserWords);
+
+  //User functions
 
   const { changeState, changeGameLoadedStatus } = props;
 
@@ -59,41 +69,33 @@ export function Audiochallenge(props: IProps) {
 
   useEffect(() => {
     if (!answerReceived && !showResult && !isTimerOn) {
-      console.log("timer on", questionWord, answerReceived);
       setIsTimerOn(true);
       timerId.current = setTimeout(() => {
-        console.log("before off", timerId.current);
         if (timerId.current) {
           answerNorReceived();
-          console.log("timer off");
           setIsTimerOn(false);
           return clearTimeout(timerId.current);
         }
       }, AUDIO_ANSWER_TIME);
     }
-  }, [answerReceived, showResult, isTimerOn, questionWord, answerNorReceived]);
+  }, [answerReceived, showResult, isTimerOn, rightAnswer, answerNorReceived]);
 
   function answerNorReceived(): void {
     setAnswerReceived(true);
     afterAnswer(AUDIO_EMPTY_WORD, questionWord);
   }
 
-  function afterAnswer(answer: IWord, correctAnswer: IWord): void {
-    if (timerId.current) {
-      console.log("before stop", timerId.current);
-      console.log("timer stopped");
-      clearTimeout(timerId.current);
-      setIsTimerOn(false);
-    }
-
+  function afterAnswer(answer: IWordAudio, correctAnswer: IWordAudio): void {
     setAnswerReceived(true);
-    //console.log("answer", answer);
     if (answer === correctAnswer) {
       setRightAnswer(true);
     } else {
       setLives(lives - 1);
     }
-
+    if (timerId.current) {
+      clearTimeout(timerId.current);
+      setIsTimerOn(false);
+    }
     setQuestionsAnswered(() => {
       return questionsAnswered.map((item, index) =>
         index === currentQuestion ? answer === correctAnswer : item
@@ -105,9 +107,9 @@ export function Audiochallenge(props: IProps) {
     const nextQuestion = currentQuestion + 1;
 
     if (nextQuestion < questionsAmount && lives > 0) {
-      setRightAnswer(false);
-      setAnswerReceived(false);
       setCurrentQuestion(nextQuestion);
+      setAnswerReceived(false);
+      setRightAnswer(false);
     } else {
       const arrResult = AUDIO_QUESTIONS_ARRAY.map((item, index) => {
         return {
@@ -129,6 +131,34 @@ export function Audiochallenge(props: IProps) {
     onClickNext: nextQuestion,
     isTimerOn: isTimerOn,
   };
+
+  useEffect(() => {
+    const checkAnswer = (event: KeyboardEvent) => {
+      if (event.key === "1") {
+        return afterAnswer(paramQuestion.answers[0], questionWord);
+      }
+      if (event.key === "2") {
+        return afterAnswer(paramQuestion.answers[1], questionWord);
+      }
+      if (event.key === "3") {
+        return afterAnswer(paramQuestion.answers[2], questionWord);
+      }
+      if (event.key === "4") {
+        return afterAnswer(paramQuestion.answers[3], questionWord);
+      }
+      if (event.key === "ArrowRight") {
+        if (answerReceived) {
+          return nextQuestion();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", checkAnswer, false);
+
+    return () => {
+      document.removeEventListener("keydown", checkAnswer, false);
+    };
+  });
 
   return (
     <div className="container">

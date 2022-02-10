@@ -10,8 +10,6 @@ interface IProps {
 }
 
 export function AudioLevel(props: IProps) {
-  //console.log("AudioLevel");
-
   const {
     id,
     isGameLoaded,

@@ -1,4 +1,4 @@
-export interface IWord {
+export interface IWordAudio {
   id: string;
   group: number;
   page: number;
@@ -10,11 +10,24 @@ export interface IWord {
 }
 
 export interface IAudioQuestion {
-  questionWord: IWord;
-  answers: Array<IWord>;
+  questionWord: IWordAudio;
+  answers: Array<IWordAudio>;
 }
 
 export interface IAudioResult {
-  questionWord: IWord;
+  questionWord: IWordAudio;
   isAnswerCorrect: Boolean;
+}
+
+export interface IUserWord {
+  wordId: string;
+  difficulty: string;
+  optional: {
+    //group: number;
+    // page: number;
+    learned: boolean;
+    new: boolean;
+    wordCounter: number;
+    rightCounter: number;
+  };
 }

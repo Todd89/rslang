@@ -1,18 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom";
 import "./audio-answer.css";
 
-import { IWord } from "../../../interface/interface-audio";
+import { IWordAudio } from "../../../interface/interface-audio";
 
 interface Iprops {
-  questionWord: IWord;
-  word: IWord;
+  questionWord: IWordAudio;
+  word: IWordAudio;
   id: string;
-  onClick: (answer: IWord, correctAnswer: IWord) => void;
+  onClick: (answer: IWordAudio, correctAnswer: IWordAudio) => void;
 }
 
 export function AudioAnswer(props: Iprops) {
-  //console.log("AudioAnswer");
   const { word, questionWord, id, onClick } = props;
   return (
     <button

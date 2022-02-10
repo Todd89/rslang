@@ -7,16 +7,16 @@ import {
   AUDIO_PATH_IMAGES,
 } from "../../../const/const-audio";
 
-import { IWord } from "../../../interface/interface-audio";
+import { IWordAudio } from "../../../interface/interface-audio";
 
 import { AudioAnswer } from "../audio-answer/audio-answer";
 
 interface IProps {
-  questionWord: IWord;
-  answers: Array<IWord>;
+  questionWord: IWordAudio;
+  answers: Array<IWordAudio>;
   rightAnswer: boolean;
   answerReceived: boolean;
-  onClick: (answer: IWord, correctAnswer: IWord) => void;
+  onClick: (answer: IWordAudio, correctAnswer: IWordAudio) => void;
   onClickNext: () => void;
   isTimerOn: boolean;
 }
@@ -34,37 +34,43 @@ export function AudioQuestion(props: IProps) {
   const audio = new Audio();
   audio.volume = 0.2;
 
-  function playAudio(word: IWord) {
-    const path = `${AUDIO_PATH_DATA_AUDIO}${word.audio}`;
-
-    audio.src = path;
-    audio.load();
-    audio.play();
-  }
-
-  function playAudioAfterAnswer(isCorrectAnswer: boolean) {
-    const path = isCorrectAnswer
-      ? `${AUDIO_PATH_UTILS_AUDIO}right.mp3`
-      : `${AUDIO_PATH_UTILS_AUDIO}wrong.mp3`;
-
-    audio.src = path;
-    audio.load();
-    audio.play();
-  }
-
   useEffect(() => {
+    const audio = new Audio();
+    audio.volume = 0.2;
+    function playAudio(word: IWordAudio) {
+      const path = `${AUDIO_PATH_DATA_AUDIO}${word.audio}`;
+
+      audio.src = path;
+      audio.load();
+      setTimeout(() => {
+        audio.play();
+      }, 500);
+    }
     if (!answerReceived && isTimerOn) {
       playAudio(questionWord);
     }
-  });
+  }, [answerReceived, isTimerOn, questionWord]);
 
   useEffect(() => {
+    const audio = new Audio();
+    audio.volume = 0.2;
+
+    function playAudioAfterAnswer(isCorrectAnswer: boolean) {
+      const path = isCorrectAnswer
+        ? `${AUDIO_PATH_UTILS_AUDIO}right.mp3`
+        : `${AUDIO_PATH_UTILS_AUDIO}wrong.mp3`;
+
+      audio.src = path;
+      audio.load();
+      audio.play();
+    }
+
     if (answerReceived && rightAnswer && !isTimerOn) {
       playAudioAfterAnswer(true);
-    } else if (answerReceived && !rightAnswer) {
+    } else if (answerReceived && !rightAnswer && !isTimerOn) {
       playAudioAfterAnswer(false);
     }
-  });
+  }, [answerReceived, rightAnswer, isTimerOn]);
 
   if (answerReceived) {
     const style = {

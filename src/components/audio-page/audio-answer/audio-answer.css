@@ -16,11 +16,21 @@
   margin: 0 auto;
 }
 
+@media (max-width: 1200px) {
+  #id-0,
+  #id-1,
+  #id-2,
+  #id-3 {
+    font-size: 22px;
+  }
+}
+
 @media (max-width: 1024px) {
   #id-0,
   #id-1,
   #id-2,
   #id-3 {
     width: 200px;
+    font-size: 20px;
   }
 }

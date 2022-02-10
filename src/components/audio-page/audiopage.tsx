@@ -6,8 +6,6 @@ import "./audiopage.css";
 import { AudioLevels } from "./audio-levels/audio-levels";
 
 function AudioPage() {
-  // console.log("AudioPage");
-
   const [isGameOn, SetIsGameOn] = useState(false);
   const [isGameLoaded, SetIsGameLoaded] = useState(false);
 

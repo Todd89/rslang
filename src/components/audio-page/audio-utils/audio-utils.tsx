@@ -3,32 +3,48 @@ import {
   AUDIO_ANSWER_AMOUNT,
   AUDIO_QUESTIONS_ARRAY,
 } from "../../../const/const-audio";
-import { IWord } from "../../../interface/interface-audio";
+import { IWordAudio, IUserWord } from "../../../interface/interface-audio";
+import { IWord, IUserData } from "../../../interface/interface";
 
-import { PAGES_PER_GROUP } from "../../../const/const-audio";
+import { WORDS_PER_PAGE, PAGES_PER_GROUP } from "../../../const/const-audio";
 import httpClient from "../../../services/http-client";
 
-const wordsArray: Array<IWord> = [];
+const wordsArray: Array<IWordAudio> = [];
 
-async function getWords(group: number, page: number): Promise<void> {
+const userLearnedWordsArray: Array<IUserWord> = [];
+
+async function getWords(
+  group: number,
+  page: number,
+  strong: boolean
+): Promise<void> {
   const promiseArray = [];
-  for (let i = 0; i < PAGES_PER_GROUP; i += 1) {
-    const wordsServer = httpClient.getChunkOfWords(String(i), String(group));
+
+  if (strong) {
+    const wordsServer = httpClient.getChunkOfWords(
+      String(page - 1),
+      String(group)
+    );
     promiseArray.push(wordsServer);
+  } else {
+    for (let i = 0; i < page; i += 1) {
+      const wordsServer = httpClient.getChunkOfWords(String(i), String(group));
+      promiseArray.push(wordsServer);
+    }
   }
 
   await Promise.all(promiseArray).then((values) => {
     for (let i = 0; i < values.length; i++) {
       values[i].forEach(
         (item: {
-          id: any;
-          group: any;
-          page: any;
-          word: any;
-          image: any;
-          audio: any;
-          transcription: any;
-          wordTranslate: any;
+          id: string;
+          group: number;
+          page: number;
+          word: string;
+          image: string;
+          audio: string;
+          transcription: string;
+          wordTranslate: string;
         }) => {
           const itemWord = {
             id: item.id,
@@ -47,11 +63,64 @@ async function getWords(group: number, page: number): Promise<void> {
   });
 }
 
-export async function createArrayOfQuestions(group: number, page: number) {
+async function getUserWords(user: IUserData) {
+  //User functions
+
+  const promiseArray = [];
+  const userWords = httpClient.getAllUserWords(user);
+
+  promiseArray.push(userWords);
+
+  await Promise.all(promiseArray).then((values) => {
+    for (let i = 0; i < values.length; i++) {
+      values[i].forEach(
+        (item: {
+          wordId: string;
+          difficulty: string;
+          optional: {
+            // group: number;
+            //  page: number;
+            learned: boolean;
+            new: boolean;
+            wordCounter: number;
+            rightCounter: number;
+          };
+        }) => {
+          if (item.optional.learned) {
+            const itemWord = {
+              wordId: item.wordId,
+              difficulty: item.difficulty,
+              optional: {
+                learned: item.optional.learned,
+                new: item.optional.new,
+                wordCounter: item.optional.wordCounter,
+                rightCounter: item.optional.rightCounter,
+              },
+            };
+            userLearnedWordsArray.push(itemWord);
+          }
+        }
+      );
+    }
+  });
+}
+
+export async function createArrayOfQuestions(
+  group: number,
+  page: number
+  // user: IUserData //authorization
+) {
   AUDIO_QUESTIONS_ARRAY.length = 0;
 
-  await getWords(group, page);
-  const wordsForQuestions: Array<IWord> = [];
+  if (page < 0) {
+    await getWords(group, PAGES_PER_GROUP, false);
+  } else {
+    await getWords(group, page, true);
+  }
+
+  //  await getUserWords(user);//authorization
+
+  const wordsForQuestions: Array<IWordAudio> = [];
 
   const arrAvailableWords = getFilteredArray(group, page);
 
@@ -60,7 +129,23 @@ export async function createArrayOfQuestions(group: number, page: number) {
     AUDIO_MAX_QUESTION_AMOUNT
   );
 
-  while (wordsForQuestions.length < questionAmount) {
+  let counter = 0;
+
+  while (
+    wordsForQuestions.length < questionAmount &&
+    counter < WORDS_PER_PAGE
+  ) {
+    const question = getRandomWord();
+
+    //добавить отбор по пользовательским словам, если запуск со страницы
+    if (!wordsForQuestions.includes(question)) {
+      wordsForQuestions.push(question);
+    }
+    counter += 1;
+  }
+
+  if (wordsForQuestions.length < AUDIO_MAX_QUESTION_AMOUNT) {
+    await getWords(group, page - 1, false);
     const question = getRandomWord();
 
     if (!wordsForQuestions.includes(question)) {
@@ -75,14 +160,14 @@ export async function createArrayOfQuestions(group: number, page: number) {
     });
   });
 
-  function getRandomWord(): IWord {
+  function getRandomWord(): IWordAudio {
     return arrAvailableWords[
       Math.floor(Math.random() * (arrAvailableWords.length - 1))
     ];
   }
 
-  function getAnswersForQuestion(questionWord: IWord): Array<IWord> {
-    const arrAnswers: Array<IWord> = [];
+  function getAnswersForQuestion(questionWord: IWordAudio): Array<IWordAudio> {
+    const arrAnswers: Array<IWordAudio> = [];
     arrAnswers.push(questionWord);
 
     while (arrAnswers.length < AUDIO_ANSWER_AMOUNT) {
@@ -96,8 +181,8 @@ export async function createArrayOfQuestions(group: number, page: number) {
   }
 }
 
-function getFilteredArray(group: number, page: number): Array<IWord> {
-  let arrAvailableWords: Array<IWord> = [...wordsArray];
+function getFilteredArray(group: number, page: number): Array<IWordAudio> {
+  let arrAvailableWords: Array<IWordAudio> = [...wordsArray];
   if (group >= 0) {
     arrAvailableWords = wordsArray.filter((word) => word.group === group);
   }
