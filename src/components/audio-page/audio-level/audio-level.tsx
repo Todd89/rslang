@@ -22,7 +22,7 @@ export function AudioLevel(props: IProps) {
     changeIsGameChosen(true);
     (async () => {
       if (!isGameLoaded) {
-        await createArrayOfQuestions(id - 1, -1);
+        await createArrayOfQuestions(id - 1, -1, false);
         changeState(true);
         changeGameLoadedStatus(true);
       }

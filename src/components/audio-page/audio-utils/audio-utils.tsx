@@ -2,6 +2,7 @@ import {
   AUDIO_MAX_QUESTION_AMOUNT,
   AUDIO_ANSWER_AMOUNT,
   AUDIO_QUESTIONS_ARRAY,
+  AUDIO_USER_WORDS_ARRAY,
 } from "../../../const/const-audio";
 import { IWordAudio, IUserWord } from "../../../interface/interface-audio";
 import { IWord, IUserData } from "../../../interface/interface";
@@ -11,7 +12,15 @@ import httpClient from "../../../services/http-client";
 
 const wordsArray: Array<IWordAudio> = [];
 
-const userLearnedWordsArray: Array<IUserWord> = [];
+const userLearnedWordsArray: Array<IWordAudio> = [];
+
+async function getWord(id: string): Promise<void> {
+  const wordPromise = httpClient.getWord(id);
+  let wordServer:IWord
+  wordPromise.then((value)=>
+   
+  )
+}
 
 async function getWords(
   group: number,
@@ -86,17 +95,18 @@ async function getUserWords(user: IUserData) {
             rightCounter: number;
           };
         }) => {
-          if (item.optional.learned) {
-            const itemWord = {
-              wordId: item.wordId,
-              difficulty: item.difficulty,
-              optional: {
-                learned: item.optional.learned,
-                new: item.optional.new,
-                wordCounter: item.optional.wordCounter,
-                rightCounter: item.optional.rightCounter,
-              },
-            };
+          const itemWord = {
+            wordId: item.wordId,
+            difficulty: item.difficulty,
+            optional: {
+              learned: item.optional.learned,
+              new: item.optional.new,
+              wordCounter: item.optional.wordCounter,
+              rightCounter: item.optional.rightCounter,
+            },
+          };
+          AUDIO_USER_WORDS_ARRAY.push(itemWord);
+          if (itemWord.optional.learned) {
             userLearnedWordsArray.push(itemWord);
           }
         }
@@ -105,20 +115,26 @@ async function getUserWords(user: IUserData) {
   });
 }
 
+//userLearnedWordsArray;
+//AUDIO_USER_WORDS_ARRAY
+
 export async function createArrayOfQuestions(
   group: number,
-  page: number
-  // user: IUserData //authorization
+  page: number,
+  isLoadFromTextBook: boolean
 ) {
   AUDIO_QUESTIONS_ARRAY.length = 0;
+  AUDIO_USER_WORDS_ARRAY.length = 0;
 
   if (page < 0) {
     await getWords(group, PAGES_PER_GROUP, false);
   } else {
     await getWords(group, page, true);
   }
-
-  //  await getUserWords(user);//authorization
+  if (isAuthorized && isLoadFromTextBook) {
+    //для отбора неизученных слов
+    await getUserWords(user); //пол
+  }
 
   const wordsForQuestions: Array<IWordAudio> = [];
 
@@ -138,7 +154,10 @@ export async function createArrayOfQuestions(
     const question = getRandomWord();
 
     //добавить отбор по пользовательским словам, если запуск со страницы
-    if (!wordsForQuestions.includes(question)) {
+    if (
+      !wordsForQuestions.includes(question) &&
+      !userLearnedWordsArray.includes(question)
+    ) {
       wordsForQuestions.push(question);
     }
     counter += 1;

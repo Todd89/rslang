@@ -1,4 +1,8 @@
-import { IWordAudio, IAudioQuestion } from "../interface/interface-audio";
+import {
+  IWordAudio,
+  IAudioQuestion,
+  IUserWord,
+} from "../interface/interface-audio";
 import { Url } from "../const/const";
 
 export const PAGES_PER_GROUP = 30; //убрать в общие
@@ -6,11 +10,12 @@ export const WORDS_PER_PAGE = 20; //убрать в общие
 export const AUDIO_MAX_QUESTION_AMOUNT = 2;
 export const AUDIO_ANSWER_AMOUNT = 4;
 export const AUDIO_LIVES_AMOUNT = 5;
-export const AUDIO_ANSWER_TIME = 60000;
+export const AUDIO_ANSWER_TIME = 6000;
 export const AUDIO_PATH_DATA_AUDIO = `${Url.DOMEN}/`;
 export const AUDIO_PATH_UTILS_AUDIO = "/assets/sound/";
 export const AUDIO_PATH_IMAGES = `${Url.DOMEN}/`;
 export const AUDIO_QUESTIONS_ARRAY: Array<IAudioQuestion> = [];
+export const AUDIO_USER_WORDS_ARRAY: Array<IUserWord> = [];
 export const AUDIO_EMPTY_WORD: IWordAudio = {
   id: "-1",
   group: -1,
