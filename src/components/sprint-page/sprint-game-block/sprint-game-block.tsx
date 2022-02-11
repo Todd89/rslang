@@ -1,7 +1,7 @@
 import "./sprint-game-block.css";
 import { randomNum } from "../sprint-methods/sprint-methods";
 import { IGameBlockProps, IWordInAnswerArray } from "../../../interface/interface";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   word,
@@ -10,9 +10,44 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   changePageState,
   changeAnswersArray
 }) => {
-  let answer = "";
-  let rightAnswer: boolean;
-  const [answers, setAnswers] = useState<Array<IWordInAnswerArray>>([])
+  
+  const [answers, setAnswers] = useState<Array<IWordInAnswerArray>>([]);
+  const [seconds, setSeconds] = useState<number>(60);
+  const [answer, setAnswer] = useState<string>("");
+  const [rightAnswer, setRightAnswer] = useState<boolean | undefined>();
+  const [score, setScore] = useState<number>(0);
+
+  const makeRandomAnswer = () => {
+    const VALUE = randomNum(9);
+   
+    if (VALUE < 6) {
+      setAnswer(word.wordTranslate.toUpperCase());
+      setRightAnswer(true);
+      console.log('makeRandomAnswer',rightAnswer)
+      console.log('word',word)
+    } else {
+      const WRONG_NUM = randomNum(59);
+      if (wordsInGame[WRONG_NUM].wordTranslate !== word.wordTranslate) {
+        setAnswer(wordsInGame[WRONG_NUM].wordTranslate.toUpperCase());
+        setRightAnswer(false);
+        console.log('makeRandomAnswer',rightAnswer)
+        console.log('word',word)
+      }
+    }
+   
+  };
+
+  useEffect(() => {
+    let sec = 60;
+    const interval = setInterval(() => {
+      sec -= 1;
+      setSeconds(sec);
+    }, 1000)
+    makeRandomAnswer();
+    return () => clearInterval(interval);
+  }, []);
+
+
   const AUDIO_RIGHT = new Audio();
   AUDIO_RIGHT.src = "/assets/audio/right.mp3";
 
@@ -24,22 +59,9 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     changePageState('congratulation');
   }
 
-  const makeRandomAnswer = () => {
-    const VALUE = randomNum(9);
-    if (VALUE < 6) {
-      answer = word.wordTranslate.toUpperCase();
-      rightAnswer = true;
-    } else {
-      const WRONG_NUM = randomNum(59);
-      if (wordsInGame[WRONG_NUM].wordTranslate !== word.wordTranslate) {
-        answer = wordsInGame[WRONG_NUM].wordTranslate.toUpperCase();
-        rightAnswer = false;
-      }
-    }
-  };
 
-  const makeAnswersArray = (rightAnswer:boolean) => {
-    if (!rightAnswer) {
+  const makeAnswersArray = (rightAnswer:boolean, playerAnswer:boolean) => {
+    if (rightAnswer === playerAnswer) {
       const ANSWER_STATE = { isAnwserTrue: true };
       const ANWSER_WORD = { ...word, ...ANSWER_STATE };
       const NEW_ARR = answers.slice();
@@ -54,18 +76,28 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       setAnswers(NEW_ARR)
       AUDIO_WRONG.play();
     }
+  };
+
+  const changeScore = (answer:boolean, playerAnswer: boolean) => {
+    let newScore = score + 100;
+    if(answer === playerAnswer) {
+      setScore(newScore)
+    }
   }
 
-  makeRandomAnswer();
-  console.log(answers)
-
+console.log(rightAnswer)
+  
   return (
     <div>
       <div className='girl-image'>
         <img src='/assets/images/png/sprint_girl.png' alt='девочка' />
       </div>
       <div className='game-sprint-block'>
-        <div className='game-sprint-block__top-lights'></div>
+        <div className='game-sprint-block__top-lights'>
+          <div className='game-sprint-block__timer'>{ seconds }</div> 
+          <div className='game-sprint-block__level-up'></div> 
+          <div className='game-sprint-block__score'>{ score }</div> 
+        </div>
         <div className='game-sprint-block__quastion'>
           <div className='game-sprint-block__english-word'>
             '{word.word.toUpperCase()}'
@@ -74,19 +106,33 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         </div>
         <div className='game-sprint-block__buttons-block'>
           <button
+            id = 'wrong'
             className='game-sprint-block__button game-sprint-block__button_wrong'
-            onClick={() => {
-              makeAnswersArray(rightAnswer)
+            onClick={(e) => {
+              let el = e.target as HTMLElement;
+             if (el.id === 'wrong') {
+              changeScore(rightAnswer as boolean, false)
+              makeAnswersArray(rightAnswer as boolean, false)
               changeWordCount();
+              makeRandomAnswer();
+             }
             }}
+            
           >
             Неверно
           </button>
           <button
+            id = 'right'
             className='game-sprint-block__button game-sprint-block__button_right'
-            onClick={() => {
-              makeAnswersArray(rightAnswer)
+            onClick={(e) => {
+              let el = e.target as HTMLElement;
+               if (el.id === 'right') {
+              changeScore(rightAnswer as boolean, true)
+              makeAnswersArray(rightAnswer as boolean, true)
               changeWordCount();
+              makeRandomAnswer();
+             }
+              
             }}
           >
             Правильно
@@ -98,3 +144,4 @@ const GameBlock: React.FC<IGameBlockProps> = ({
 };
 
 export default GameBlock;
+

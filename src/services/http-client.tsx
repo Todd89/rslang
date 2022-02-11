@@ -9,6 +9,7 @@ import {
 import {Url, Methods} from '../const/const'
 
 class HTTPClient {
+
   // Words
 
   async getWords() {
@@ -155,9 +156,9 @@ class HTTPClient {
     return data;
   }
 
-  async createUserWord({ userId, wordId, word, token }: IUserWord) {
+  async createUserWord({ userId, token }: IUserData, userWord:IUserWord) {
     const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
         method: `${Methods.POST}`,
         headers: {
@@ -165,7 +166,7 @@ class HTTPClient {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(word),
+        body: JSON.stringify(userWord),
       }
     ).then((response) => {
       return response.json();
@@ -176,7 +177,7 @@ class HTTPClient {
   return data;
   }
 
-  async getUserWord({ userId, wordId, token }: IUserWord) {
+  async getUserWord({ userId, token }: IUserData, wordId: string) {
     const data = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
@@ -195,9 +196,9 @@ class HTTPClient {
   return data;
   }
 
-  async updateUserWord({ userId, wordId, token, word }: IUserWord) {
+  async updateUserWord({ userId, token }: IUserData, userWord:IUserWord) {
     const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
         method: `${Methods.PUT}`,
         headers: {
@@ -205,7 +206,7 @@ class HTTPClient {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(word),
+        body: JSON.stringify(userWord),
       }
     ).then((response) => {
       return response.json();
@@ -216,13 +217,13 @@ class HTTPClient {
   return data;
   }
 
-  async deleteUserWord({ userId, wordId, token }: IUserWord) {
+  async deleteUserWord({ userId, token }: IUserData, userWord:IUserWord) {
     const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
         method: `${Methods.DELETE}`,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userWord}`,
           Accept: "application/json",
         },
       }

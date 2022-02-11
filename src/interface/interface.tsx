@@ -30,6 +30,13 @@ export interface IUserWord {
   token: string;
   word?: IWord;
 }
+export interface IUserWord {
+  userId: string;
+  wordId: string;
+  token: string;
+  word?: IWord;
+}
+
 
 export interface  IChangePageState {
   changePageState: (name:string) => void;

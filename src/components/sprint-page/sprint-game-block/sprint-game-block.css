@@ -42,6 +42,7 @@
 }
 
 .game-sprint-block__top-lights{
+  color: black;
   height: 20%;
   border-bottom: 4px solid #ffba43;
 }
@@ -62,4 +63,8 @@
 .game-sprint-block__russian-word{
   padding-top: 10%;
   border-top: 1px dotted #ffba43;
+}
+
+.game-sprint-block__timer{
+
 }

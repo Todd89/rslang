@@ -15,8 +15,6 @@ const MainBlock: React.FC = () => {
   const [answersArray, setAnswersArray] =useState<Array<IWordInAnswerArray>>([]);
   let [wordCount, setCount] = useState<number>(0);
 
-  console.log(answersArray, 'main');
-
    useEffect(() => {
      if(words?.length > 0) {
       const newWord: IWordInArray = wordsInGame[wordCount];
