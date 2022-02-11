@@ -9,6 +9,7 @@ import {
 import { Url, Methods } from "../const/const";
 
 class HTTPClient {
+
   // Words
 
   async getWords(): Promise<void> {
@@ -140,15 +141,20 @@ class HTTPClient {
     return data;
   }
 
-  async createUserWord({ userId, wordId, word, token }: IUserWord) {
-    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
-      method: `${Methods.POST}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(word),
+  async createUserWord({ userId, token }: IUserData, userWord:IUserWord) {
+    const data = await fetch(
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
+      {
+        method: `${Methods.POST}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userWord),
+      }
+    ).then((response) => {
+      return response.json();
     })
       .then((response) => {
         return response.json();
@@ -162,13 +168,19 @@ class HTTPClient {
     return data;
   }
 
-  async getUserWord({ userId, wordId, token }: IUserWord) {
-    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
-      method: `${Methods.GET}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
+
+  async getUserWord({ userId, token }: IUserData, wordId: string) {
+    const data = await fetch(
+      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+      {
+        method: `${Methods.GET}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+      }
+    ).then((response) => {
+      return response.json();
     })
       .then((response) => {
         return response.json();
@@ -182,15 +194,20 @@ class HTTPClient {
     return data;
   }
 
-  async updateUserWord({ userId, wordId, token, word }: IUserWord) {
-    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
-      method: `${Methods.PUT}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(word),
+  async updateUserWord({ userId, token }: IUserData, userWord:IUserWord) {
+    const data = await fetch(
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
+      {
+        method: `${Methods.PUT}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userWord),
+      }
+    ).then((response) => {
+      return response.json();
     })
       .then((response) => {
         return response.json();
@@ -204,13 +221,18 @@ class HTTPClient {
     return data;
   }
 
-  async deleteUserWord({ userId, wordId, token }: IUserWord) {
-    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
-      method: `${Methods.DELETE}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
+  async deleteUserWord({ userId, token }: IUserData, userWord:IUserWord) {
+    const data = await fetch(
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
+      {
+        method: `${Methods.DELETE}`,
+        headers: {
+          Authorization: `Bearer ${userWord}`,
+          Accept: "application/json",
+        },
+      }
+    ).then((response) => {
+      return response.json();
     })
       .then((response) => {
         return response.json();
