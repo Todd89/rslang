@@ -1,18 +1,19 @@
 import {
-  Statistic,
-  Settings,
-  User,
-  UserData,
-  UserWord,
+  IStatistic,
+  ISettings,
+  IUser,
+  IUserData,
+  IUserWord,
 } from "../interface/interface";
 import { AuthData } from "../interface/auth-interface";
 
 import {Url, Methods, ResponseStatus} from '../const/const'
 
 class HTTPClient {
+
   // Words
 
-  async getWords() {
+  async getWords(): Promise<void> {
     const data = await fetch(`${Url.DOMEN}/words"`)
       .then((response) => {
         return response.json();
@@ -24,19 +25,8 @@ class HTTPClient {
   }
 
   async getChunkOfWords(pageNum: string, groupNum: string) {
-    const data = await fetch(`${Url.DOMEN}/words/?page=${pageNum}&group=${groupNum}`)
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
-  }
-
-  async getWord(id: string) {
     const data = await fetch(
-      `${Url.DOMEN}/words/${id}`
+      `${Url.DOMEN}/words/?page=${pageNum}&group=${groupNum}`
     )
       .then((response) => {
         return response.json();
@@ -47,8 +37,19 @@ class HTTPClient {
     return data;
   }
 
+  async getWord(id: string) {
+    const data = await fetch(`${Url.DOMEN}/words/${id}`)
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
+  }
+
   //Users
-  async createUser (user: User) {
+  async createUser (user: IUser) {
     try {
       const res = await fetch(`${Url.DOMEN}/users`, {
         method: Methods.POST,
@@ -68,18 +69,15 @@ class HTTPClient {
     }
   }
 
-  async getUser({ userId, token }: UserData) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}`,
-      {
-        method: `${Methods.GET}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
+  async getUser({ userId, token }: IUserData) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}`, {
+      method: `${Methods.GET}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         return response.json();
       })
@@ -89,18 +87,15 @@ class HTTPClient {
     return data;
   }
 
-  async deleteUser({ userId, token }: UserData) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}`,
-      {
-        method:`${Methods.DELETE}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "content-type": "application/json",
-        },
-      }
-    )
+  async deleteUser({ userId, token }: IUserData) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}`, {
+      method: `${Methods.DELETE}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "content-type": "application/json",
+      },
+    })
       .then((response) => {
         return response.json();
       })
@@ -135,18 +130,15 @@ class HTTPClient {
 
   // User Words
 
-  async getAllUserWords({ userId, token }: UserData) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words`,
-      {
-        method: `${Methods.GET}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
+  async getAllUserWords({ userId, token }: IUserData) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/words`, {
+      method: `${Methods.GET}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         return response.json();
       })
@@ -156,9 +148,9 @@ class HTTPClient {
     return data;
   }
 
-  async createUserWord({ userId, wordId, word, token }: UserWord) {
+  async createUserWord({ userId, token }: IUserData, userWord:IUserWord) {
     const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
         method: `${Methods.POST}`,
         headers: {
@@ -166,18 +158,25 @@ class HTTPClient {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(word),
+        body: JSON.stringify(userWord),
       }
     ).then((response) => {
       return response.json();
     })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
   }
 
-  async getUserWord({ userId, wordId, token }: UserWord) {
+
+  async getUserWord({ userId, token }: IUserData, wordId: string) {
     const data = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
@@ -190,15 +189,21 @@ class HTTPClient {
     ).then((response) => {
       return response.json();
     })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
   }
 
-  async updateUserWord({ userId, wordId, token, word }: UserWord) {
+  async updateUserWord({ userId, token }: IUserData, userWord:IUserWord) {
     const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
         method: `${Methods.PUT}`,
         headers: {
@@ -206,120 +211,136 @@ class HTTPClient {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(word),
+        body: JSON.stringify(userWord),
       }
     ).then((response) => {
       return response.json();
     })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
   }
 
-  async deleteUserWord({ userId, wordId, token }: UserWord) {
+  async deleteUserWord({ userId, token }: IUserData, userWord:IUserWord) {
     const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
         method: `${Methods.DELETE}`,
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userWord}`,
           Accept: "application/json",
         },
       }
     ).then((response) => {
       return response.json();
     })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
   }
 
   // AggregatedWords
 
-  async getUserStatistic({ userId, token }: UserData) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/statistics`,
-      {
-        method: `${Methods.GET}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    ).then((response) => {
-      return response.json();
+  async getUserStatistic({ userId, token }: IUserData) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
+      method: `${Methods.GET}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
     })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
   }
 
-  async putUserStatistic({ userId, token }: UserData, statistic: Statistic) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/statistics`,
-      {
-        method: `${Methods.PUT}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-        body: JSON.stringify(statistic),
-      }
-    ).then((response) => {
-      return response.json();
+  async putUserStatistic({ userId, token }: IUserData, statistic: IStatistic) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
+      method: `${Methods.PUT}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+      body: JSON.stringify(statistic),
     })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
   }
 
   // Settings
 
-  async getUserSettings({ userId, token }: UserData) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/statistics`,
-      {
-        method: `${Methods.GET}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    ).then((response) => {
-      return response.json();
+  async getUserSettings({ userId, token }: IUserData) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
+      method: `${Methods.GET}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
     })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
   }
 
-  async putUserSettings({ userId, token }: UserData, statistic: Settings) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/statistics`,
-      {
-        method: `${Methods.PUT}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-        body: JSON.stringify(statistic),
-      }
-    ).then((response) => {
-      return response.json();
+  async putUserSettings({ userId, token }: IUserData, statistic: ISettings) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
+      method: `${Methods.PUT}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+      body: JSON.stringify(statistic),
     })
-    .catch((error) => {
-      console.log(console.log(error));
-    });
-  return data;
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
   }
 
   // SignIn
-  async signIn(user: User) {
+  async signIn(user: IUser) {
     try {
       const res = await fetch(`${Url.DOMEN}/signin`, {
         method: Methods.POST,
