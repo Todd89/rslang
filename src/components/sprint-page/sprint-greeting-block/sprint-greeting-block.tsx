@@ -3,7 +3,7 @@ import { IGreetingBlockProps } from "../../../interface/interface";
 import { BUTTONS_NUMS } from '../../../const/const'
 import { getWordsFromGroup } from '../sprint-methods/sprint-methods';
 
-const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({ changePageState, changeWords, setFirstWord, makeRandomWordsForWork }) => {
+const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({ changePageState, changeWords, setFirstWord, makeRandomWordsForWork, makeRandomQuastions}) => {
 
   const BUTTONS = BUTTONS_NUMS.map((item) => {
     const ID = item.toString();

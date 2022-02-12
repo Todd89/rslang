@@ -2,11 +2,13 @@ import "./sprint-game-block.css";
 import {
   IGameBlockProps,
   IWordInAnswerArray,
+  IRandomWordInGame
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   word,
+  wordsInGame,
   changeWordCount,
   changePageState,
   changeAnswersArray,
@@ -15,12 +17,14 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   makeRandomAnswer,
   englishAnswer,
   changeWord,
+  randomWordsInGame,
 }) => {
   const [answers, setAnswers] = useState<Array<IWordInAnswerArray>>([]);
   const [seconds, setSeconds] = useState<number>(60);
   const [score, setScore] = useState<number>(0);
   const [scoreX, setScoreX] = useState<number>(1);
-
+  const [count, setCount] = useState<number>(0);
+  const [playerRealAnswer, setPlayerRealAnswer] = useState<boolean | undefined>();
 
   useEffect(() => {
     let sec = 60;
@@ -31,9 +35,18 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       }
       setSeconds(sec);
     }, 1000);
-    makeRandomAnswer();
     return () => clearInterval(interval);
   }, []);
+
+  
+  useEffect(() => {
+    if(count > 0) {
+      changeScoreX(answers)
+              
+      changeScore(randomWordsInGame[count-1].TYPE_OF_TRUE_ANSWER, playerRealAnswer as boolean);
+    }
+
+  }, [count]);
 
   const AUDIO_RIGHT = new Audio();
   AUDIO_RIGHT.src = "/assets/audio/right.mp3";
@@ -66,6 +79,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   };
 
   const changeScoreX = (answers:IWordInAnswerArray[]) => {
+    
     let result = 1;
     const LAST_WORD = answers.length - 1;    
       if(answers[LAST_WORD]?.isAnwserTrue && answers[LAST_WORD - 1]?.isAnwserTrue && answers[LAST_WORD-2]?.isAnwserTrue) {
@@ -75,16 +89,23 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       } else if (answers[LAST_WORD]?.isAnwserTrue) {
         result = 1.25
       }
-    console.log('result',result)
+      console.log(result)
     setScoreX(result)
   };
 
   const changeScore = (answer: boolean, playerAnswer: boolean) => {
+    console.log(answer)
+    console.log(playerAnswer)
     let newScore = score + (100 * scoreX);
     if (answer === playerAnswer) {
       setScore(newScore);
     }
   };
+
+  const changeCount = () => {
+    setCount(count + 1)
+  };
+  
 
   return (
     <div>
@@ -110,19 +131,23 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           </div>
         </div>
         <div className='game-sprint-block__quastion'>
-          <div className='game-sprint-block__english-word'>{englishAnswer}</div>
-          <div className='game-sprint-block__russian-word'>{answer}</div>
+          <div className='game-sprint-block__english-word'>{randomWordsInGame[count].ENGLISH_WORD}</div>
+          <div className='game-sprint-block__russian-word'>{randomWordsInGame[count].RUSSIAN_WORD}</div>
         </div>
         <div className='game-sprint-block__buttons-block'>
           <button
             className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={() => {
-              makeAnswersArray(typeOfAnswer as boolean, false);
-              changeScoreX(answers)
-              changeScore(typeOfAnswer as boolean, false);
+              setPlayerRealAnswer(false);
+
+              makeAnswersArray(randomWordsInGame[count].TYPE_OF_TRUE_ANSWER, false);
+              
               changeWordCount();
+              
               changeWord();
-              makeRandomAnswer();
+              
+              changeCount()
+   
             }}
           >
             Неверно
@@ -130,12 +155,15 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_right'
             onClick={() => {
-              makeAnswersArray(typeOfAnswer as boolean, true);
-              changeScoreX(answers)
-              changeScore(typeOfAnswer as boolean, true);
+              setPlayerRealAnswer(true);
+
+              makeAnswersArray(randomWordsInGame[count].TYPE_OF_TRUE_ANSWER, true);
+              
               changeWordCount();
+             
               changeWord();
-              makeRandomAnswer();
+              
+              changeCount()
             }}
           >
             Правильно

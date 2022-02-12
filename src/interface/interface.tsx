@@ -91,8 +91,8 @@ export interface IGameBlockProps {
   makeRandomAnswer:() => void 
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IWordInAnswerArray[]) => void;
-  changeWord: () => void
-  
+  changeWord: () => void;
+  randomWordsInGame:Array<IRandomWordInGame>;
 }
 
 export interface IGreetingBlockProps {
@@ -100,4 +100,18 @@ export interface IGreetingBlockProps {
   changeWords: (arr: Array<IWordInArray> | undefined) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
   makeRandomWordsForWork: (wordsInGame: any) => any;
+  makeRandomQuastions:(wordsInGame: Array<IWordInArray>) => void
 }
+
+export interface IWordInGame {
+  ENGLISH_WORD: string;
+  RUSSIAN_WORD: string;
+  TYPE_OF_TRUE_ANSWER: boolean;
+}
+
+export interface IRandomWordInGame {
+  ENGLISH_WORD: string;
+  RUSSIAN_WORD: string;
+  TYPE_OF_TRUE_ANSWER: boolean;
+} 
+
