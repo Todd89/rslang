@@ -1,52 +1,39 @@
 import "./sprint-game-block.css";
-import { randomNum } from "../sprint-methods/sprint-methods";
-import { IGameBlockProps, IWordInAnswerArray } from "../../../interface/interface";
-import { useState, useEffect } from 'react';
+import {
+  IGameBlockProps,
+  IWordInAnswerArray,
+} from "../../../interface/interface";
+import { useState, useEffect } from "react";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   word,
   changeWordCount,
-  wordsInGame,
   changePageState,
-  changeAnswersArray
+  changeAnswersArray,
+  answer,
+  typeOfAnswer,
+  makeRandomAnswer,
+  englishAnswer,
+  changeWord,
 }) => {
-  
   const [answers, setAnswers] = useState<Array<IWordInAnswerArray>>([]);
   const [seconds, setSeconds] = useState<number>(60);
-  const [answer, setAnswer] = useState<string>("");
-  const [rightAnswer, setRightAnswer] = useState<boolean | undefined>();
   const [score, setScore] = useState<number>(0);
+  const [scoreX, setScoreX] = useState<number>(1);
 
-  const makeRandomAnswer = () => {
-    const VALUE = randomNum(9);
-   
-    if (VALUE < 6) {
-      setAnswer(word.wordTranslate.toUpperCase());
-      setRightAnswer(true);
-      console.log('makeRandomAnswer',rightAnswer)
-      console.log('word',word)
-    } else {
-      const WRONG_NUM = randomNum(59);
-      if (wordsInGame[WRONG_NUM].wordTranslate !== word.wordTranslate) {
-        setAnswer(wordsInGame[WRONG_NUM].wordTranslate.toUpperCase());
-        setRightAnswer(false);
-        console.log('makeRandomAnswer',rightAnswer)
-        console.log('word',word)
-      }
-    }
-   
-  };
 
   useEffect(() => {
     let sec = 60;
     const interval = setInterval(() => {
       sec -= 1;
+      if (sec === 0) {
+        clearInterval(interval);
+      }
       setSeconds(sec);
-    }, 1000)
+    }, 1000);
     makeRandomAnswer();
     return () => clearInterval(interval);
   }, []);
-
 
   const AUDIO_RIGHT = new Audio();
   AUDIO_RIGHT.src = "/assets/audio/right.mp3";
@@ -54,39 +41,51 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const AUDIO_WRONG = new Audio();
   AUDIO_WRONG.src = "/assets/audio/wrong.mp3";
 
-  if(answers.length === 10) {
+  if (answers.length === 10) {
     changeAnswersArray(answers);
-    changePageState('congratulation');
+    changePageState("congratulation");
   }
 
-
-  const makeAnswersArray = (rightAnswer:boolean, playerAnswer:boolean) => {
+  const makeAnswersArray = (rightAnswer: boolean, playerAnswer: boolean) => {
+    console.log(word)
     if (rightAnswer === playerAnswer) {
       const ANSWER_STATE = { isAnwserTrue: true };
       const ANWSER_WORD = { ...word, ...ANSWER_STATE };
       const NEW_ARR = answers.slice();
-      NEW_ARR.push(ANWSER_WORD)
-      setAnswers(NEW_ARR)
+      NEW_ARR.push(ANWSER_WORD);
+      setAnswers(NEW_ARR);
       AUDIO_RIGHT.play();
     } else {
       const ANSWER_STATE = { isAnwserTrue: false };
       const ANWSER_WORD = { ...word, ...ANSWER_STATE };
       const NEW_ARR = answers.slice();
-      NEW_ARR.push(ANWSER_WORD)
-      setAnswers(NEW_ARR)
+      NEW_ARR.push(ANWSER_WORD);
+      setAnswers(NEW_ARR);
       AUDIO_WRONG.play();
     }
   };
 
-  const changeScore = (answer:boolean, playerAnswer: boolean) => {
-    let newScore = score + 100;
-    if(answer === playerAnswer) {
-      setScore(newScore)
-    }
-  }
+  const changeScoreX = (answers:IWordInAnswerArray[]) => {
+    let result = 1;
+    const LAST_WORD = answers.length - 1;    
+      if(answers[LAST_WORD]?.isAnwserTrue && answers[LAST_WORD - 1]?.isAnwserTrue && answers[LAST_WORD-2]?.isAnwserTrue) {
+        result = 2;
+      } else if (answers[LAST_WORD]?.isAnwserTrue && answers[LAST_WORD-1]?.isAnwserTrue) {
+        result = 1.5
+      } else if (answers[LAST_WORD]?.isAnwserTrue) {
+        result = 1.25
+      }
+    console.log('result',result)
+    setScoreX(result)
+  };
 
-console.log(rightAnswer)
-  
+  const changeScore = (answer: boolean, playerAnswer: boolean) => {
+    let newScore = score + (100 * scoreX);
+    if (answer === playerAnswer) {
+      setScore(newScore);
+    }
+  };
+
   return (
     <div>
       <div className='girl-image'>
@@ -94,45 +93,49 @@ console.log(rightAnswer)
       </div>
       <div className='game-sprint-block'>
         <div className='game-sprint-block__top-lights'>
-          <div className='game-sprint-block__timer'>{ seconds }</div> 
-          <div className='game-sprint-block__level-up'></div> 
-          <div className='game-sprint-block__score'>{ score }</div> 
+          <div className='game-sprint-block__timer'><span className='game-sprint-block__text'>{seconds} sec</span></div>
+          <div className='game-sprint-block__level-up'>
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/png/cool.png' alt='класс' />
+            </div>
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/png/cool.png' alt='класс' />
+            </div>
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/png/cool.png' alt='класс' />
+            </div>
+          </div>
+          <div className='game-sprint-block__score'>
+            <span className='game-sprint-block__text'>Score:{score}</span>
+          </div>
         </div>
         <div className='game-sprint-block__quastion'>
-          <div className='game-sprint-block__english-word'>
-            '{word.word.toUpperCase()}'
-          </div>
+          <div className='game-sprint-block__english-word'>{englishAnswer}</div>
           <div className='game-sprint-block__russian-word'>{answer}</div>
         </div>
         <div className='game-sprint-block__buttons-block'>
           <button
-            id = 'wrong'
             className='game-sprint-block__button game-sprint-block__button_wrong'
-            onClick={(e) => {
-              let el = e.target as HTMLElement;
-             if (el.id === 'wrong') {
-              changeScore(rightAnswer as boolean, false)
-              makeAnswersArray(rightAnswer as boolean, false)
+            onClick={() => {
+              makeAnswersArray(typeOfAnswer as boolean, false);
+              changeScoreX(answers)
+              changeScore(typeOfAnswer as boolean, false);
               changeWordCount();
+              changeWord();
               makeRandomAnswer();
-             }
             }}
-            
           >
             Неверно
           </button>
           <button
-            id = 'right'
             className='game-sprint-block__button game-sprint-block__button_right'
-            onClick={(e) => {
-              let el = e.target as HTMLElement;
-               if (el.id === 'right') {
-              changeScore(rightAnswer as boolean, true)
-              makeAnswersArray(rightAnswer as boolean, true)
+            onClick={() => {
+              makeAnswersArray(typeOfAnswer as boolean, true);
+              changeScoreX(answers)
+              changeScore(typeOfAnswer as boolean, true);
               changeWordCount();
+              changeWord();
               makeRandomAnswer();
-             }
-              
             }}
           >
             Правильно
@@ -144,4 +147,3 @@ console.log(rightAnswer)
 };
 
 export default GameBlock;
-

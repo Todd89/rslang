@@ -1,11 +1,13 @@
-export type IWord = {
-  difficulty: string;
-  optional: object;
-};
-
 export type IStatistic = {
-  learnedWords: number;
-  optional: object;
+  learned:number
+  optional:{
+    game:string,
+    date:string,
+    bestSeries:number,
+    succesCounter:number,
+    failCounter:number,
+    newWords:number
+  }
 };
 
 export type ISettings = {
@@ -25,21 +27,20 @@ export interface IUserData {
 }
 
 export interface IUserWord {
-  userId: string;
+  difficulty: string;
   wordId: string;
-  token: string;
-  word?: IWord;
-}
-export interface IUserWord {
-  userId: string;
-  wordId: string;
-  token: string;
-  word?: IWord;
+  options: {
+    learned: boolean;
+    group: boolean;
+    page: number;
+    succesCounter: number;
+    failCounter: number;
+    new: boolean;
+  };
 }
 
-
-export interface  IChangePageState {
-  changePageState: (name:string) => void;
+export interface IChangePageState {
+  changePageState: (name: string) => void;
 }
 
 export interface IChangeWords {
@@ -65,6 +66,7 @@ export interface IWordInArray {
   wordTranslate: string;
 }
 
+
 export interface AuthorizationComponentProps {
   isRegistration: boolean;
   changeForm: (evt: React.MouseEvent) => void;
@@ -76,20 +78,26 @@ export interface IWordInAnswerArray extends IWordInArray{
 }
 
 export interface IWordsOfArrays {
-  words:IWordInArray[][]
+  words: IWordInArray[][];
 }
 
 export interface IGameBlockProps {
-  word: IWordInArray,
-  changeWordCount: () => void,
-  wordsInGame:Array<IWordInArray>,
-  changePageState:(name:string) => void,
-  changeAnswersArray: (arr:IWordInAnswerArray[]) => void
+  word: IWordInArray;
+  wordsInGame: Array<IWordInArray>;
+  englishAnswer:string | undefined
+  answer:string;
+  typeOfAnswer:boolean | undefined; 
+  changeWordCount: () => void;
+  makeRandomAnswer:() => void 
+  changePageState: (name: string) => void;
+  changeAnswersArray: (arr: IWordInAnswerArray[]) => void;
+  changeWord: () => void
+  
 }
 
 export interface IGreetingBlockProps {
-  changePageState: (name:string) => void,
-  changeWords: (arr:Array<IWordInArray> | undefined) => void,
-  setFirstWord: (arr:Array<IWordInArray>) => void,
-  makeRandomWordsForWork: (wordsInGame:any) => any,
+  changePageState: (name: string) => void;
+  changeWords: (arr: Array<IWordInArray> | undefined) => void;
+  setFirstWord: (arr: Array<IWordInArray>) => void;
+  makeRandomWordsForWork: (wordsInGame: any) => any;
 }
