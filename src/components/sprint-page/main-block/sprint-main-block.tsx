@@ -14,11 +14,7 @@ const MainBlock: React.FC = () => {
   const [wordsInGame, setwordsInGame] = useState<Array<IWordInArray>>([]);
   const [randomWordsInGame, setRandomWordsInGame] = useState<Array<IRandomWordInGame>>([]);
   const [word, setWord] = useState<IWordInArray>();
-  const [answersArray, setAnswersArray] = useState<Array<IWordInAnswerArray>>([]);
-  const [answer, setAnswer] = useState<string>("");
-  const [typeOfAnswer, setTypeOfAnswer] = useState<boolean | undefined>();
-  const [englishAnswer, setEnglishAnswer] = useState<string>("");
-
+  const [answersArray, setAnswersArray] = useState<Array<IRandomWordInGame>>([]);
  
 
   const makeRandomAnswerArray = (word:IWordInArray):IRandomWordInGame => {
@@ -29,21 +25,21 @@ const MainBlock: React.FC = () => {
 
       const ENGLISH_WORD = word.word.toUpperCase();
       const RUSSIAN_WORD = word.wordTranslate.toUpperCase();
-      const TYPE_OF_TRUE_ANSWER = true;
+      const TRANSCRIPTION = word.transcription.toUpperCase();
+      const TYPE_OF_ANSWER = true;
 
-      newRandomQuastion = {...{}, ENGLISH_WORD, RUSSIAN_WORD, TYPE_OF_TRUE_ANSWER}
+      newRandomQuastion = {...{}, ENGLISH_WORD, RUSSIAN_WORD, TRANSCRIPTION, TYPE_OF_ANSWER}
        
       return newRandomQuastion;
     } else {
       const WRONG_NUM = randomNum(59);
       if (wordsInGame[WRONG_NUM].wordTranslate !== (word as IWordInArray).wordTranslate) {
         const ENGLISH_WORD = word.word.toUpperCase();
-
         const RUSSIAN_WORD = wordsInGame[WRONG_NUM].wordTranslate.toUpperCase();
-
-        const TYPE_OF_TRUE_ANSWER = false;
+        const TRANSCRIPTION = word.transcription.toUpperCase();
+        const TYPE_OF_ANSWER = false;
   
-        newRandomQuastion = {...{}, ENGLISH_WORD, RUSSIAN_WORD, TYPE_OF_TRUE_ANSWER}
+        newRandomQuastion = {...{}, ENGLISH_WORD, RUSSIAN_WORD, TRANSCRIPTION, TYPE_OF_ANSWER}
          
         return newRandomQuastion;
       } else {
@@ -52,9 +48,10 @@ const MainBlock: React.FC = () => {
     }
     const ENGLISH_WORD = word.word.toUpperCase();
     const RUSSIAN_WORD = word.wordTranslate.toUpperCase();
-    const TYPE_OF_TRUE_ANSWER = true;
+    const TRANSCRIPTION = word.transcription.toUpperCase();
+    const TYPE_OF_ANSWER = true;
 
-    newRandomQuastion = {...{}, ENGLISH_WORD, RUSSIAN_WORD, TYPE_OF_TRUE_ANSWER}
+    newRandomQuastion = {...{}, ENGLISH_WORD, RUSSIAN_WORD, TRANSCRIPTION, TYPE_OF_ANSWER}
 
     return newRandomQuastion
   };
@@ -74,36 +71,6 @@ const MainBlock: React.FC = () => {
       makeRandomQuastions(wordsInGame)
     }
   }, [wordsInGame])
-
-
-  
-  const makeRandomAnswer = () => {
-
-    const VALUE = randomNum(9);
-   
-    if (VALUE < 6) {
-      setEnglishAnswer((word as IWordInArray).word.toUpperCase());
-
-      setAnswer( (word as IWordInArray).wordTranslate.toUpperCase());
-      
-      setTypeOfAnswer(true);
-       
-      return
-    } else {
-      const WRONG_NUM = randomNum(59);
-      if (wordsInGame[WRONG_NUM].wordTranslate !== (word as IWordInArray).wordTranslate) {
-        setEnglishAnswer((word as IWordInArray).word.toUpperCase());
-
-        setAnswer(wordsInGame[WRONG_NUM].wordTranslate.toUpperCase());
-
-        setTypeOfAnswer(false);
-              
-        return
-      } else {
-        makeRandomAnswer ()
-      }
-    }
-  };
 
 
   const changeWord = () => {
@@ -157,16 +124,11 @@ const MainBlock: React.FC = () => {
         <div className='sprint-container container'>
           <GameBlock 
            word={word as IWordInArray} 
-           wordsInGame={wordsInGame} 
-           englishAnswer={englishAnswer}
-           answer={answer} 
-           typeOfAnswer={typeOfAnswer} 
+           randomWordsInGame={randomWordsInGame}
            changeWordCount={changeWordCount}
-           makeRandomAnswer={makeRandomAnswer} 
            changePageState={changePageState} 
            changeAnswersArray={changeAnswersArray} 
            changeWord={changeWord}
-           randomWordsInGame={randomWordsInGame}
            />
         </div>
       </main>

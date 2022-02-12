@@ -1,16 +1,18 @@
 import "./congratulation-item-block.css";
-import { IGameBlockProps, IWordInAnswerArray } from "../../../../interface/interface";
-import { useState } from 'react';
 
-const CongratulationItemBlock: React.FC<any> = ({ audio, word, transcription , wordTranslate, isAnwserTrue }) => {
-  
+const CongratulationItemBlock: React.FC<any> = ({
+  ENGLISH_WORD,
+  RUSSIAN_WORD,
+  TRANSCRIPTION,
+  TYPE_OF_ANSWER,
+}) => {
   return (
     <>
-    <span className=''>""</span>
-    <span className=''>{word}</span> 
-    <span className=''>{transcription}</span> 
-    <span className=''>{wordTranslate}</span> 
-    <span className=''>{`${isAnwserTrue}`}</span> 
+      <span className=''>""</span>
+      <span className=''>{ENGLISH_WORD}</span>
+      <span className=''>{TRANSCRIPTION}</span>
+      <span className=''>{RUSSIAN_WORD}</span>
+      <span className=''>{`${TYPE_OF_ANSWER}`}</span>
     </>
   );
 };

@@ -1,25 +1,20 @@
 import "./sprint-game-block.css";
 import {
   IGameBlockProps,
-  IWordInAnswerArray,
   IRandomWordInGame
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   word,
-  wordsInGame,
+  randomWordsInGame,
   changeWordCount,
   changePageState,
   changeAnswersArray,
-  answer,
-  typeOfAnswer,
-  makeRandomAnswer,
-  englishAnswer,
   changeWord,
-  randomWordsInGame,
+
 }) => {
-  const [answers, setAnswers] = useState<Array<IWordInAnswerArray>>([]);
+  const [answers, setAnswers] = useState<any>([]);
   const [seconds, setSeconds] = useState<number>(60);
   const [score, setScore] = useState<number>(0);
   const [scoreX, setScoreX] = useState<number>(1);
@@ -41,9 +36,12 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   
   useEffect(() => {
     if(count > 0) {
+
       changeScoreX(answers)
               
-      changeScore(randomWordsInGame[count-1].TYPE_OF_TRUE_ANSWER, playerRealAnswer as boolean);
+      changeScore(randomWordsInGame[count-1].TYPE_OF_ANSWER, playerRealAnswer as boolean);
+
+     
     }
 
   }, [count]);
@@ -60,17 +58,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }
 
   const makeAnswersArray = (rightAnswer: boolean, playerAnswer: boolean) => {
-    console.log(word)
+    console.log(word, "WORD")
     if (rightAnswer === playerAnswer) {
-      const ANSWER_STATE = { isAnwserTrue: true };
-      const ANWSER_WORD = { ...word, ...ANSWER_STATE };
+      const ANSWER_STATE = { TYPE_OF_ANSWER: true };
+      const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
       const NEW_ARR = answers.slice();
       NEW_ARR.push(ANWSER_WORD);
       setAnswers(NEW_ARR);
       AUDIO_RIGHT.play();
     } else {
-      const ANSWER_STATE = { isAnwserTrue: false };
-      const ANWSER_WORD = { ...word, ...ANSWER_STATE };
+      const ANSWER_STATE = { TYPE_OF_ANSWER: false };
+      const ANWSER_WORD = {  ...randomWordsInGame[count], ...ANSWER_STATE };
       const NEW_ARR = answers.slice();
       NEW_ARR.push(ANWSER_WORD);
       setAnswers(NEW_ARR);
@@ -78,24 +76,22 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     }
   };
 
-  const changeScoreX = (answers:IWordInAnswerArray[]) => {
+  const changeScoreX = (answers:IRandomWordInGame[]) => {
     
     let result = 1;
     const LAST_WORD = answers.length - 1;    
-      if(answers[LAST_WORD]?.isAnwserTrue && answers[LAST_WORD - 1]?.isAnwserTrue && answers[LAST_WORD-2]?.isAnwserTrue) {
+      if(answers[LAST_WORD]?.TYPE_OF_ANSWER && answers[LAST_WORD - 1]?.TYPE_OF_ANSWER && answers[LAST_WORD-2]?.TYPE_OF_ANSWER) {
         result = 2;
-      } else if (answers[LAST_WORD]?.isAnwserTrue && answers[LAST_WORD-1]?.isAnwserTrue) {
+      } else if (answers[LAST_WORD]?.TYPE_OF_ANSWER && answers[LAST_WORD-1]?.TYPE_OF_ANSWER) {
         result = 1.5
-      } else if (answers[LAST_WORD]?.isAnwserTrue) {
+      } else if (answers[LAST_WORD]?.TYPE_OF_ANSWER) {
         result = 1.25
       }
-      console.log(result)
+
     setScoreX(result)
   };
 
   const changeScore = (answer: boolean, playerAnswer: boolean) => {
-    console.log(answer)
-    console.log(playerAnswer)
     let newScore = score + (100 * scoreX);
     if (answer === playerAnswer) {
       setScore(newScore);
@@ -105,7 +101,27 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const changeCount = () => {
     setCount(count + 1)
   };
+
+
+  if (document.getElementById('level-up')) {
+    const EL = document.getElementById('level-up') as HTMLElement;
+    const EL_FIRST = EL.firstElementChild;
+    const EL_SECOND = EL.firstElementChild?.nextElementSibling;
+    const EL_THIRD = EL.firstElementChild?.nextElementSibling?.nextElementSibling;
+    const EL_ARR = [EL_FIRST, EL_SECOND, EL_THIRD]
   
+    switch(scoreX ) {
+      case 1.25: EL_FIRST?.classList.add('view');
+      break;
+      case 1.5: EL_SECOND?.classList.add('view');
+      break;
+      case 2:  EL_THIRD?.classList.add('view');
+      break;
+      default: EL_ARR.forEach(el => el?.classList.remove('view'))
+    }
+  }
+
+
 
   return (
     <div>
@@ -113,9 +129,9 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         <img src='/assets/images/png/sprint_girl.png' alt='девочка' />
       </div>
       <div className='game-sprint-block'>
-        <div className='game-sprint-block__top-lights'>
+        <div  className='game-sprint-block__top-lights'>
           <div className='game-sprint-block__timer'><span className='game-sprint-block__text'>{seconds} sec</span></div>
-          <div className='game-sprint-block__level-up'>
+          <div id="level-up" className='game-sprint-block__level-up'>
             <div className='game-sprint-block__cool-symbol'>
               <img src='/assets/images/png/cool.png' alt='класс' />
             </div>
@@ -139,15 +155,16 @@ const GameBlock: React.FC<IGameBlockProps> = ({
             className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={() => {
               setPlayerRealAnswer(false);
-
-              makeAnswersArray(randomWordsInGame[count].TYPE_OF_TRUE_ANSWER, false);
+              
+              makeAnswersArray(randomWordsInGame[count].TYPE_OF_ANSWER, false);
               
               changeWordCount();
               
               changeWord();
               
               changeCount()
-   
+
+              
             }}
           >
             Неверно
@@ -157,13 +174,15 @@ const GameBlock: React.FC<IGameBlockProps> = ({
             onClick={() => {
               setPlayerRealAnswer(true);
 
-              makeAnswersArray(randomWordsInGame[count].TYPE_OF_TRUE_ANSWER, true);
+              makeAnswersArray(randomWordsInGame[count].TYPE_OF_ANSWER, true);
               
               changeWordCount();
              
               changeWord();
               
               changeCount()
+
+             
             }}
           >
             Правильно

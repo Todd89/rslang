@@ -83,16 +83,12 @@ export interface IWordsOfArrays {
 
 export interface IGameBlockProps {
   word: IWordInArray;
-  wordsInGame: Array<IWordInArray>;
-  englishAnswer:string | undefined
-  answer:string;
-  typeOfAnswer:boolean | undefined; 
-  changeWordCount: () => void;
-  makeRandomAnswer:() => void 
-  changePageState: (name: string) => void;
-  changeAnswersArray: (arr: IWordInAnswerArray[]) => void;
-  changeWord: () => void;
   randomWordsInGame:Array<IRandomWordInGame>;
+  changeWordCount: () => void;
+  changePageState: (name: string) => void;
+  changeAnswersArray: (arr: IRandomWordInGame[]) => void;
+  changeWord: () => void;
+ 
 }
 
 export interface IGreetingBlockProps {
@@ -112,6 +108,7 @@ export interface IWordInGame {
 export interface IRandomWordInGame {
   ENGLISH_WORD: string;
   RUSSIAN_WORD: string;
-  TYPE_OF_TRUE_ANSWER: boolean;
+  TRANSCRIPTION: string
+  TYPE_OF_ANSWER: boolean;
 } 
 

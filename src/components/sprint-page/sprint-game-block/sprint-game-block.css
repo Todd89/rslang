@@ -87,3 +87,11 @@
 .game-sprint-block__text{
   display: block;
 }
+
+.game-sprint-block__cool-symbol {
+  opacity: 0;
+}
+
+.view {
+  opacity: 1;
+}
