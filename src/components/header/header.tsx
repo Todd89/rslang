@@ -2,11 +2,18 @@ import Authorization from "../authorization/authorization";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { AppRoute } from '../../const/const';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAuthorizeStatus } from "../../store/data/selectors";
+import { resetStore, changeAuthorizeStatus } from "../../store/action";
+import { initialState } from "../../store/data/data";
 
 const Header: React.FC = () => {
   const [isOpenNav, setIsOpenNav] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isRegistration, setIsRegistration] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const isAuthorize = useSelector(getAuthorizeStatus);
 
   const changeForm = (evt: React.MouseEvent) => {
     evt.preventDefault();
@@ -15,6 +22,12 @@ const Header: React.FC = () => {
 
   const toggleForm = () => {
     setIsFormOpen((prev) => !prev);
+  }
+
+  const logout = () => {
+    dispatch(resetStore(initialState));
+    dispatch(changeAuthorizeStatus(false));
+    localStorage.clear();
   }
 
   return (
@@ -67,11 +80,21 @@ const Header: React.FC = () => {
           </button>
   
           <button 
-            className="btn header__authorization"
-            onClick={() => toggleForm()}
+            className={
+              !isAuthorize 
+              ? "btn header__authorization" 
+              : "btn header__authorization header__authorization--authorized"
+            }
+            onClick={() => {
+              if (isAuthorize) {
+                logout();
+                return;
+              }
+              toggleForm()
+            }}
             disabled={isOpenNav}
           >
-            Войти
+            {isAuthorize ? "Выйти" : "Войти"}
           </button>
         </div>
       </header>

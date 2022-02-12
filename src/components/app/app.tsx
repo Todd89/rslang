@@ -5,8 +5,31 @@ import AudioChallenge from '../audio-page/audio-page';
 import SprintPage from '../sprint-page/sprint-page';
 import TextBook from '../text-book/text-book';
 import Stats from '../stats/stats';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { getUserAuthData } from '../../store/data/selectors';
+import httpClient from '../../services/http-client';
+import { useDispatch } from 'react-redux';
+import { addNewTokens, changeAuthorizeStatus } from '../../store/action';
 
-function App() {
+const App: React.FC = () => {
+  const userAuthData = useSelector(getUserAuthData);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    const getRefreshToken = async () => {
+      if (userAuthData && userAuthData.userId && userAuthData.refreshToken) {
+        const res = await httpClient.getNewUserToken(userAuthData.userId, userAuthData.refreshToken);
+        if (res) {
+          dispatch(addNewTokens(res));
+          return;
+        }
+        dispatch(changeAuthorizeStatus(false));
+      }
+    }
+    getRefreshToken();
+  }, []);
+
   return (
     <BrowserRouter >
       <Switch>

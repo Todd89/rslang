@@ -1,6 +1,9 @@
 import { AuthorizationComponentProps } from "../../interface/interface";
-import React, { useRef, useState } from "react";
-import httpClient from "../../services/http-client"
+import React, { useRef, useState, useEffect } from "react";
+import httpClient from "../../services/http-client";
+import { useDispatch } from "react-redux";
+import { addUserIdData, addUserAuthData } from "../../store/action";
+import { ResponseStatus } from "../../const/const";
 
 const Authorization: React.FC<AuthorizationComponentProps> = ({ 
   isRegistration, 
@@ -10,33 +13,76 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
   const [nameValue, setNameValue] = useState("");
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
 
   const inputName = useRef<HTMLInputElement>(null);
   const inputEmail = useRef<HTMLInputElement>(null);
   const inputPassword = useRef<HTMLInputElement>(null);
 
-  const authorize = async () => {
-    if (isRegistration) {
-      const newUser = await httpClient.createUser({
-        name: nameValue,
-        email: emailValue, 
-        password: passwordValue
-      });
-      console.log(newUser);
-      return;
+  useEffect(() => {
+    const changeFocus = () => {
+      if (isRegistration) {
+        if (inputName.current !== null) {
+          inputName.current.focus()
+        }
+        return;
+      }
+      if (inputEmail.current !== null) {
+        inputEmail.current.focus()
+      }
     }
-    const user = await httpClient.signIn({
+    changeFocus();
+  }, [isRegistration])
+
+  
+  const createNewUser = async () => {
+    const response = await httpClient.createUser({
+      name: nameValue,
       email: emailValue, 
       password: passwordValue
     });
-    console.log(user);
-  } 
+    if (response === null) {
+      setErrorMessage("Неправильный пароль или логин");
+      return;
+    }
+    if (response === ResponseStatus.EXPECTATION_FAILED) {
+      setErrorMessage("Пользователь с таким email уже существует");
+      return;
+    }
+    dispatch(addUserIdData(response));
+    signInUser();
+  }
 
-  
+  const signInUser = async () => {
+    const response = await httpClient.signIn({
+      email: emailValue, 
+      password: passwordValue
+    });
+
+    if (response === null) {
+      setErrorMessage("Неправильный пароль или логин");
+      return;
+    }
+    if (response === ResponseStatus.EXPECTATION_FAILED) {
+      setErrorMessage("Пользователь с таким email уже существует");
+      return;
+    }
+
+    dispatch(addUserAuthData(response));
+    toggleForm();
+  }
 
   return (
     <>
-      <div className="modal authorization" id="modal">
+      <div 
+          className={
+            isRegistration 
+            ? "modal authorization" 
+            : "modal authorization authorization--sign-in"
+          } 
+          id="modal"
+      >
         <button 
             type="button"
             className="modal__close authorization__close"
@@ -46,18 +92,25 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
             Закрыть форму
           </span>
         </button>
-        <div className="modal__guts">
 
+        <div className="modal__guts">
+          {errorMessage && <p className="authorization__error">{errorMessage}</p>}
+          {/* <p className="authorization__error">Пользователь с таким email уже существует</p> */}
           <form className="authorization__form" autoComplete="off"
             onSubmit={(evt) => {
               evt.preventDefault();
-              authorize();
+              if (isRegistration) {
+                createNewUser();
+                return;
+              }
+              signInUser();
             }}
           >
             <h3 className="authorization__title">
-              {isRegistration ? "Регистрация" : "Войдите в аккаунт"} 
+              {isRegistration ? "Зарегистрируйтесь" : "Войдите в аккаунт"} 
             </h3> 
             <ul className="authorization__list">
+              {isRegistration && 
               <li className="authorization__item">
                 <label className="authorization__label" htmlFor="name">
                   Введите ваше имя <span className="authorization__star">*</span>
@@ -69,7 +122,6 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
                     placeholder="Филипп"
                     ref={inputName}
                     autoComplete="off"
-                    autoFocus
                     required
                     onChange={() => {
                       if (null !== inputName.current) {
@@ -77,7 +129,7 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
                       }
                     }}
                 />
-              </li>
+              </li>}
 
               <li className="authorization__item">
                 <label className="authorization__label" htmlFor="email">
@@ -90,6 +142,7 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
                     placeholder="kirkorov@mail.ru"
                     ref={inputEmail}
                     autoComplete="off"
+                    autoFocus
                     required
                     onChange={() => {
                       if (null !== inputEmail.current) {
@@ -134,7 +187,11 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
 
                 <button 
                   className="authorization__question-btn"
-                  onClick={(evt) => changeForm(evt)}
+                  onClick={(evt) => {
+                    changeForm(evt);
+                    setErrorMessage("");
+                    // changeFocus();
+                  }}
                 >
                   {isRegistration ? "Войдите" : "Зарегистрируйтесь"}
                 </button>
