@@ -5,9 +5,7 @@ import {
   IUserData,
   IUserWord,
 } from "../interface/interface";
-import { AuthData } from "../interface/auth-interface";
-
-import {Url, Methods, ResponseStatus} from '../const/const'
+import { Url, Methods, ResponseStatus } from '../const/const'
 
 class HTTPClient {
 

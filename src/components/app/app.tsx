@@ -6,10 +6,9 @@ import SprintPage from '../sprint-page/sprint-page';
 import TextBook from '../text-book/text-book';
 import Stats from '../stats/stats';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getUserAuthData } from '../../store/data/selectors';
 import httpClient from '../../services/http-client';
-import { useDispatch } from 'react-redux';
 import { addNewTokens, changeAuthorizeStatus } from '../../store/action';
 
 const App: React.FC = () => {
