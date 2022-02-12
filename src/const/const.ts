@@ -15,6 +15,7 @@ export const enum Methods {
 
 export const enum ResponseStatus {
   OK = 200,
+  EXPECTATION_FAILED = 417,
 }
 
 export const enum Url {

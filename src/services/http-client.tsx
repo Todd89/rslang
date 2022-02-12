@@ -5,6 +5,7 @@ import {
   UserData,
   UserWord,
 } from "../interface/interface";
+import { AuthData } from "../interface/auth-interface";
 
 import {Url, Methods, ResponseStatus} from '../const/const'
 
@@ -109,25 +110,27 @@ class HTTPClient {
     return data;
   }
 
-  async getNewUserToken({ userId, token }: UserData) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/tokens`,
-      {
-        method: `${Methods.GET}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
+  async getNewUserToken(userId: string, token: string) {
+    console.log("in getNewToken userId", userId);
+    console.log("in getNewToken token", token);
+    try {
+      const res = await fetch(
+        `${Url.DOMEN}/users/${userId}/tokens`,
+        {
+          method: Methods.GET,
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      if (res.status === ResponseStatus.OK) {
+        return res.json();
       }
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   // User Words
