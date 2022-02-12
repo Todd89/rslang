@@ -4,7 +4,7 @@ import {
   AUDIO_QUESTIONS_ARRAY,
 } from "../../../const/const-audio";
 import { IWordAudio, IUserWord } from "../../../interface/interface-audio";
-import { IWord, IUserData } from "../../../interface/interface";
+import { IUserData } from "../../../interface/interface";
 
 import { WORDS_PER_PAGE, PAGES_PER_GROUP } from "../../../const/const-audio";
 import httpClient from "../../../services/http-client";
