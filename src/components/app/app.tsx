@@ -1,12 +1,34 @@
-import { Switch, Route, BrowserRouter } from "react-router-dom";
-import { AppRoute } from "../../const/const";
-import MainPage from "../main-page/main-page";
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
+import { AppRoute } from '../../const/const';
+import MainPage from '../main-page/main-page';
 import AudioPage from "../audio-page/audiopage";
-import SprintPage from "../sprint-page/sprint-page";
-import TextBook from "../text-book/text-book";
-import Stats from "../stats/stats";
+import SprintPage from '../sprint-page/sprint-page';
+import TextBook from '../text-book/text-book';
+import Stats from '../stats/stats';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserAuthData } from '../../store/data/selectors';
+import httpClient from '../../services/http-client';
+import { addNewTokens, changeAuthorizeStatus } from '../../store/action';
 
-function App() {
+const App: React.FC = () => {
+  const userAuthData = useSelector(getUserAuthData);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    const getRefreshToken = async () => {
+      if (userAuthData && userAuthData.userId && userAuthData.refreshToken) {
+        const res = await httpClient.getNewUserToken(userAuthData.userId, userAuthData.refreshToken);
+        if (res) {
+          dispatch(addNewTokens(res));
+          return;
+        }
+        dispatch(changeAuthorizeStatus(false));
+      }
+    }
+    getRefreshToken();
+  }, []);
+
   return (
     <BrowserRouter>
       <Switch>

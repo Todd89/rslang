@@ -15,7 +15,7 @@
   box-sizing: border-box;
 }
 
-.header__login {
+.header__authorization {
   display: block;
   margin: 0;
   margin-left: auto;
@@ -47,4 +47,8 @@
   }
 
   @media (min-width: $desktop-width) {}
+}
+
+.header .header__authorization--authorized {
+  background-color: rgb(135, 193, 201);
 }

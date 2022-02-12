@@ -5,8 +5,7 @@ import {
   IUserData,
   IUserWord,
 } from "../interface/interface";
-
-import { Url, Methods } from "../const/const";
+import { Url, Methods, ResponseStatus } from '../const/const'
 
 class HTTPClient {
 
@@ -48,23 +47,24 @@ class HTTPClient {
   }
 
   //Users
-
-  async createUser(user: IUser) {
-    const data = await fetch(`${Url.DOMEN}/users`, {
-      method: `${Methods.POST}`,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
+  async createUser (user: IUser) {
+    try {
+      const res = await fetch(`${Url.DOMEN}/users`, {
+        method: Methods.POST,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
       });
-    return data;
+      if (res.status === ResponseStatus.OK) {
+        return res.json();
+      }
+      if (res.status === ResponseStatus.EXPECTATION_FAILED) {
+        return ResponseStatus.EXPECTATION_FAILED;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   }
 
   async getUser({ userId, token }: IUserData) {
@@ -103,22 +103,27 @@ class HTTPClient {
     return data;
   }
 
-  async getNewUserToken({ userId, token }: IUserData) {
-    const data = await fetch(`${Url.DOMEN}/users/${userId}/tokens`, {
-      method: `${Methods.GET}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
+  async getNewUserToken(userId: string, token: string) {
+    console.log("in getNewToken userId", userId);
+    console.log("in getNewToken token", token);
+    try {
+      const res = await fetch(
+        `${Url.DOMEN}/users/${userId}/tokens`,
+        {
+          method: Methods.GET,
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      if (res.status === ResponseStatus.OK) {
+        return res.json();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   // User Words
@@ -333,25 +338,19 @@ class HTTPClient {
   }
 
   // SignIn
-
   async signIn(user: IUser) {
-    const data = await fetch(`${Url.DOMEN}/signin`, {
-      method: `${Methods.POST}`,
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
+    try {
+      const res = await fetch(`${Url.DOMEN}/signin`, {
+        method: Methods.POST,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
       });
-    return data;
+      if (res.status === ResponseStatus.OK) {
+        return res.json();
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   }
 }
 

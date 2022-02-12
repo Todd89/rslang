@@ -66,7 +66,14 @@ export interface IWordInArray {
   wordTranslate: string;
 }
 
-export interface IWordInAnswerArray extends IWordInArray {
+
+export interface AuthorizationComponentProps {
+  isRegistration: boolean;
+  changeForm: (evt: React.MouseEvent) => void;
+  toggleForm: () => void;
+}
+
+export interface IWordInAnswerArray extends IWordInArray{
   isAnwserTrue: boolean;
 }
 
