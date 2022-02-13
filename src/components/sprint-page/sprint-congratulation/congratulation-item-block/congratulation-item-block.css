@@ -1,0 +1,27 @@
+.congratulation-item__audio {
+  margin: 3px 10px 3px 5px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.congratulation-item__audio img {
+  width:100%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.congratulation-item__audio img {
+  width: 100%;
+}
+
+.congratulation-item__english-word{
+  width: 23%;
+}
+
+.congratulation-item__translation{
+  width: 23%;
+}
+
+.congratulation-item__russian-word{
+  width: 23%;
+}

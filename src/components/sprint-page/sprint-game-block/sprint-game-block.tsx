@@ -20,18 +20,31 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [scoreX, setScoreX] = useState<number>(1);
   const [count, setCount] = useState<number>(0);
   const [playerRealAnswer, setPlayerRealAnswer] = useState<boolean | undefined>();
-
+  const [finish, setFinish] = useState<boolean | undefined>(false);
+  
   useEffect(() => {
     let sec = 60;
     const interval = setInterval(() => {
+
       sec -= 1;
       if (sec === 0) {
+        setFinish(true);
         clearInterval(interval);
+        changePageState("congratulation");
+        AUDIO_END.load();
+        AUDIO_END.play();
       }
       setSeconds(sec);
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+   if (finish) {
+    changeAnswersArray(answers);
+   }
+  }, [finish]);
+
 
   
   useEffect(() => {
@@ -41,24 +54,31 @@ const GameBlock: React.FC<IGameBlockProps> = ({
               
       changeScore(randomWordsInGame[count-1].TYPE_OF_ANSWER, playerRealAnswer as boolean);
 
-     
     }
 
   }, [count]);
 
   const AUDIO_RIGHT = new Audio();
-  AUDIO_RIGHT.src = "/assets/audio/right.mp3";
+  AUDIO_RIGHT.src = "/assets/sound/right.mp3";
+  AUDIO_RIGHT.volume = 0.2;
 
   const AUDIO_WRONG = new Audio();
-  AUDIO_WRONG.src = "/assets/audio/wrong.mp3";
+  AUDIO_WRONG.src = "/assets/sound/wrong.mp3";
+  AUDIO_WRONG.volume = 0.2;
 
-  if (answers.length === 10) {
+  const AUDIO_END = new Audio();
+  AUDIO_END.src = "/assets/sound/end.mp3";
+  AUDIO_END.volume = 0.2;
+
+  if (answers.length === 59) {
     changeAnswersArray(answers);
     changePageState("congratulation");
+    AUDIO_END.load();
+    AUDIO_END.play();
   }
 
   const makeAnswersArray = (rightAnswer: boolean, playerAnswer: boolean) => {
-    console.log(word, "WORD")
+
     if (rightAnswer === playerAnswer) {
       const ANSWER_STATE = { TYPE_OF_ANSWER: true };
       const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
@@ -121,12 +141,10 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     }
   }
 
-
-
   return (
     <div>
       <div className='girl-image'>
-        <img src='/assets/images/png/sprint_girl.png' alt='девочка' />
+        <img src='/assets/images/png/rocket-girl.png' alt='девочка' />
       </div>
       <div className='game-sprint-block'>
         <div  className='game-sprint-block__top-lights'>
@@ -163,8 +181,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
               changeWord();
               
               changeCount()
-
-              
+             
             }}
           >
             Неверно

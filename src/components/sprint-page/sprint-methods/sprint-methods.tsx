@@ -2,7 +2,7 @@ import httpClient from "../../../services/http-client";
 import { SprintNums } from '../../../const/const'
 import { IWordInArray  } from "../../../interface/interface";
 
-const getWordsFromGroup = async (group:string, changeWords:any) => {
+const getWordsFromGroup = async (group:string) => {
   const PROMIS_ARR = [];
   let RESULT: Array<Array<IWordInArray>> = [];
   for (let i = 0; i < SprintNums.PAGE_COUNT; i++) {
@@ -11,7 +11,7 @@ const getWordsFromGroup = async (group:string, changeWords:any) => {
   }
 
   await Promise.all(PROMIS_ARR).then((values) => {
-    changeWords(values);
+    // changeWords(values);
     RESULT =  values;
   })
 

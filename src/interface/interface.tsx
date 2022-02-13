@@ -29,11 +29,11 @@ export interface IUserData {
 export interface IUserWord {
   difficulty: string;
   wordId: string;
-  options: {
+  optional: {
     learned: boolean;
-    group: boolean;
+    group: number;
     page: number;
-    succesCounter: number;
+    successCounter: number;
     failCounter: number;
     new: boolean;
   };
@@ -93,10 +93,9 @@ export interface IGameBlockProps {
 
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
-  changeWords: (arr: Array<IWordInArray> | undefined) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
   makeRandomWordsForWork: (wordsInGame: any) => any;
-  makeRandomQuastions:(wordsInGame: Array<IWordInArray>) => void
+  changeAllWord: (arr: Array<Array<IWordInArray>>) => void
 }
 
 export interface IWordInGame {
@@ -106,8 +105,10 @@ export interface IWordInGame {
 }
 
 export interface IRandomWordInGame {
+  AUDIO: string;
   ENGLISH_WORD: string;
   RUSSIAN_WORD: string;
+  REAL_TRANSLATE:string;
   TRANSCRIPTION: string
   TYPE_OF_ANSWER: boolean;
 } 

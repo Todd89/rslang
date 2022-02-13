@@ -3,7 +3,7 @@ import { IGreetingBlockProps } from "../../../interface/interface";
 import { BUTTONS_NUMS } from '../../../const/const'
 import { getWordsFromGroup } from '../sprint-methods/sprint-methods';
 
-const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({ changePageState, changeWords, setFirstWord, makeRandomWordsForWork, makeRandomQuastions}) => {
+const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({ changePageState, setFirstWord, makeRandomWordsForWork, changeAllWord}) => {
 
   const BUTTONS = BUTTONS_NUMS.map((item) => {
     const ID = item.toString();
@@ -39,7 +39,8 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({ changePageState, 
         style={ {backgroundColor: color} }
         className='greeting-sprint-block__button'
         onClick={async() => {
-          const WORDS = await getWordsFromGroup((Number(ID) - 1).toString(), changeWords);
+          const WORDS = await getWordsFromGroup((Number(ID) - 1).toString());
+          changeAllWord(WORDS)
           const WORDS_FOR_WORK = await  makeRandomWordsForWork(WORDS);
           await setFirstWord(WORDS_FOR_WORK);
           changePageState('game');

@@ -1,18 +1,34 @@
 import "./congratulation-item-block.css";
+import { Url } from '../../../../const/const'
 
 const CongratulationItemBlock: React.FC<any> = ({
+  AUDIO,
   ENGLISH_WORD,
-  RUSSIAN_WORD,
+  REAL_TRANSLATE,
   TRANSCRIPTION,
   TYPE_OF_ANSWER,
 }) => {
+
+  const audio = new Audio();
+  audio.volume = 0.2;
+
+  function playAudio(AUDIO:string) {
+    const path = `${Url.DOMEN}/${AUDIO}`;
+    audio.src = path;
+    audio.load();
+    setTimeout(() => {
+      audio.play();
+    }, 500);
+  }
   return (
     <>
-      <span className=''>""</span>
-      <span className=''>{ENGLISH_WORD}</span>
-      <span className=''>{TRANSCRIPTION}</span>
-      <span className=''>{RUSSIAN_WORD}</span>
-      <span className=''>{`${TYPE_OF_ANSWER}`}</span>
+      <div className='congratulation-item__audio congratulation-text' onClick={() => playAudio(AUDIO)}>
+        <img src='/assets/images/png/audio.png' alt='звук' />
+      </div>
+      <span className='congratulation-item__english-word congratulation-text'>{ENGLISH_WORD}</span>
+      <span className='congratulation-item__translation congratulation-text'>{TRANSCRIPTION}</span>
+      <span className='congratulation-item__russian-word congratulation-text'>{REAL_TRANSLATE}</span>
+      <span className='congratulation-item__type congratulation-text'>{`${TYPE_OF_ANSWER}`}</span>
     </>
   );
 };

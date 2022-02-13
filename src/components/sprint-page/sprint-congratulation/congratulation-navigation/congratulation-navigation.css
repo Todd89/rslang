@@ -1,0 +1,9 @@
+.sprint-navigation-block__button-repeat {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.sprint-navigation-block__button-change {
+  margin-left: 10px;
+  cursor: pointer;
+}
