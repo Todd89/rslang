@@ -10,11 +10,24 @@ import {
 import {
   IWordAudio,
   IAudioResult,
-  IUserWord,
+  IAudioGameStatistic,
 } from "../../../interface/interface-audio";
 import { AudioQuestion } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
 import { AudioLives } from "../audio-lives/audio-lives";
+import {
+  createUpdateUserWord,
+  getPutAudioUserStatistic,
+} from "../audio-utils/audio-utils";
+
+//user
+import { useSelector } from "react-redux";
+import { getUserAuthData, getAuthorizeStatus } from "../../..store/selectors";
+import httpClient from "../../../services/http-client";
+
+const userAuthData = useSelector(getUserAuthData);
+const userAuthorized = useSelector(getAuthorizeStatus);
+//user
 
 interface IProps {
   changeState: (isOn: boolean) => void;
@@ -22,14 +35,6 @@ interface IProps {
 }
 
 export function Audiochallenge(props: IProps) {
-  //User functions
-  const userAuthorized = true; //заменить на state из Appa
-  const userId = "user";
-  const initialUserWords: Array<IUserWord> = []; //заменить на получение информации с сервера
-  const [userWords, setUserWords] = useState(initialUserWords);
-
-  //User functions
-
   const { changeState, changeGameLoadedStatus } = props;
 
   const [showResult, setShowResult] = useState(false);
@@ -47,6 +52,17 @@ export function Audiochallenge(props: IProps) {
 
   const initialStateResult: Array<IAudioResult> = [];
   const [gameResult, setGameResult] = useState(initialStateResult);
+  const [currentSeries, setCurrentSeries] = useState(0);
+  const [bestSeries, setBestSeries] = useState(0);
+  const initialGameStatistic: IAudioGameStatistic = {
+    gameBestSeries: 0,
+    gameLearnedWords: 0,
+    gameNewWords: 0,
+    gameSuccessCounter: 0,
+    gameFailCounter: 0,
+  };
+
+  const [gameStatistic, setGameStatistic] = useState(initialGameStatistic);
 
   const timerId: { current: NodeJS.Timeout | null } = useRef(null);
 
@@ -65,6 +81,7 @@ export function Audiochallenge(props: IProps) {
     setQuestionsAnswered(Array(AUDIO_QUESTIONS_ARRAY.length).fill(false));
     setLives(AUDIO_LIVES_AMOUNT);
     setGameResult(initialStateResult);
+    setGameStatistic(initialGameStatistic);
   }
 
   useEffect(() => {
@@ -89,8 +106,11 @@ export function Audiochallenge(props: IProps) {
     setAnswerReceived(true);
     if (answer === correctAnswer) {
       setRightAnswer(true);
+      setCurrentSeries(currentSeries + 1);
     } else {
       setLives(lives - 1);
+      setBestSeries((bestSeries) => Math.max(bestSeries, currentSeries));
+      setCurrentSeries(0);
     }
     if (timerId.current) {
       clearTimeout(timerId.current);
@@ -100,6 +120,21 @@ export function Audiochallenge(props: IProps) {
       return questionsAnswered.map((item, index) =>
         index === currentQuestion ? answer === correctAnswer : item
       );
+    });
+    if (userAuthorized) {
+      createUpdateUserWord(correctAnswer, rightAnswer, updateGameStatistic); //записать слово на сервер
+    }
+  }
+
+  function updateGameStatistic(data: IAudioGameStatistic) {
+    setGameStatistic((gameStatistic) => {
+      const newStat = gameStatistic;
+      newStat.gameBestSeries = Math.max(newStat.gameBestSeries, bestSeries);
+      newStat.gameFailCounter += data.gameFailCounter;
+      newStat.gameLearnedWords += data.gameLearnedWords;
+      newStat.gameNewWords += data.gameNewWords;
+      newStat.gameSuccessCounter += data.gameSuccessCounter;
+      return newStat;
     });
   }
 
@@ -118,6 +153,8 @@ export function Audiochallenge(props: IProps) {
         };
       });
       setGameResult(arrResult);
+      setBestSeries((bestSeries) => Math.max(bestSeries, currentSeries));
+      getPutAudioUserStatistic(gameStatistic);
       setShowResult(true);
     }
   }

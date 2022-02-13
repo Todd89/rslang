@@ -19,15 +19,35 @@ export interface IAudioResult {
   isAnswerCorrect: Boolean;
 }
 
+export interface IAudioGameStatistic {
+  gameLearnedWords: number;
+  gameBestSeries: number;
+  gameSuccessCounter: number;
+  gameFailCounter: number;
+  gameNewWords: number;
+}
+
 export interface IUserWord {
   wordId: string;
   difficulty: string;
   optional: {
-    //group: number;
-    // page: number;
     learned: boolean;
+    group: number;
+    page: number;
+    successCounter: number;
+    failCounter: number;
     new: boolean;
-    wordCounter: number;
-    rightCounter: number;
   };
 }
+
+export type IStatistic = {
+  learned: number;
+  optional: {
+    game: string;
+    date: string;
+    bestSeries: number;
+    successCounter: number;
+    failCounter: number;
+    newWords: number;
+  };
+};

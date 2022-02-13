@@ -10,10 +10,11 @@ import "./audio-result.css";
 
 interface IProps {
   gameResult: Array<IAudioResult>;
+  bestSeries: number;
 }
 
 export function Result(props: IProps) {
-  const { gameResult } = props;
+  const { gameResult, bestSeries } = props; //bestSeries Для статистики
 
   const audio = new Audio();
   audio.volume = 0.2;
