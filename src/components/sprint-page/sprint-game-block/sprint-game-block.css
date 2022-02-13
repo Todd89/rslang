@@ -12,7 +12,11 @@
 }
 
 .game-sprint-block__top-lights{
-  height: 15%;
+  display: flex;
+  justify-content: space-around;
+  height: 20%;
+  border-bottom: 4px solid #ffba43;
+  color: rgb(17, 0, 255);
 }
 
 .game-sprint-block__quastion{
@@ -41,11 +45,6 @@
   z-index: 0;
 }
 
-.game-sprint-block__top-lights{
-  height: 20%;
-  border-bottom: 4px solid #ffba43;
-}
-
 .game-sprint-block__quastion {
   display: flex;
   flex-direction: column;
@@ -62,4 +61,29 @@
 .game-sprint-block__russian-word{
   padding-top: 10%;
   border-top: 1px dotted #ffba43;
+}
+
+.game-sprint-block__timer{
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-sprint-block__level-up {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-sprint-block__score{
+  width: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-sprint-block__text{
+  display: block;
 }

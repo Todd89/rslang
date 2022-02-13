@@ -130,9 +130,15 @@
   text-align: center;
   
   @media (min-width: $tablet-width) {
-    padding-left: 30px;
-    max-width: 400px;
+    padding-left: 40px;
+    max-width: 370px;
     width: auto;
     text-align: left;
+  }
+  
+  @media (min-width: $desktop-width) {
+    padding-left: 30px;
+    max-width: 420px;
+    text-align: center;
   }
 }
