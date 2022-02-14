@@ -3,32 +3,32 @@ import {
   AUDIO_ANSWER_AMOUNT,
   AUDIO_QUESTIONS_ARRAY,
   AUDIO_USER_WORDS_ARRAY,
+  AUDIO_USER_WORDS_ARRAY_FOR_GAME,
   AUDIO_EMPTY_USER_WORD,
   RIGHT_ANSWERS_DIFFICULT,
   RIGHT_ANSWERS_NOT_DIFFICULT,
 } from "../../../const/const-audio";
 import {
   IWordAudio,
-  IUserWord,
   IStatistic,
   IAudioGameStatistic,
 } from "../../../interface/interface-audio";
-import { IWord, IUserData } from "../../../interface/interface";
+
+import { Url, Methods, ResponseStatus } from "../../../const/const";
+
+import { IUserWord, IUserData } from "../../../interface/interface";
+
+import { AuthData } from "../../../interface/auth-interface";
+//import { IWord, IUserData } from "../../../interface/interface";
 
 import { WORDS_PER_PAGE, PAGES_PER_GROUP } from "../../../const/const-audio";
 import httpClient from "../../../services/http-client";
 
-//user
-import { useSelector } from "react-redux";
-import { getUserAuthData, getAuthorizeStatus } from "../../..store/selectors";
-
-const userAuthData = useSelector(getUserAuthData);
-const userAuthorized = useSelector(getAuthorizeStatus);
-//user
 const wordsArray: Array<IWordAudio> = [];
 
 const userLearnedWordsArray: Array<string> = [];
-const userWordsArray: Array<IUserWord> = [];
+//const userWordsArray: Array<IUserWord> = [];
+let userLearnedWordsArrayToCheck: Array<string> = [];
 
 async function getWords(
   group: number,
@@ -83,9 +83,10 @@ async function getWords(
 export function createUpdateUserWord(
   word: IWordAudio,
   isRightAnswer: boolean,
-  updateGameStatistic: (data: IAudioGameStatistic)=>void
+  updateGameStatistic: (data: IAudioGameStatistic) => void,
+  userAuthData: AuthData
 ) {
-  const userWordArr = AUDIO_USER_WORDS_ARRAY.filter(
+  const userWordArr = AUDIO_USER_WORDS_ARRAY_FOR_GAME.filter(
     (item) => item.wordId === word.id
   );
   let userWord = AUDIO_EMPTY_USER_WORD;
@@ -94,16 +95,18 @@ export function createUpdateUserWord(
     userWord = userWordArr[0];
     isNewUserWord = false;
   } else {
+    //создать новое слово
     userWord.optional.new = true;
+    userWord.wordId = word.id;
+    userWord.difficulty = "false";
+    userWord.optional.group = word.group;
+    userWord.optional.page = word.page;
     //добавить сохранение нового слова для статистики
   }
-  userWord.wordId = userWord.wordId || word.id;
-  userWord.difficulty = userWord.wordId || userWord.difficulty;
   userWord.optional.failCounter = Number(!isRightAnswer);
-  userWord.optional.group = word.group || userWord.optional.group;
   if (userWord.difficulty === "true") {
     userWord.optional.successCounter = isRightAnswer
-      ? Math.max(
+      ? Math.min(
           (userWord.optional.successCounter += 1),
           RIGHT_ANSWERS_DIFFICULT
         )
@@ -113,7 +116,7 @@ export function createUpdateUserWord(
       userWord.optional.successCounter === RIGHT_ANSWERS_DIFFICULT;
   } else {
     userWord.optional.successCounter = isRightAnswer
-      ? Math.max(
+      ? Math.min(
           (userWord.optional.successCounter += 1),
           RIGHT_ANSWERS_NOT_DIFFICULT
         )
@@ -123,28 +126,100 @@ export function createUpdateUserWord(
       userWord.optional.successCounter === RIGHT_ANSWERS_NOT_DIFFICULT;
   }
   if (isNewUserWord) {
-    httpClient.createUserWord(userAuthData, userWord);
+    //httpClient.createUserWord(userAuthData, userWord);
+    createUserWord(userAuthData, userWord);
   } else {
-    httpClient.updateUserWord(userAuthData, userWord);
+    //httpClient.updateUserWord(userAuthData, userWord);
+    updateUserWord(userAuthData, userWord);
   }
 
   updateGameStatistic({
-    gameLearnedWords:Number(userWord.optional.learned),
-    gameBestSeries:0,
-    gameSuccessCounter:Number(isRightAnswer),
-    gameFailCounter:Number(!isRightAnswer),
-    gameNewWords:Number(userWord.optional.new));
+    gameLearnedWords: Number(userWord.optional.learned),
+    gameBestSeries: 0,
+    gameSuccessCounter: Number(isRightAnswer),
+    gameFailCounter: Number(!isRightAnswer),
+    gameNewWords: Number(userWord.optional.new),
+  });
 }
 
-async function getUserWords() {
+const createUserWord = async (
+  { userId, token }: IUserData,
+  userWord: IUserWord
+) => {
+  const userWordServer = {
+    difficulty: userWord.difficulty,
+    optional: {
+      learned: userWord.optional.learned,
+      group: userWord.optional.group,
+      page: userWord.optional.page,
+      successCounter: userWord.optional.successCounter,
+      failCounter: userWord.optional.failCounter,
+      new: userWord.optional.new,
+    },
+  };
+  const rawResponse = await fetch(
+    `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userWordServer),
+    }
+  );
+  const content = await rawResponse.json();
+};
+
+const updateUserWord = async (
+  { userId, token }: IUserData,
+  userWord: IUserWord
+) => {
+  const userWordServer = {
+    difficulty: userWord.difficulty,
+    optional: {
+      learned: userWord.optional.learned,
+      group: userWord.optional.group,
+      page: userWord.optional.page,
+      successCounter: userWord.optional.successCounter,
+      failCounter: userWord.optional.failCounter,
+      new: userWord.optional.new,
+    },
+  };
+
+  const rawResponse = await fetch(
+    `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
+    {
+      method: `${Methods.PUT}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userWordServer),
+    }
+  );
+  const content = await rawResponse.json();
+};
+
+export async function getUserWords(
+  userAuthData: AuthData,
+  isLoadFromTextBook: boolean
+) {
   //User functions
 
+  //console.log("utils getUserWords");
+
   const promiseArray = [];
+  AUDIO_USER_WORDS_ARRAY.length = 0;
 
   //const userWords = httpClient.getAllUserWords({userId:userAuthData.userId,token:userAuthData.token});
   const userWords = httpClient.getAllUserWords(userAuthData);
 
   promiseArray.push(userWords);
+
+  //console.log("utils getUserWords", userWords);
 
   await Promise.all(promiseArray).then((values) => {
     for (let i = 0; i < values.length; i++) {
@@ -173,33 +248,70 @@ async function getUserWords() {
               new: item.optional.new,
             },
           };
-          userWordsArray.push(itemWord);
+          AUDIO_USER_WORDS_ARRAY.push(itemWord);
           if (itemWord.optional.learned) {
             userLearnedWordsArray.push(itemWord.wordId);
           }
         }
       );
     }
+
+    if (isLoadFromTextBook) {
+      userLearnedWordsArrayToCheck = userLearnedWordsArray.slice();
+    }
+
+    // console.log("getUserWords AUDIO_USER_WORDS_ARRAY", AUDIO_USER_WORDS_ARRAY);
   });
+}
+
+export async function getUserWordsForTheGame(
+  userAuthorized: boolean,
+  userAuthData: AuthData
+) {
+  /*console.log(
+    "getUserWordsForTheGame AUDIO_QUESTIONS_ARRAY",
+    AUDIO_QUESTIONS_ARRAY
+  );*/
+  const wordsTemp = AUDIO_QUESTIONS_ARRAY.map((item) => item.questionWord);
+  /*console.log(
+    "getUserWordsForTheGame AUDIO_QUESTIONS_ARRAY",
+    AUDIO_QUESTIONS_ARRAY
+  );*/
+
+  //console.log("getUserWordsForTheGame userWordsArray", AUDIO_USER_WORDS_ARRAY);
+
+  AUDIO_USER_WORDS_ARRAY_FOR_GAME.length = 0;
+  if (userAuthorized) {
+    const arrTemp = AUDIO_USER_WORDS_ARRAY.filter((userWord) =>
+      wordsTemp.map((wordTemp) => wordTemp.id).includes(userWord.wordId)
+    );
+    arrTemp.forEach((item) => AUDIO_USER_WORDS_ARRAY_FOR_GAME.push(item)); //получили пользовательские слова для игры
+  }
+  /* console.log(
+    "getUserWordsForTheGame AUDIO_USER_WORDS_ARRAY_FOR_GAME",
+    AUDIO_USER_WORDS_ARRAY_FOR_GAME
+  );*/
 }
 
 export async function createArrayOfQuestions(
   group: number,
   page: number,
-  isLoadFromTextBook: boolean
+  isLoadFromTextBook: boolean,
+  userAuthorized: boolean,
+  userAuthData: AuthData
 ) {
   AUDIO_QUESTIONS_ARRAY.length = 0;
+
   AUDIO_USER_WORDS_ARRAY.length = 0;
-  userWordsArray.length = 0;
 
   if (page < 0) {
     await getWords(group, PAGES_PER_GROUP, false);
   } else {
     await getWords(group, page, true);
   }
-  if (userAuthorized && isLoadFromTextBook) {
+  if (userAuthorized) {
     //для отбора неизученных слов
-    await getUserWords(); //получить слова пользователя
+    await getUserWords(userAuthData, isLoadFromTextBook); //получить слова пользователя
   }
 
   const wordsForQuestions: Array<IWordAudio> = [];
@@ -221,7 +333,7 @@ export async function createArrayOfQuestions(
 
     if (
       !wordsForQuestions.includes(question) &&
-      !userLearnedWordsArray.includes(question.id)
+      !userLearnedWordsArrayToCheck.includes(question.id)
     ) {
       wordsForQuestions.push(question);
     }
@@ -232,18 +344,12 @@ export async function createArrayOfQuestions(
     await getWords(group, page - 1, false);
     const question = getRandomWord();
 
-    if (!wordsForQuestions.includes(question)) {
+    if (
+      !wordsForQuestions.includes(question) &&
+      !userLearnedWordsArrayToCheck.includes(question.id)
+    ) {
       wordsForQuestions.push(question);
     }
-  }
-
-  if (userAuthorized) {
-    const arrTemp = userWordsArray.filter((wordLearned) =>
-      wordsForQuestions
-        .map((wordQuestion) => wordQuestion.id)
-        .includes(wordLearned.wordId)
-    );
-    arrTemp.forEach((item) => AUDIO_USER_WORDS_ARRAY.push(item)); //получили пользовательские слова для игры
   }
 
   wordsForQuestions.forEach((word) => {
@@ -252,6 +358,10 @@ export async function createArrayOfQuestions(
       answers: getAnswersForQuestion(word),
     });
   });
+
+  if (userAuthorized) {
+    await getUserWordsForTheGame(userAuthorized, userAuthData);
+  }
 
   function getRandomWord(): IWordAudio {
     return arrAvailableWords[
@@ -294,6 +404,7 @@ function getFilteredArray(group: number, page: number): Array<IWordAudio> {
 }
 
 export async function getPutAudioUserStatistic(
+  userAuthData: AuthData,
   statisticState: IAudioGameStatistic
 ) {
   const dateTemp = new Date();

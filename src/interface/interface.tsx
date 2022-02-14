@@ -1,13 +1,13 @@
 export type IStatistic = {
-  learned:number
-  optional:{
-    game:string,
-    date:string,
-    bestSeries:number,
-    succesCounter:number,
-    failCounter:number,
-    newWords:number
-  }
+  learned: number;
+  optional: {
+    game: string;
+    date: string;
+    bestSeries: number;
+    successCounter: number;
+    failCounter: number;
+    newWords: number;
+  };
 };
 
 export type ISettings = {
@@ -29,11 +29,23 @@ export interface IUserData {
 export interface IUserWord {
   difficulty: string;
   wordId: string;
-  options: {
+  optional: {
     learned: boolean;
-    group: boolean;
+    group: number;
     page: number;
-    succesCounter: number;
+    successCounter: number;
+    failCounter: number;
+    new: boolean;
+  };
+}
+
+export interface IUserWordServer {
+  difficulty: string;
+  optional: {
+    learned: boolean;
+    group: number;
+    page: number;
+    successCounter: number;
     failCounter: number;
     new: boolean;
   };
@@ -66,14 +78,13 @@ export interface IWordInArray {
   wordTranslate: string;
 }
 
-
 export interface AuthorizationComponentProps {
   isRegistration: boolean;
   changeForm: (evt: React.MouseEvent) => void;
   toggleForm: () => void;
 }
 
-export interface IWordInAnswerArray extends IWordInArray{
+export interface IWordInAnswerArray extends IWordInArray {
   isAnwserTrue: boolean;
 }
 
@@ -84,15 +95,14 @@ export interface IWordsOfArrays {
 export interface IGameBlockProps {
   word: IWordInArray;
   wordsInGame: Array<IWordInArray>;
-  englishAnswer:string | undefined
-  answer:string;
-  typeOfAnswer:boolean | undefined; 
+  englishAnswer: string | undefined;
+  answer: string;
+  typeOfAnswer: boolean | undefined;
   changeWordCount: () => void;
-  makeRandomAnswer:() => void 
+  makeRandomAnswer: () => void;
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IWordInAnswerArray[]) => void;
-  changeWord: () => void
-  
+  changeWord: () => void;
 }
 
 export interface IGreetingBlockProps {

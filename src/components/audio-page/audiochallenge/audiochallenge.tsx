@@ -6,6 +6,8 @@ import {
   AUDIO_LIVES_AMOUNT,
   AUDIO_EMPTY_WORD,
   AUDIO_QUESTIONS_ARRAY,
+  AUDIO_USER_WORDS_ARRAY,
+  AUDIO,
 } from "../../../const/const-audio";
 import {
   IWordAudio,
@@ -18,15 +20,17 @@ import { AudioLives } from "../audio-lives/audio-lives";
 import {
   createUpdateUserWord,
   getPutAudioUserStatistic,
+  getUserWords,
+  getUserWordsForTheGame,
 } from "../audio-utils/audio-utils";
 
 //user
 import { useSelector } from "react-redux";
-import { getUserAuthData, getAuthorizeStatus } from "../../..store/selectors";
-import httpClient from "../../../services/http-client";
+import {
+  getUserAuthData,
+  getAuthorizeStatus,
+} from "../../../store/data/selectors";
 
-const userAuthData = useSelector(getUserAuthData);
-const userAuthorized = useSelector(getAuthorizeStatus);
 //user
 
 interface IProps {
@@ -36,6 +40,12 @@ interface IProps {
 
 export function Audiochallenge(props: IProps) {
   const { changeState, changeGameLoadedStatus } = props;
+  //++изменить когда будет загрузка со страниц учебника
+  const isLoadFromTextBook = false;
+  //--изменить когда будет загрузка со страниц учебника
+
+  const userAuthData = useSelector(getUserAuthData);
+  const userAuthorized = useSelector(getAuthorizeStatus);
 
   const [showResult, setShowResult] = useState(false);
 
@@ -70,7 +80,7 @@ export function Audiochallenge(props: IProps) {
 
   const questionWord = AUDIO_QUESTIONS_ARRAY[currentQuestion].questionWord;
 
-  function resetParameters(isOn: boolean, isLoad: boolean) {
+  async function resetParameters(isOn: boolean, isLoad: boolean) {
     changeState(isOn);
     changeGameLoadedStatus(isLoad);
     setShowResult(false);
@@ -82,6 +92,19 @@ export function Audiochallenge(props: IProps) {
     setLives(AUDIO_LIVES_AMOUNT);
     setGameResult(initialStateResult);
     setGameStatistic(initialGameStatistic);
+    // console.log("resetParameters AUDIO_QUESTIONS_ARRAY", AUDIO_QUESTIONS_ARRAY);
+    //console.log(
+    //  "resetParameters AUDIO_USER_WORDS_ARRAY before",
+    //  AUDIO_USER_WORDS_ARRAY
+    // );
+    await getUserWords(userAuthData, isLoadFromTextBook);
+    await getUserWordsForTheGame(userAuthorized, userAuthData);
+    console.log(AUDIO.src);
+    AUDIO.pause();
+    // console.log(
+    //   "resetParameters AUDIO_USER_WORDS_ARRAY after",
+    //   AUDIO_USER_WORDS_ARRAY
+    // );
   }
 
   useEffect(() => {
@@ -121,9 +144,6 @@ export function Audiochallenge(props: IProps) {
         index === currentQuestion ? answer === correctAnswer : item
       );
     });
-    if (userAuthorized) {
-      createUpdateUserWord(correctAnswer, rightAnswer, updateGameStatistic); //записать слово на сервер
-    }
   }
 
   function updateGameStatistic(data: IAudioGameStatistic) {
@@ -154,7 +174,7 @@ export function Audiochallenge(props: IProps) {
       });
       setGameResult(arrResult);
       setBestSeries((bestSeries) => Math.max(bestSeries, currentSeries));
-      getPutAudioUserStatistic(gameStatistic);
+      getPutAudioUserStatistic(userAuthData, gameStatistic);
       setShowResult(true);
     }
   }
@@ -168,6 +188,17 @@ export function Audiochallenge(props: IProps) {
     onClickNext: nextQuestion,
     isTimerOn: isTimerOn,
   };
+
+  useEffect(() => {
+    if (answerReceived && userAuthorized && !showResult && !isTimerOn) {
+      createUpdateUserWord(
+        paramQuestion.questionWord,
+        rightAnswer,
+        updateGameStatistic,
+        userAuthData
+      ); //записать слово на сервер
+    }
+  });
 
   useEffect(() => {
     const checkAnswer = (event: KeyboardEvent) => {
@@ -230,7 +261,13 @@ export function Audiochallenge(props: IProps) {
             </div>
           ) : (
             <div className="game__wrapper horizontal">
-              <div className="game__left-image"></div>
+              <div className="game__left-image">
+                <img
+                  className="game__left-img"
+                  src="assets/images/png/girl-thinking.png"
+                  alt=""
+                />
+              </div>
               <div className="game__wrapper vertical">
                 <AudioLives amount={lives} />
                 <div className="game__container">

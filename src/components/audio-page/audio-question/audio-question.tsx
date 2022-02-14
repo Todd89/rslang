@@ -5,6 +5,7 @@ import {
   AUDIO_PATH_DATA_AUDIO,
   AUDIO_PATH_UTILS_AUDIO,
   AUDIO_PATH_IMAGES,
+  AUDIO,
 } from "../../../const/const-audio";
 
 import { IWordAudio } from "../../../interface/interface-audio";
@@ -31,19 +32,19 @@ export function AudioQuestion(props: IProps) {
     onClickNext,
     isTimerOn,
   } = props;
-  const audio = new Audio();
-  audio.volume = 0.2;
+
+  AUDIO.volume = 0.2;
 
   useEffect(() => {
-    const audio = new Audio();
-    audio.volume = 0.2;
+    //const audio = new Audio();
+    AUDIO.volume = 0.2;
     function playAudio(word: IWordAudio) {
       const path = `${AUDIO_PATH_DATA_AUDIO}${word.audio}`;
 
-      audio.src = path;
-      audio.load();
+      AUDIO.src = path;
+      AUDIO.load();
       setTimeout(() => {
-        audio.play();
+        AUDIO.play();
       }, 500);
     }
     if (!answerReceived && isTimerOn) {
@@ -52,17 +53,17 @@ export function AudioQuestion(props: IProps) {
   }, [answerReceived, isTimerOn, questionWord]);
 
   useEffect(() => {
-    const audio = new Audio();
-    audio.volume = 0.2;
+    //const audio = new Audio();
+    AUDIO.volume = 0.2;
 
     function playAudioAfterAnswer(isCorrectAnswer: boolean) {
       const path = isCorrectAnswer
         ? `${AUDIO_PATH_UTILS_AUDIO}right.mp3`
         : `${AUDIO_PATH_UTILS_AUDIO}wrong.mp3`;
 
-      audio.src = path;
-      audio.load();
-      audio.play();
+      AUDIO.src = path;
+      AUDIO.load();
+      AUDIO.play();
     }
 
     if (answerReceived && rightAnswer && !isTimerOn) {

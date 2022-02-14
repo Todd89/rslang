@@ -4,11 +4,11 @@ import {
   IUser,
   IUserData,
   IUserWord,
+  IUserWordServer,
 } from "../interface/interface";
-import { Url, Methods, ResponseStatus } from '../const/const'
+import { Url, Methods, ResponseStatus } from "../const/const";
 
 class HTTPClient {
-
   // Words
 
   async getWords(): Promise<void> {
@@ -47,7 +47,7 @@ class HTTPClient {
   }
 
   //Users
-  async createUser (user: IUser) {
+  async createUser(user: IUser) {
     try {
       const res = await fetch(`${Url.DOMEN}/users`, {
         method: Methods.POST,
@@ -107,17 +107,14 @@ class HTTPClient {
     console.log("in getNewToken userId", userId);
     console.log("in getNewToken token", token);
     try {
-      const res = await fetch(
-        `${Url.DOMEN}/users/${userId}/tokens`,
-        {
-          method: Methods.GET,
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      const res = await fetch(`${Url.DOMEN}/users/${userId}/tokens`, {
+        method: Methods.GET,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -146,7 +143,7 @@ class HTTPClient {
     return data;
   }
 
-  async createUserWord({ userId, token }: IUserData, userWord:IUserWord) {
+  async createUserWord({ userId, token }: IUserData, userWord: IUserWord) {
     const data = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
@@ -158,9 +155,10 @@ class HTTPClient {
         },
         body: JSON.stringify(userWord),
       }
-    ).then((response) => {
-      return response.json();
-    })
+    )
+      .then((response) => {
+        return response.json();
+      })
       .then((response) => {
         return response.json();
       })
@@ -172,21 +170,18 @@ class HTTPClient {
       });
     return data;
   }
-
 
   async getUserWord({ userId, token }: IUserData, wordId: string) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
-      {
-        method: `${Methods.GET}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    ).then((response) => {
-      return response.json();
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
+      method: `${Methods.GET}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
     })
+      .then((response) => {
+        return response.json();
+      })
       .then((response) => {
         return response.json();
       })
@@ -199,7 +194,7 @@ class HTTPClient {
     return data;
   }
 
-  async updateUserWord({ userId, token }: IUserData, userWord:IUserWord) {
+  async updateUserWord({ userId, token }: IUserData, userWord: IUserWord) {
     const data = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
@@ -211,9 +206,10 @@ class HTTPClient {
         },
         body: JSON.stringify(userWord),
       }
-    ).then((response) => {
-      return response.json();
-    })
+    )
+      .then((response) => {
+        return response.json();
+      })
       .then((response) => {
         return response.json();
       })
@@ -226,7 +222,7 @@ class HTTPClient {
     return data;
   }
 
-  async deleteUserWord({ userId, token }: IUserData, userWord:IUserWord) {
+  async deleteUserWord({ userId, token }: IUserData, userWord: IUserWord) {
     const data = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
       {
@@ -236,9 +232,10 @@ class HTTPClient {
           Accept: "application/json",
         },
       }
-    ).then((response) => {
-      return response.json();
-    })
+    )
+      .then((response) => {
+        return response.json();
+      })
       .then((response) => {
         return response.json();
       })

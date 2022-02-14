@@ -5,34 +5,34 @@ import { IWordAudio, IAudioResult } from "../../../interface/interface-audio";
 import {
   AUDIO_PATH_DATA_AUDIO,
   AUDIO_PATH_UTILS_AUDIO,
+  AUDIO,
 } from "../../../const/const-audio";
 import "./audio-result.css";
 
 interface IProps {
   gameResult: Array<IAudioResult>;
-  bestSeries: number;
 }
 
 export function Result(props: IProps) {
-  const { gameResult, bestSeries } = props; //bestSeries Для статистики
+  const { gameResult } = props; //bestSeries Для статистики
 
-  const audio = new Audio();
-  audio.volume = 0.2;
+  //const audio = new Audio();
+  AUDIO.volume = 0.2;
 
   function playAudio(word: IWordAudio) {
     const path = `${AUDIO_PATH_DATA_AUDIO}${word.audio}`;
 
-    audio.src = path;
-    audio.load();
-    audio.play();
+    AUDIO.src = path;
+    AUDIO.load();
+    AUDIO.play();
   }
 
   function playAudioResult() {
     const path = `${AUDIO_PATH_UTILS_AUDIO}end.mp3`;
 
-    audio.src = path;
-    audio.load();
-    audio.play();
+    AUDIO.src = path;
+    AUDIO.load();
+    AUDIO.play();
   }
 
   useEffect(() => {
