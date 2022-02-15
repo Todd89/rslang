@@ -1,0 +1,19 @@
+.textbook {
+  background-color: $basic-white;
+}
+
+.textbook__words {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 40px;
+}
+
+.textbook__words-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+} 
+
+.textbook__words-item {
+  margin-bottom: 30px;
+}

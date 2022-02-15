@@ -1,0 +1,216 @@
+.word-card {
+  padding-top: 18px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 20px;
+  border-radius: 26px;
+
+  background-color: $basic-white;
+  box-shadow: 
+      12px -8px 28px 0px rgb(58 50 157 / 10%),
+      0 10px 10px rgb(0 0 0 / 10%);
+}
+
+.word-card__image-wrapper {
+  display: flex;
+  margin-bottom: 10px;
+
+  overflow: hidden;
+  background-color: $orange;
+  border-radius: 18px;
+  
+  & img {
+    object-fit: fill;
+    width: 100%;
+  }
+}
+
+.word-card__word-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 5px;
+
+  margin: 0;
+  margin-bottom: 15px;
+  padding: 0;
+
+  list-style: none;
+}
+
+.word-card__word-item--btn {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.word-card__target-word {
+  font-size: 29px;
+  font-weight: 600;
+  line-height: 34px;
+  font-family: $main-font;
+  max-width: 100%;
+}
+
+.word-card__transcription {
+  font-size: 21px;
+  color: $dark;
+  font-family: $main-font;
+}
+
+.word-card__translation {
+  font-size: 21px;
+  font-family: $main-font;
+  color: #8f8989;
+}
+
+
+.word-card__audio-btn {
+  display: block;
+  margin-left: auto;
+  height: 40px;
+  width: 40px;
+  background-color: transparent;
+  border: none;
+}
+
+.word-card__audio-icon {
+  fill: $dark;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    fill: $green;
+  }
+
+  &:active {
+    fill: #8f8989;
+  }
+}
+
+// explanation, example
+.word-card__explanation,
+.word-card__example {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  margin-bottom: 15px;
+  padding: 0;
+  list-style: none;
+}
+
+.word-card__explanation {
+  margin-bottom: 20px;
+}
+
+.word-card__explanation-item,
+.word-card__example-item {
+  display: flex;
+  margin-bottom: 5px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.word-card__explanation-en,
+.word-card__explanation-ru,
+.word-card__example-en,
+.word-card__example-ru {
+  margin: 0;
+  font-family: $main-font;
+}
+
+.word-card__explanation-en,
+.word-card__example-en {
+  color: $dark;
+  font-size: 18px;
+  line-height: 20px;
+}
+
+.word-card__explanation-ru,
+.word-card__example-ru {
+  color: #8f8989;
+  font-size: 15px;
+  line-height: 17px;
+}
+
+.word-card__auth-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.word-card__complex-btn,
+.word-card__check-btn {
+  display: flex;
+  align-items: center;
+
+  min-height: 40px;
+  
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 14px;
+  padding-right: 12px;
+
+  background-color: transparent;
+  border: 2px solid #8f8989;
+  color: $dark;
+  border-radius: 25px;
+  font-size: 18px;
+  font-family: $title-font;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.word-card__complex-icon,
+.word-card__check-icon {
+  margin-right: 6px;
+  fill: $dark;
+  transition: all 0.5s;
+}
+
+
+.word-card__complex-btn {
+  &:hover {
+    background-color: #b621fe;
+    color: $basic-white;
+    border: 2px solid #b621fe;
+
+    & .word-card__complex-icon {
+      fill: $basic-white;
+    }
+  }
+}
+
+.word-card__complex-btn--checked {
+  background-color: #b621fe;
+  color: $basic-white;
+  border: 2px solid #b621fe;
+
+  & .word-card__complex-icon {
+    fill: $basic-white;
+  }
+}
+
+.word-card__check-btn {
+  &:hover {
+    background-color: $green;
+    color: $basic-white;
+    border: 2px solid $green;
+
+    & .word-card__check-icon {
+      fill: $basic-white;
+    }
+  }
+}
+
+.word-card__check-btn--checked {
+  background-color: $green;
+  color: $basic-white;
+  border: 2px solid $green;
+
+  & .word-card__check-icon {
+    fill: $basic-white;
+  }
+}

@@ -2,19 +2,26 @@ import Header from "../header/header";
 import { Link } from "react-router-dom";
 import { AppRoute } from "../../const/const";
 import WordCard from "./word-card/word-card";
+import Footer from "../footer/footer";
+import Pagination from "./pagination/pagination";
+import { useState } from "react";
 
 
 const sections = [
-  { name: 1 }, 
+  { 
+    name: 1, 
+  }, 
   { name: 2 }, 
   { name: 3 }, 
   { name: 4 }, 
   { name: 5 }, 
   { name: 6 }, 
-  { name: 7 }, 
+  { name: "7 - Сложные слова" }, 
 ];
 
 const TextBook: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
   return (
     <>
       <Header />
@@ -23,50 +30,72 @@ const TextBook: React.FC = () => {
         <div className="textbook__wrapper container">
           <h1 className="textbook__title visually-hidden">Учебник</h1>
 
-          <section className="game-link">
+          <aside className="game-link">
             <h2 className="game-link__title">Изучите слова в мини-играх</h2>
             <ul className="game-link__list">
-              <li>
-                <Link to={AppRoute.SPRINT}>Спринт</Link>
+              <li className="game-link__item">
+                <Link className="game-link__link" to={AppRoute.SPRINT}>
+                  Спринт
+                </Link>
               </li>
   
-              <li>
-                <Link to={AppRoute.AUDIO_CHALLENGE}>Аудиовызов</Link>
+              <li className="game-link__item">
+                <Link className="game-link__link" to={AppRoute.AUDIO_CHALLENGE}>
+                  Аудиовызов
+                </Link>
               </li>
             </ul>
-          </section>
+          </aside>
 
 
-          <section className="textbook-sections">
-            <h2>Разделы</h2>
-            <ul className="textbook__textbook-sections textbook-sections__list">
+          <section className="textbook-nav">
+            <h2 className="textbook-nav__title">
+              Разделы учебника
+            </h2>
+            <ol className="textbook__textbook-nav textbook-nav__list">
               {sections.map(({name}) => (
-                <li key={name} className="textbook-sections__item">
-                  <label htmlFor={`textbook-${name}`} className="textbook-sections__label">
-                    {name}
-                  </label>
+                <li key={name} className="textbook-nav__item">            
                   <input 
-                      className="textbook-sections__control" 
+                      className="textbook-nav__control visually-hidden"
+                      name="word-sections" 
                       id={`textbook-${name}`} 
                       type="radio" 
-                      checked={name === 1}
+                      defaultChecked={name === 1}
                   />
+                  <label htmlFor={`textbook-${name}`} className="textbook-nav__label">
+                    Часть {name}
+                  </label>
                 </li>
               ))}
-            </ul>
+            </ol>
           </section>
 
-          <section className="words">
-            <ul className="textbook__words words__list">
-              <li className="words__item">
+          <section className="textbook__words">
+            <ul className="textbook__words-list">
+              <li className="textbook__words-item">
+                <WordCard />
+              </li>
+              <li className="textbook__words-item">
+                <WordCard />
+              </li>
+              <li className="textbook__words-item">
                 <WordCard />
               </li>
             </ul>
           </section>
           
+          <Pagination
+              currentPage={currentPage}
+              totalCount={600}
+              siblingCount={0}
+              pageSize={30} 
+              onPageChange={(page: number) => setCurrentPage(page)}
+          />
 
         </div>
       </main>
+
+      <Footer />
     </>
   );
 }
