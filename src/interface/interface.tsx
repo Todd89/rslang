@@ -1,5 +1,5 @@
 export type IStatistic = {
-  learned:number
+  learnedWords:number,
   optional:{
     game:string,
     date:string,
@@ -28,7 +28,7 @@ export interface IUserData {
 
 export interface IUserWord {
   difficulty: string;
-  wordId: string;
+  wordId?:string;
   optional: {
     learned: boolean;
     group: number;
@@ -84,11 +84,12 @@ export interface IWordsOfArrays {
 export interface IGameBlockProps {
   word: IWordInArray;
   randomWordsInGame:Array<IRandomWordInGame>;
+  loadingUserWords:IUserWord[]
   changeWordCount: () => void;
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
   changeWord: () => void;
- 
+
 }
 
 export interface IGreetingBlockProps {
@@ -96,6 +97,7 @@ export interface IGreetingBlockProps {
   setFirstWord: (arr: Array<IWordInArray>) => void;
   makeRandomWordsForWork: (wordsInGame: any) => any;
   changeAllWord: (arr: Array<Array<IWordInArray>>) => void
+  changeLoadingUserWords: (arr: IUserWord[]) => void
 }
 
 export interface IWordInGame {
@@ -105,11 +107,14 @@ export interface IWordInGame {
 }
 
 export interface IRandomWordInGame {
+  ID: string;
   AUDIO: string;
   ENGLISH_WORD: string;
   RUSSIAN_WORD: string;
   REAL_TRANSLATE:string;
   TRANSCRIPTION: string
   TYPE_OF_ANSWER: boolean;
-} 
+  PAGE: number;
+  GROUP: number; 
+}
 

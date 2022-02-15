@@ -3,17 +3,19 @@ import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
 import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
-import { IWordInArray, IRandomWordInGame } from "../../../interface/interface";
+import { IWordInArray, IRandomWordInGame, IUserWord } from "../../../interface/interface";
 import {
   makeTreeRandomPage,
   shuffle,
-  randomNum,
+  makeRandomAnswerArray
 } from "../sprint-methods/sprint-methods";
+
 
 const MainBlock: React.FC = () => {
   let [wordCount, setCount] = useState<number>(0);
   let [pageState, setPage] = useState<string>("greeting");
 
+  const [loadingUserWords, setLoadingUserWords] = useState<IUserWord[]>([])
   const [allWords, setAllWords] = useState<Array<Array<IWordInArray>>>([]);
   const [wordsInGame, setwordsInGame] = useState<Array<IWordInArray>>([]);
   const [randomWordsInGame, setRandomWordsInGame] = useState<
@@ -24,81 +26,9 @@ const MainBlock: React.FC = () => {
     []
   );
 
-  const makeRandomAnswerArray = (word: IWordInArray): IRandomWordInGame => {
-    let newRandomQuastion: IRandomWordInGame;
-    const VALUE = randomNum(9);
-
-    if (VALUE < 5) {
-      const AUDIO = word.audio;
-      const ENGLISH_WORD = word.word.toUpperCase();
-      const RUSSIAN_WORD = word.wordTranslate.toUpperCase();
-      const REAL_TRANSLATE =  word.wordTranslate.toUpperCase()
-      const TRANSCRIPTION = word.transcription.toUpperCase();
-     
-      const TYPE_OF_ANSWER = true;
-
-      newRandomQuastion = {
-        ...{},
-        AUDIO,
-        ENGLISH_WORD,
-        RUSSIAN_WORD,
-        TRANSCRIPTION,
-        REAL_TRANSLATE,
-        TYPE_OF_ANSWER,
-      };
-
-      return newRandomQuastion;
-    } else {
-      const WRONG_NUM = randomNum(59);
-      if (
-        wordsInGame[WRONG_NUM].wordTranslate !==
-        (word as IWordInArray).wordTranslate
-      ) {
-        const AUDIO = word.audio;
-        const ENGLISH_WORD = word.word.toUpperCase();
-        const RUSSIAN_WORD = wordsInGame[WRONG_NUM].wordTranslate.toUpperCase();
-        const REAL_TRANSLATE =  word.wordTranslate.toUpperCase();
-        const TRANSCRIPTION = word.transcription.toUpperCase();
-        const TYPE_OF_ANSWER = false;
-
-        newRandomQuastion = {
-          ...{},
-          AUDIO,
-          ENGLISH_WORD,
-          RUSSIAN_WORD,
-          REAL_TRANSLATE,
-          TRANSCRIPTION,
-          TYPE_OF_ANSWER,
-        };
-
-        return newRandomQuastion;
-      } else {
-        makeRandomAnswerArray(word);
-      }
-    }
-    const AUDIO = word.audio;
-    const ENGLISH_WORD = word.word.toUpperCase();
-    const RUSSIAN_WORD = word.wordTranslate.toUpperCase();
-    const REAL_TRANSLATE =  word.wordTranslate.toUpperCase();
-    const TRANSCRIPTION = word.transcription.toUpperCase();
-    const TYPE_OF_ANSWER = true;
-
-    newRandomQuastion = {
-      ...{},
-      AUDIO,
-      ENGLISH_WORD,
-      RUSSIAN_WORD,
-      REAL_TRANSLATE,
-      TRANSCRIPTION,
-      TYPE_OF_ANSWER,
-    };
-
-    return newRandomQuastion;
-  };
-
   const makeRandomQuastions = (wordsInGame: Array<IWordInArray>) => {
     const RANDOM_QUASTIONS = wordsInGame.map((el) => {
-      return makeRandomAnswerArray(el);
+      return makeRandomAnswerArray(el, wordsInGame);
     });
 
     setRandomWordsInGame(RANDOM_QUASTIONS);
@@ -133,6 +63,10 @@ const MainBlock: React.FC = () => {
     setCount((wordCount += 1));
   };
 
+  const changeLoadingUserWords = (arr:IUserWord[]) => {
+    setLoadingUserWords(arr)
+  }
+
 
   const setFirstWord = (arr: Array<IWordInArray>) => {
     const newWord: IWordInArray = arr[0];
@@ -166,6 +100,7 @@ const MainBlock: React.FC = () => {
             changePageState={changePageState}
             changeAnswersArray={changeAnswersArray}
             changeWord={changeWord}
+            loadingUserWords={loadingUserWords}
           />
         </div>
       </main>
@@ -193,6 +128,7 @@ const MainBlock: React.FC = () => {
           setFirstWord={setFirstWord}
           makeRandomWordsForWork={makeRandomWordsForWork}
           changeAllWord={changeAllWord}
+          changeLoadingUserWords={changeLoadingUserWords}
         />
       </div>
     </main>
