@@ -33,7 +33,7 @@
   width: 40vh;
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url("/public/assets/images/png/sprint_girl.png");
+  background-image: url("/public/assets/images/sprint_girl.png");
 }
 
 .btn-repeate {
@@ -46,7 +46,7 @@
   width: 35vw;
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url("/public/assets/images/png/girl-thinking.png");
+  background-image: url("/public/assets/images/girl-thinking.png");
 }*/
 
 .game__left-img {
@@ -64,6 +64,12 @@
   background-color: var(--basic-white);
   border: 2px solid var(--violet);
   border-radius: 20px;
+}
+
+@media (min-width: 1920px) {
+  .game__container {
+    width: 1000px;
+  }
 }
 
 @media (max-width: 1200px) {

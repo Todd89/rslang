@@ -99,7 +99,7 @@ export function Audiochallenge(props: IProps) {
     // );
     await getUserWords(userAuthData, isLoadFromTextBook);
     await getUserWordsForTheGame(userAuthorized, userAuthData);
-    console.log(AUDIO.src);
+    // console.log(AUDIO.src);
     AUDIO.pause();
     // console.log(
     //   "resetParameters AUDIO_USER_WORDS_ARRAY after",
@@ -173,8 +173,10 @@ export function Audiochallenge(props: IProps) {
         };
       });
       setGameResult(arrResult);
-      setBestSeries((bestSeries) => Math.max(bestSeries, currentSeries));
-      getPutAudioUserStatistic(userAuthData, gameStatistic);
+      if (userAuthorized) {
+        setBestSeries((bestSeries) => Math.max(bestSeries, currentSeries));
+        getPutAudioUserStatistic(userAuthData, gameStatistic);
+      }
       setShowResult(true);
     }
   }
@@ -264,7 +266,7 @@ export function Audiochallenge(props: IProps) {
               <div className="game__left-image">
                 <img
                   className="game__left-img"
-                  src="assets/images/png/girl-thinking.png"
+                  src="assets/images/girl-thinking.png"
                   alt=""
                 />
               </div>

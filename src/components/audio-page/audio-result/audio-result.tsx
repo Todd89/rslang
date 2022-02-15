@@ -24,7 +24,7 @@ export function Result(props: IProps) {
 
     AUDIO.src = path;
     AUDIO.load();
-    AUDIO.play();
+    // AUDIO.play();
   }
 
   function playAudioResult() {
@@ -32,7 +32,7 @@ export function Result(props: IProps) {
 
     AUDIO.src = path;
     AUDIO.load();
-    AUDIO.play();
+    //  AUDIO.play();
   }
 
   useEffect(() => {

@@ -41,7 +41,7 @@ export interface IUserWord {
 }
 
 export type IStatistic = {
-  learned: number;
+  learnedWords: number;
   optional: {
     game: string;
     date: string;

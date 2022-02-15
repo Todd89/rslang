@@ -44,7 +44,7 @@ export function AudioQuestion(props: IProps) {
       AUDIO.src = path;
       AUDIO.load();
       setTimeout(() => {
-        AUDIO.play();
+        // AUDIO.play();
       }, 500);
     }
     if (!answerReceived && isTimerOn) {
@@ -63,7 +63,7 @@ export function AudioQuestion(props: IProps) {
 
       AUDIO.src = path;
       AUDIO.load();
-      AUDIO.play();
+      //  AUDIO.play();
     }
 
     if (answerReceived && rightAnswer && !isTimerOn) {

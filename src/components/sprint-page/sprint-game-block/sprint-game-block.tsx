@@ -89,20 +89,20 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   return (
     <div>
       <div className='girl-image'>
-        <img src='/assets/images/png/sprint_girl.png' alt='девочка' />
+        <img src='/assets/images/sprint_girl.png' alt='девочка' />
       </div>
       <div className='game-sprint-block'>
         <div className='game-sprint-block__top-lights'>
           <div className='game-sprint-block__timer'><span className='game-sprint-block__text'>{seconds} sec</span></div>
           <div className='game-sprint-block__level-up'>
             <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/png/cool.png' alt='класс' />
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
             <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/png/cool.png' alt='класс' />
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
             <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/png/cool.png' alt='класс' />
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
           </div>
           <div className='game-sprint-block__score'>

@@ -12,7 +12,7 @@ const Stats: React.FC = () => {
           <div className="game__wrapper horizontal">
             <img
               className="image-stat"
-              src="assets/images/png/girl-stat.png"
+              src="assets/images/girl-stat.png"
               alt=""
             />
             <div className="stat__section">

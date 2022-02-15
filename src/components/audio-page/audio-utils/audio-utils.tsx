@@ -23,6 +23,7 @@ import { AuthData } from "../../../interface/auth-interface";
 
 import { WORDS_PER_PAGE, PAGES_PER_GROUP } from "../../../const/const-audio";
 import httpClient from "../../../services/http-client";
+import { statSync } from "fs";
 
 const wordsArray: Array<IWordAudio> = [];
 
@@ -194,8 +195,6 @@ const updateUserWord = async (
       method: `${Methods.PUT}`,
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
       },
       body: JSON.stringify(userWordServer),
     }
@@ -408,12 +407,19 @@ export async function getPutAudioUserStatistic(
   statisticState: IAudioGameStatistic
 ) {
   const dateTemp = new Date();
-  const currentData = `${String(dateTemp.getFullYear)}-${String(
+  const currentData = `${String(dateTemp.getFullYear())}-${String(
     dateTemp.getMonth() + 1
-  )} - ${String(dateTemp.getDate())}`;
-  const promise = httpClient.getUserStatistic(userAuthData);
+  ).padStart(2, "0")}-${String(dateTemp.getDate()).padStart(2, "0")}`;
+  //console.log(currentData);
+  //const promise = httpClient.getUserStatistic(userAuthData);
+
+  //const promise = getUserStatistic(userAuthData);
+
+  const getStat = getUserStatistic(userAuthData);
+  await getStat;
+
   let localStatistic: IStatistic = {
-    learned: 0,
+    learnedWords: 0,
     optional: {
       game: "audio",
       date: currentData,
@@ -424,20 +430,7 @@ export async function getPutAudioUserStatistic(
     },
   };
 
-  promise
-    .then((values) => {
-      for (let i = 0; i < values.length; i += 1) {
-        if (
-          values[i].optional.game === "audio" &&
-          values[i].optional.date === currentData
-        ) {
-          localStatistic = values[i];
-        }
-      }
-    })
-    .catch((err) => "")
-    .finally(() => {
-      localStatistic.learned += statisticState.gameLearnedWords;
+  /*   localStatistic.learned += statisticState.gameLearnedWords;
       localStatistic.optional.bestSeries = Math.max(
         localStatistic.optional.bestSeries,
         statisticState.gameBestSeries
@@ -446,7 +439,46 @@ export async function getPutAudioUserStatistic(
         statisticState.gameSuccessCounter;
       localStatistic.optional.failCounter += statisticState.gameFailCounter;
       localStatistic.optional.newWords += statisticState.gameNewWords;
-
-      httpClient.putUserStatistic(userAuthData, localStatistic);
-    });
+*/
+  /* localStatistic.learnedWords += statisticState.gameLearnedWords;
+  localStatistic.optional.bestSeries = Math.max(
+    localStatistic.optional.bestSeries,
+    statisticState.gameBestSeries
+  );
+  localStatistic.optional.successCounter += statisticState.gameSuccessCounter;
+  localStatistic.optional.failCounter += statisticState.gameFailCounter;
+  localStatistic.optional.newWords += statisticState.gameNewWords;*/
+  //console.log(localStatistic);
+  const putStat = putUserStatistic(userAuthData, localStatistic);
+  await putStat;
+  // });
 }
+
+const getUserStatistic = async ({ userId, token }: IUserData) => {
+  const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
+    method: `${Methods.GET}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+  });
+
+  const stat = await rawResponse.json();
+  return stat;
+};
+
+const putUserStatistic = async (
+  { userId, token }: IUserData,
+  statistic: IStatistic
+) => {
+  const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
+    method: `${Methods.PUT}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(statistic),
+  });
+  const content = await rawResponse.json();
+};
