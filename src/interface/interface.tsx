@@ -101,3 +101,18 @@ export interface IGreetingBlockProps {
   setFirstWord: (arr: Array<IWordInArray>) => void;
   makeRandomWordsForWork: (wordsInGame: any) => any;
 }
+
+export interface PaginationComponentProps {
+  onPageChange: any;
+  totalCount: number;
+  siblingCount: number;
+  currentPage: number;
+  pageSize: number;
+}
+
+export interface UsePagination {
+  totalCount: number;
+  pageSize: number;
+  siblingCount: number;
+  currentPage: number;
+}

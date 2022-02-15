@@ -1,6 +1,6 @@
 import Header from "../header/header";
 import { Link } from "react-router-dom";
-import { AppRoute } from "../../const/const";
+import { AppRoute, PaginationData } from "../../const/const";
 import WordCard from "./word-card/word-card";
 import Footer from "../footer/footer";
 import Pagination from "./pagination/pagination";
@@ -86,9 +86,9 @@ const TextBook: React.FC = () => {
           
           <Pagination
               currentPage={currentPage}
-              totalCount={600}
-              siblingCount={0}
-              pageSize={30} 
+              totalCount={PaginationData.TOTAL_COUNT}
+              siblingCount={PaginationData.SIBLING_COUNT}
+              pageSize={PaginationData.PAGE_SIZE} 
               onPageChange={(page: number) => setCurrentPage(page)}
           />
 
