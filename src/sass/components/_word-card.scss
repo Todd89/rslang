@@ -1,14 +1,40 @@
 .word-card {
+  display: flex;
+  flex-direction: column;
+
+  margin-right: auto;
+  margin-left: auto;
   padding-top: 18px;
   padding-left: 15px;
   padding-right: 15px;
   padding-bottom: 20px;
   border-radius: 26px;
 
+  max-width: 420px;
+  box-sizing: border-box;
+
   background-color: $basic-white;
   box-shadow: 
       12px -8px 28px 0px rgb(58 50 157 / 10%),
       0 10px 10px rgb(0 0 0 / 10%);
+
+  @media (min-width: 620px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+    max-width: none;
+  }
+
+  @media (min-width: $tablet-width) {
+    grid-template-columns: 320px 1fr;
+    grid-column-gap: 25px;
+
+    padding-top: 28px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 30px;
+    border-radius: 29px;
+  }
 }
 
 .word-card__image-wrapper {
@@ -23,6 +49,13 @@
     object-fit: fill;
     width: 100%;
   }
+
+  @media (min-width: 620px) {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+  }
 }
 
 .word-card__word-list {
@@ -35,12 +68,39 @@
   padding: 0;
 
   list-style: none;
+
+  @media (min-width: 620px) {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    margin-bottom: 0;
+  }
+
+  @media (min-width: $tablet-width) {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
+.word-card__word-item {
+
+  @media (min-width: $tablet-width) {
+    &:nth-child(2) {
+      margin-left: auto;
+    }
+  }
+} 
+
 .word-card__word-item--btn {
+  position: relative;
+  width: 100%;
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+
+  @media (min-width: $tablet-width) {
+    margin-top: 15px;
+  }
 }
 
 .word-card__target-word {
@@ -71,6 +131,11 @@
   width: 40px;
   background-color: transparent;
   border: none;
+
+  @media (min-width: $tablet-width) {
+    position: absolute;
+    right: 0;
+  }
 }
 
 .word-card__audio-icon {
@@ -100,6 +165,23 @@
 
 .word-card__explanation {
   margin-bottom: 20px;
+
+  @media (min-width: 620px) {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+  }
+}
+
+
+.word-card__example {
+  @media (min-width: 620px) {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
 }
 
 .word-card__explanation-item,
@@ -125,6 +207,11 @@
   color: $dark;
   font-size: 18px;
   line-height: 20px;
+
+  @media (min-width: $tablet-width) {
+    font-size: 21px;
+    line-height: 24px;
+  }
 }
 
 .word-card__explanation-ru,
@@ -132,11 +219,33 @@
   color: #8f8989;
   font-size: 15px;
   line-height: 17px;
+
+  @media (min-width: $tablet-width) {
+    font-size: 18px;
+    line-height: 21px;
+  }
 }
 
+
+
+
 .word-card__auth-buttons {
-  display: flex;
+  display: none;
   justify-content: space-between;
+
+  @media (min-width: 620px) {
+    margin-top: auto;
+  }
+
+  @media (min-width: 920px) {
+    margin-left: auto;
+    box-sizing: border-box;
+    width: 320px;
+  }
+
+  .is-auth & {
+    display: flex;
+  }
 }
 
 .word-card__complex-btn,
@@ -148,7 +257,7 @@
   
   padding-top: 4px;
   padding-bottom: 4px;
-  padding-left: 14px;
+  padding-left: 6%;
   padding-right: 12px;
 
   background-color: transparent;
@@ -158,6 +267,9 @@
   font-size: 18px;
   font-family: $title-font;
   font-weight: 500;
+
+  flex-grow: 1;
+  box-sizing: border-box;
 
   cursor: pointer;
   transition: all 0.5s;
@@ -172,6 +284,11 @@
 
 
 .word-card__complex-btn {
+  display: inline-block;
+  width: 100%;
+  margin-right: 4%;
+  box-sizing: border-box;
+
   &:hover {
     background-color: #b621fe;
     color: $basic-white;

@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
+
+  @media (min-width: $desktop-width) {
+    margin-bottom: 45px;
+  }
 }
 
 .textbook-nav__title {
@@ -10,6 +14,13 @@
   font-family: $title-font;
   font-size: 26px;
   text-align: left;
+
+  @media (min-width: $desktop-width) {
+    margin-bottom: 25px;
+
+    font-size: 29px;
+    line-height: 32px;
+  }
 }
 
 .textbook-nav__list {
@@ -22,12 +33,34 @@
   padding: 0;
 
   list-style-type: none;
+
+  @media (min-width: 560px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: $tablet-width) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: $desktop-width) {
+    grid-template-columns: repeat(6, 1fr) 2fr;
+  }
 }
 
 .textbook-nav__item {
   &:last-child {
     grid-column-start: 1;
     grid-column-end: 3;
+
+    @media (min-width: 768px) {
+      grid-column-start: 3;
+      grid-column-end: 5;
+    }
+
+    @media (min-width: $desktop-width) {
+      grid-column-start: 7;
+      grid-column-end: 9;
+    }
   }
 }
 
@@ -39,7 +72,7 @@
   padding-left: 12px;
 
   background-color: transparent;
-  color: $green;
+  color: $dark;
   border: 1px solid #3F5EFB;
   width: 100%;
 
@@ -50,10 +83,21 @@
   border-radius: 8px;
 
   transition: 0.3s all;
+
+  cursor: pointer;
+}
+
+.textbook-nav__label--complex {
+  display: none;
+
+  .is-auth & {
+    display: block;
+  }
 }
 
 .textbook-nav__control:checked+.textbook-nav__label {
+  color: $green;
   box-shadow: 
       0 0 0 2px $basic-white,
-      0 0 0 4px #FC466B;
+      0 0 0 4px $green;
 }

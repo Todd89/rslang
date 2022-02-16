@@ -9,9 +9,17 @@
 }
 
 .textbook__words-list {
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
+
+  @media (min-width: $desktop-width) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 25px;
+  }
 } 
 
 .textbook__words-item {
