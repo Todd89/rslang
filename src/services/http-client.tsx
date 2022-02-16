@@ -4,7 +4,6 @@ import {
   IUser,
   IUserData,
   IUserWord,
-  IUserWordServer,
 } from "../interface/interface";
 import { Url, Methods, ResponseStatus } from "../const/const";
 
