@@ -4,6 +4,7 @@ import {
   IWordInArray,
   IRandomWordInGame,
   IUserWord,
+  IUserData
 } from "../../../interface/interface";
 
 const getWordsFromGroup = async (group: string) => {
@@ -81,7 +82,7 @@ const createNewUserWord = (
   success: boolean
 ): IUserWord => {
   const newWord: IUserWord = {
-    difficulty: "weak",
+    difficulty: "false",
     optional: {
       learned: false,
       group: GROUP,
@@ -91,22 +92,11 @@ const createNewUserWord = (
       new: true,
     },
   };
-  if (success && !newWord.optional.learned) {
-    newWord.optional.successCounter++;
-  } else {
-    newWord.optional.failCounter++;
-    newWord.optional.successCounter = 0;
-  }
 
-  if (newWord.difficulty === "weak") {
-    if (newWord.optional.successCounter === SprintNums.MAX_SUCCESS_LIGTH_MODE) {
-      newWord.optional.learned = true;
-    }
-  } else {
-    if (newWord.optional.successCounter === SprintNums.MAX_SUCCESS_HARD_MODE) {
-      newWord.optional.learned = true;
-    }
-  }
+  if (success) {
+    newWord.optional.successCounter++;
+  } 
+
   return newWord;
 };
 
@@ -211,6 +201,72 @@ const makeRandomAnswerArray = (word: IWordInArray, wordsInGame:Array<IWordInArra
 };
 
 
+const chooseMaxSuccess = (difficulty: string) => {
+  if (difficulty === "false") return 3;
+  return 5;
+};
+
+const updateWord = (word: IUserWord, success: boolean) => {
+  const MAX_NUM = chooseMaxSuccess(word.difficulty);
+  delete word.id;
+  delete word.wordId;
+
+  if (success && !word.optional.learned) {
+    word.optional.successCounter += 1;
+    if (word.optional.successCounter === MAX_NUM) {
+      word.optional.learned = true;
+    }
+  } else {
+    word.optional.learned = false;
+    word.optional.successCounter = 0;
+  }
+
+  return word;
+};
+
+const workWithUserWord = async (user:IUserData, loadingUserWords:IUserWord[], randomWordsInGame:IRandomWordInGame[], count:number, changeLoadingUserWords:(arr: IUserWord[]) => void) => {
+ 
+    const FIND = loadingUserWords.find(
+      (el:any) =>  el.wordId === randomWordsInGame[count].ID
+    );
+
+    const SUCCESS = !randomWordsInGame[count].TYPE_OF_ANSWER
+      ? true
+      : false;
+
+    if (!FIND) {
+      
+      const NEW_WORD = createNewUserWord(
+        { ...randomWordsInGame[count] },
+        SUCCESS
+      );
+
+      loadingUserWords.push(NEW_WORD);
+      changeLoadingUserWords(loadingUserWords);
+
+      await httpClient.createUserWord(
+        user as IUserData,
+        NEW_WORD,
+        randomWordsInGame[count].ID
+      );
+    } else {
+      const WORD = await httpClient.getUserWord(
+        user as IUserData,
+        randomWordsInGame[count].ID
+      );
+
+      updateWord(WORD, SUCCESS);
+     
+      const UPDATE_WORD = updateWord(WORD, SUCCESS);
+      await httpClient.updateUserWord(
+        user as IUserData,
+        UPDATE_WORD,
+        randomWordsInGame[count].ID
+      );
+    }
+}
+
+
 export {
   getWordsFromGroup,
   randomNum,
@@ -220,5 +276,6 @@ export {
   makeAnswersArray,
   addViewToBonus,
   makeWord,
-  makeRandomAnswerArray
+  makeRandomAnswerArray,
+  workWithUserWord
 };

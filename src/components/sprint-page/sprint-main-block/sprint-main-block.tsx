@@ -67,7 +67,6 @@ const MainBlock: React.FC = () => {
     setLoadingUserWords(arr)
   }
 
-
   const setFirstWord = (arr: Array<IWordInArray>) => {
     const newWord: IWordInArray = arr[0];
     setWord(newWord);
@@ -101,6 +100,7 @@ const MainBlock: React.FC = () => {
             changeAnswersArray={changeAnswersArray}
             changeWord={changeWord}
             loadingUserWords={loadingUserWords}
+            changeLoadingUserWords={changeLoadingUserWords}
           />
         </div>
       </main>

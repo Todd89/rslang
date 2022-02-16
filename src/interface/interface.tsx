@@ -28,6 +28,7 @@ export interface IUserData {
 
 export interface IUserWord {
   difficulty: string;
+  id?:string;
   wordId?:string;
   optional: {
     learned: boolean;
@@ -89,9 +90,8 @@ export interface IGameBlockProps {
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
   changeWord: () => void;
-
+  changeLoadingUserWords: (arr: IUserWord[]) => void
 }
-
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
