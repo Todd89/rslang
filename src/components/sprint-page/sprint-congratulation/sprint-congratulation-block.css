@@ -1,0 +1,72 @@
+* {
+  box-sizing: border-box;
+}
+
+.girl-image {
+  position: absolute;
+  z-index: 0;
+  left: -4%;
+}
+
+.congratulation-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 65%;
+  position: relative;
+  margin-top: 2vh;
+  z-index: 1;
+  color: black;
+  left: 30%;
+}
+
+.congratulation-list-block {
+  width: 100%;
+  margin-top: 2vh;
+  text-align: left;
+  border: 2px solid blueviolet;
+  overflow-y: scroll;
+  border-radius: 25px;
+  max-height: 70vh;
+}
+
+.congratulation-list-block::-webkit-scrollbar { width: 0; }
+
+.congratulation-list-block__list {
+  margin: 10px 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.congratulation-item {
+  margin-bottom: 1vh;
+  border-bottom: 1px solid orange;
+}
+
+.congratulation-item{
+  display: flex;
+}
+
+.congratulation-list-block__description{
+  width: 100%;
+  padding: 7px;
+  border-bottom: 2px solid orange;
+}
+
+.describe-block{
+  display:inline-block;
+}
+
+.congratulation-list-block__audio {
+  width: 10%;
+}
+.congratulation-list-block__english {
+  width: 23%;
+}
+.congratulation-list-block__transсription {
+  width: 23%;
+}
+.congratulation-list-block__russian {
+  width: 23%;
+}
+

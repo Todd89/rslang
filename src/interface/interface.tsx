@@ -1,10 +1,10 @@
 export type IStatistic = {
-  learned: number;
+  learnedWords: number;
   optional: {
     game: string;
     date: string;
     bestSeries: number;
-    successCounter: number;
+    succesCounter: number;
     failCounter: number;
     newWords: number;
   };
@@ -28,19 +28,7 @@ export interface IUserData {
 
 export interface IUserWord {
   difficulty: string;
-  wordId: string;
-  optional: {
-    learned: boolean;
-    group: number;
-    page: number;
-    successCounter: number;
-    failCounter: number;
-    new: boolean;
-  };
-}
-
-export interface IUserWordServer {
-  difficulty: string;
+  wordId?: string;
   optional: {
     learned: boolean;
     group: number;
@@ -94,20 +82,36 @@ export interface IWordsOfArrays {
 
 export interface IGameBlockProps {
   word: IWordInArray;
-  wordsInGame: Array<IWordInArray>;
-  englishAnswer: string | undefined;
-  answer: string;
-  typeOfAnswer: boolean | undefined;
+  randomWordsInGame: Array<IRandomWordInGame>;
+  loadingUserWords: IUserWord[];
   changeWordCount: () => void;
-  makeRandomAnswer: () => void;
   changePageState: (name: string) => void;
-  changeAnswersArray: (arr: IWordInAnswerArray[]) => void;
+  changeAnswersArray: (arr: IRandomWordInGame[]) => void;
   changeWord: () => void;
 }
 
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
-  changeWords: (arr: Array<IWordInArray> | undefined) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
   makeRandomWordsForWork: (wordsInGame: any) => any;
+  changeAllWord: (arr: Array<Array<IWordInArray>>) => void;
+  changeLoadingUserWords: (arr: IUserWord[]) => void;
+}
+
+export interface IWordInGame {
+  ENGLISH_WORD: string;
+  RUSSIAN_WORD: string;
+  TYPE_OF_TRUE_ANSWER: boolean;
+}
+
+export interface IRandomWordInGame {
+  ID: string;
+  AUDIO: string;
+  ENGLISH_WORD: string;
+  RUSSIAN_WORD: string;
+  REAL_TRANSLATE: string;
+  TRANSCRIPTION: string;
+  TYPE_OF_ANSWER: boolean;
+  PAGE: number;
+  GROUP: number;
 }
