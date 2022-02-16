@@ -33,7 +33,7 @@
   width: 40vh;
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url("/public/assets/images/png/sprint_girl.png");
+  background-image: url("/public/assets/images/sprint_girl.png");
 }
 
 .btn-repeate {
@@ -41,12 +41,8 @@
   margin: 10px;
 }
 
-.game__left-image {
-  height: 70vh;
-  width: 35vw;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url("/public/assets/images/png/girl-thinking.png");
+.game__left-img {
+  width: 350px;
 }
 
 .game__container {
@@ -60,13 +56,15 @@
   border-radius: 20px;
 }
 
-@media (max-width: 1200px) {
+@media (min-width: 1920px) {
   .game__container {
-    height: 100%;
+    width: 1000px;
   }
-  .game__left-image {
-    height: 60vh;
-    width: 30vw;
+}
+
+@media (max-width: 1200px) {
+  .game__left-img {
+    width: 300px;
   }
 
   #btn-repeate {
@@ -75,13 +73,8 @@
 }
 
 @media (max-width: 1024px) {
-  .game__container {
-    height: 100%;
-    width: 50vw;
-  }
-  .game__left-image {
-    height: 35vh;
-    width: 35vw;
+  .game__left-img {
+    width: 200px;
   }
 
   #btn-repeate {
@@ -90,10 +83,11 @@
 }
 
 @media (max-width: 768px) {
-  .game__container {
-    width: 55vw;
-  }
   #btn-repeate {
     font-size: 16px;
+  }
+
+  .game__left-img {
+    width: 150px;
   }
 }

@@ -4,7 +4,7 @@ import {
   IGameBlockProps,
   IRandomWordInGame,
   IUserData,
-  IStatistic
+  IStatistic,
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 import { getUserAuthData } from "../../../store/data/selectors";
@@ -14,7 +14,7 @@ import {
   changeScoreX,
   createNewUserWord,
   makeAnswersArray,
-  addViewToBonus
+  addViewToBonus,
 } from "../sprint-methods/sprint-methods";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
@@ -50,7 +50,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const AUDIO_END = new Audio();
   AUDIO_END.src = "/assets/sound/end.mp3";
   AUDIO_END.volume = 0.2;
-
 
   const userI = useSelector(getUserAuthData);
 
@@ -114,45 +113,45 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   };
 
   if (document.getElementById("level-up")) {
-    addViewToBonus(scoreX)
+    addViewToBonus(scoreX);
   }
 
   return (
     <div>
-      <div className='girl-image'>
-        <img src='/assets/images/png/rocket-girl.png' alt='девочка' />
+      <div className="girl-image">
+        <img src="/assets/images/png/rocket-girl.png" alt="девочка" />
       </div>
-      <div className='game-sprint-block'>
-        <div className='game-sprint-block__top-lights'>
-          <div className='game-sprint-block__timer'>
-            <span className='game-sprint-block__text'>{seconds} sec</span>
+      <div className="game-sprint-block">
+        <div className="game-sprint-block__top-lights">
+          <div className="game-sprint-block__timer">
+            <span className="game-sprint-block__text">{seconds} sec</span>
           </div>
-          <div id='level-up' className='game-sprint-block__level-up'>
-            <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/png/cool.png' alt='класс' />
+          <div id="level-up" className="game-sprint-block__level-up">
+            <div className="game-sprint-block__cool-symbol">
+              <img src="/assets/images/cool.png" alt="класс" />
             </div>
-            <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/png/cool.png' alt='класс' />
+            <div className="game-sprint-block__cool-symbol">
+              <img src="/assets/images/cool.png" alt="класс" />
             </div>
-            <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/png/cool.png' alt='класс' />
+            <div className="game-sprint-block__cool-symbol">
+              <img src="/assets/images/cool.png" alt="класс" />
             </div>
           </div>
-          <div className='game-sprint-block__score'>
-            <span className='game-sprint-block__text'>Score:{score}</span>
+          <div className="game-sprint-block__score">
+            <span className="game-sprint-block__text">Score:{score}</span>
           </div>
         </div>
-        <div className='game-sprint-block__quastion'>
-          <div className='game-sprint-block__english-word'>
+        <div className="game-sprint-block__quastion">
+          <div className="game-sprint-block__english-word">
             {randomWordsInGame[count].ENGLISH_WORD}
           </div>
-          <div className='game-sprint-block__russian-word'>
+          <div className="game-sprint-block__russian-word">
             {randomWordsInGame[count].RUSSIAN_WORD}
           </div>
         </div>
-        <div className='game-sprint-block__buttons-block'>
+        <div className="game-sprint-block__buttons-block">
           <button
-            className='game-sprint-block__button game-sprint-block__button_wrong'
+            className="game-sprint-block__button game-sprint-block__button_wrong"
             onClick={async () => {
               const SUCCESS = randomWordsInGame[count].TYPE_OF_ANSWER
                 ? false
@@ -199,7 +198,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
             Неверно
           </button>
           <button
-            className='game-sprint-block__button game-sprint-block__button_right'
+            className="game-sprint-block__button game-sprint-block__button_right"
             onClick={async () => {
               const SUCCESS = randomWordsInGame[count].TYPE_OF_ANSWER
                 ? true

@@ -6,15 +6,32 @@ import {
   AUDIO_LIVES_AMOUNT,
   AUDIO_EMPTY_WORD,
   AUDIO_QUESTIONS_ARRAY,
+  AUDIO_BEST_SERIES,
+  AUDIO_STAT,
+  AUDIO,
 } from "../../../const/const-audio";
 import {
   IWordAudio,
   IAudioResult,
-  IUserWord,
 } from "../../../interface/interface-audio";
 import { AudioQuestion } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
 import { AudioLives } from "../audio-lives/audio-lives";
+import {
+  createUpdateUserWord,
+  getPutAudioUserStatistic,
+  getUserWords,
+  getUserWordsForTheGame,
+} from "../audio-utils/audio-utils";
+
+//user
+import { useSelector } from "react-redux";
+import {
+  getUserAuthData,
+  getAuthorizeStatus,
+} from "../../../store/data/selectors";
+
+//user
 
 interface IProps {
   changeState: (isOn: boolean) => void;
@@ -22,15 +39,13 @@ interface IProps {
 }
 
 export function Audiochallenge(props: IProps) {
-  //User functions
-  const userAuthorized = true; //заменить на state из Appa
-  const userId = "user";
-  const initialUserWords: Array<IUserWord> = []; //заменить на получение информации с сервера
-  const [userWords, setUserWords] = useState(initialUserWords);
-
-  //User functions
-
   const { changeState, changeGameLoadedStatus } = props;
+  //++изменить когда будет загрузка со страниц учебника
+  const isLoadFromTextBook = false;
+  //--изменить когда будет загрузка со страниц учебника
+
+  const userAuthData = useSelector(getUserAuthData);
+  const userAuthorized = useSelector(getAuthorizeStatus);
 
   const [showResult, setShowResult] = useState(false);
 
@@ -47,6 +62,7 @@ export function Audiochallenge(props: IProps) {
 
   const initialStateResult: Array<IAudioResult> = [];
   const [gameResult, setGameResult] = useState(initialStateResult);
+  const [currentSeries, setCurrentSeries] = useState(0);
 
   const timerId: { current: NodeJS.Timeout | null } = useRef(null);
 
@@ -54,7 +70,7 @@ export function Audiochallenge(props: IProps) {
 
   const questionWord = AUDIO_QUESTIONS_ARRAY[currentQuestion].questionWord;
 
-  function resetParameters(isOn: boolean, isLoad: boolean) {
+  async function resetParameters(isOn: boolean, isLoad: boolean) {
     changeState(isOn);
     changeGameLoadedStatus(isLoad);
     setShowResult(false);
@@ -63,8 +79,22 @@ export function Audiochallenge(props: IProps) {
     setAnswerReceived(false);
     setIsTimerOn(false);
     setQuestionsAnswered(Array(AUDIO_QUESTIONS_ARRAY.length).fill(false));
+
     setLives(AUDIO_LIVES_AMOUNT);
     setGameResult(initialStateResult);
+    setCurrentSeries(0);
+    AUDIO_BEST_SERIES[0] = 0;
+
+    if (userAuthorized) {
+      AUDIO_STAT.forEach((item) => {
+        item.learned = false;
+        item.new = false;
+      });
+      await getUserWords(userAuthData, isLoadFromTextBook);
+      await getUserWordsForTheGame(userAuthorized, userAuthData);
+    }
+
+    AUDIO.pause();
   }
 
   useEffect(() => {
@@ -87,10 +117,18 @@ export function Audiochallenge(props: IProps) {
 
   function afterAnswer(answer: IWordAudio, correctAnswer: IWordAudio): void {
     setAnswerReceived(true);
+
     if (answer === correctAnswer) {
       setRightAnswer(true);
+      if (userAuthorized) {
+        setCurrentSeries((currentSeries) => currentSeries + 1);
+      }
     } else {
       setLives(lives - 1);
+      if (userAuthorized) {
+        AUDIO_BEST_SERIES[0] = Math.max(AUDIO_BEST_SERIES[0], currentSeries);
+        setCurrentSeries(0);
+      }
     }
     if (timerId.current) {
       clearTimeout(timerId.current);
@@ -105,7 +143,6 @@ export function Audiochallenge(props: IProps) {
 
   function nextQuestion(): void {
     const nextQuestion = currentQuestion + 1;
-
     if (nextQuestion < questionsAmount && lives > 0) {
       setCurrentQuestion(nextQuestion);
       setAnswerReceived(false);
@@ -118,6 +155,25 @@ export function Audiochallenge(props: IProps) {
         };
       });
       setGameResult(arrResult);
+      if (userAuthorized) {
+        AUDIO_BEST_SERIES[0] = Math.max(AUDIO_BEST_SERIES[0], currentSeries);
+        const gameStatistic = {
+          gameLearnedWords: AUDIO_STAT.reduce((sum, item) => {
+            return item.learned ? sum + 1 : sum;
+          }, 0),
+          gameBestSeries: AUDIO_BEST_SERIES[0],
+          gameSuccessCounter: questionsAnswered.reduce((sum, item) => {
+            return item ? sum + 1 : sum;
+          }, 0),
+          gameFailCounter: questionsAnswered.reduce((sum, item) => {
+            return !item ? sum + 1 : sum;
+          }, 0),
+          gameNewWords: AUDIO_STAT.reduce((sum, item) => {
+            return item.new ? sum + 1 : sum;
+          }, 0),
+        };
+        getPutAudioUserStatistic(userAuthData, gameStatistic);
+      }
       setShowResult(true);
     }
   }
@@ -131,6 +187,16 @@ export function Audiochallenge(props: IProps) {
     onClickNext: nextQuestion,
     isTimerOn: isTimerOn,
   };
+
+  useEffect(() => {
+    if (answerReceived && userAuthorized && !showResult && !isTimerOn) {
+      createUpdateUserWord(
+        paramQuestion.questionWord,
+        rightAnswer,
+        userAuthData
+      );
+    }
+  });
 
   useEffect(() => {
     const checkAnswer = (event: KeyboardEvent) => {
@@ -193,7 +259,13 @@ export function Audiochallenge(props: IProps) {
             </div>
           ) : (
             <div className="game__wrapper horizontal">
-              <div className="game__left-image"></div>
+              <div className="game__left-image">
+                <img
+                  className="game__left-img"
+                  src="assets/images/girl-thinking.png"
+                  alt=""
+                />
+              </div>
               <div className="game__wrapper vertical">
                 <AudioLives amount={lives} />
                 <div className="game__container">

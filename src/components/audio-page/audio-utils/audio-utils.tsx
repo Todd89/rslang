@@ -2,16 +2,35 @@ import {
   AUDIO_MAX_QUESTION_AMOUNT,
   AUDIO_ANSWER_AMOUNT,
   AUDIO_QUESTIONS_ARRAY,
+  AUDIO_USER_WORDS_ARRAY,
+  AUDIO_USER_WORDS_ARRAY_FOR_GAME,
+  AUDIO_EMPTY_USER_WORD,
+  RIGHT_ANSWERS_DIFFICULT,
+  RIGHT_ANSWERS_NOT_DIFFICULT,
+  AUDIO_STAT,
+  FORMER_STAT,
 } from "../../../const/const-audio";
-import { IWordAudio, IUserWord } from "../../../interface/interface-audio";
-import { IUserData } from "../../../interface/interface";
+import {
+  IWordAudio,
+  IStatistic,
+  IAudioGameStatistic,
+} from "../../../interface/interface-audio";
+
+import { Url, Methods } from "../../../const/const";
+
+import { IUserWord, IUserData } from "../../../interface/interface";
+
+import { AuthData } from "../../../interface/auth-interface";
+//import { IWord, IUserData } from "../../../interface/interface";
 
 import { WORDS_PER_PAGE, PAGES_PER_GROUP } from "../../../const/const-audio";
 import httpClient from "../../../services/http-client";
 
 const wordsArray: Array<IWordAudio> = [];
 
-const userLearnedWordsArray: Array<IUserWord> = [];
+const userLearnedWordsArray: Array<string> = [];
+//const userWordsArray: Array<IUserWord> = [];
+let userLearnedWordsArrayToCheck: Array<string> = [];
 
 async function getWords(
   group: number,
@@ -63,14 +82,144 @@ async function getWords(
   });
 }
 
-async function getUserWords(user: IUserData) {
-  //User functions
+export function createUpdateUserWord(
+  word: IWordAudio,
+  isRightAnswer: boolean,
+  userAuthData: AuthData
+  // updateGameStatistic: (data: IAudioGameStatistic) => void
+) {
+  const userWordArr = AUDIO_USER_WORDS_ARRAY_FOR_GAME.filter(
+    (item) => item.wordId === word.id
+  );
+  let userWord = AUDIO_EMPTY_USER_WORD;
+  let isNewUserWord = true;
 
+  const indStat = AUDIO_STAT.findIndex((item) => item.id === word.id);
+
+  if (userWordArr.length > 0) {
+    userWord = userWordArr[0];
+    isNewUserWord = false;
+    userWord.optional.new = false;
+  } else {
+    //создать новое слово
+    userWord.optional.new = true;
+    userWord.wordId = word.id;
+    userWord.difficulty = "false";
+    userWord.optional.group = word.group;
+    userWord.optional.page = word.page;
+    AUDIO_STAT[indStat].new = true;
+  }
+  userWord.optional.failCounter = Number(!isRightAnswer);
+  const learnedBefore = userWord.optional.learned;
+  if (userWord.difficulty === "true") {
+    userWord.optional.successCounter = isRightAnswer
+      ? userWord.optional.successCounter === RIGHT_ANSWERS_DIFFICULT
+        ? RIGHT_ANSWERS_DIFFICULT
+        : (userWord.optional.successCounter += 1)
+      : 0;
+    userWord.optional.learned =
+      isRightAnswer &&
+      userWord.optional.successCounter === RIGHT_ANSWERS_DIFFICULT;
+  } else {
+    userWord.optional.successCounter = isRightAnswer
+      ? userWord.optional.successCounter === RIGHT_ANSWERS_NOT_DIFFICULT
+        ? RIGHT_ANSWERS_NOT_DIFFICULT
+        : (userWord.optional.successCounter += 1)
+      : 0;
+    userWord.optional.learned =
+      isRightAnswer &&
+      userWord.optional.successCounter === RIGHT_ANSWERS_NOT_DIFFICULT;
+  }
+  if (!learnedBefore && userWord.optional.learned) {
+    AUDIO_STAT[indStat].learned = true;
+  }
+  if (isNewUserWord) {
+    //httpClient.createUserWord(userAuthData, userWord);
+    createUserWord(userAuthData, userWord);
+    AUDIO_USER_WORDS_ARRAY.push(userWord);
+  } else {
+    //httpClient.updateUserWord(userAuthData, userWord);
+    updateUserWord(userAuthData, userWord);
+    const findWordIndex = AUDIO_USER_WORDS_ARRAY.findIndex(
+      (item) => item.wordId === userWord.wordId
+    );
+    AUDIO_USER_WORDS_ARRAY.splice(findWordIndex, 1, userWord);
+  }
+}
+
+const createUserWord = async (
+  { userId, token }: IUserData,
+  userWord: IUserWord
+) => {
+  const userWordServer = {
+    difficulty: userWord.difficulty,
+    optional: {
+      learned: userWord.optional.learned,
+      group: userWord.optional.group,
+      page: userWord.optional.page,
+      successCounter: userWord.optional.successCounter,
+      failCounter: userWord.optional.failCounter,
+      new: userWord.optional.new,
+    },
+  };
+  const rawResponse = await fetch(
+    `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userWordServer),
+    }
+  );
+  const content = await rawResponse.json();
+};
+
+const updateUserWord = async (
+  { userId, token }: IUserData,
+  userWord: IUserWord
+) => {
+  const userWordServer = {
+    difficulty: userWord.difficulty,
+    optional: {
+      learned: userWord.optional.learned,
+      group: userWord.optional.group,
+      page: userWord.optional.page,
+      successCounter: userWord.optional.successCounter,
+      failCounter: userWord.optional.failCounter,
+      new: userWord.optional.new,
+    },
+  };
+
+  const rawResponse = await fetch(
+    `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
+    {
+      method: `${Methods.PUT}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userWordServer),
+    }
+  );
+  const content = await rawResponse.json();
+};
+
+export async function getUserWords(
+  userAuthData: AuthData,
+  isLoadFromTextBook: boolean
+) {
   const promiseArray = [];
-  const userWords = httpClient.getAllUserWords(user);
+  AUDIO_USER_WORDS_ARRAY.length = 0;
+
+  userLearnedWordsArray.length = 0;
+
+  const userWords = httpClient.getAllUserWords(userAuthData);
 
   promiseArray.push(userWords);
-
   await Promise.all(promiseArray).then((values) => {
     for (let i = 0; i < values.length; i++) {
       values[i].forEach(
@@ -78,47 +227,77 @@ async function getUserWords(user: IUserData) {
           wordId: string;
           difficulty: string;
           optional: {
-            // group: number;
-            //  page: number;
             learned: boolean;
+            group: number;
+            page: number;
+            successCounter: number;
+            failCounter: number;
             new: boolean;
-            wordCounter: number;
-            rightCounter: number;
           };
         }) => {
-          if (item.optional.learned) {
-            const itemWord = {
-              wordId: item.wordId,
-              difficulty: item.difficulty,
-              optional: {
-                learned: item.optional.learned,
-                new: item.optional.new,
-                wordCounter: item.optional.wordCounter,
-                rightCounter: item.optional.rightCounter,
-              },
-            };
-            userLearnedWordsArray.push(itemWord);
+          const itemWord = {
+            wordId: item.wordId,
+            difficulty: item.difficulty,
+            optional: {
+              learned: item.optional.learned,
+              group: item.optional.group,
+              page: item.optional.page,
+              successCounter: item.optional.successCounter,
+              failCounter: item.optional.failCounter,
+              new: item.optional.new,
+            },
+          };
+          AUDIO_USER_WORDS_ARRAY.push(itemWord);
+          if (itemWord.optional.learned) {
+            userLearnedWordsArray.push(itemWord.wordId);
           }
         }
       );
     }
+
+    if (isLoadFromTextBook) {
+      userLearnedWordsArrayToCheck = userLearnedWordsArray.slice();
+    }
   });
+}
+
+export async function getUserWordsForTheGame(
+  userAuthorized: boolean,
+  userAuthData: AuthData
+) {
+  const wordsTemp = AUDIO_QUESTIONS_ARRAY.map((item) => item.questionWord);
+
+  AUDIO_USER_WORDS_ARRAY_FOR_GAME.length = 0;
+  if (userAuthorized) {
+    const arrTemp = AUDIO_USER_WORDS_ARRAY.filter((userWord) =>
+      wordsTemp.map((wordTemp) => wordTemp.id).includes(userWord.wordId)
+    );
+    arrTemp.forEach((item) => AUDIO_USER_WORDS_ARRAY_FOR_GAME.push(item)); //получили пользовательские слова для игры
+  }
 }
 
 export async function createArrayOfQuestions(
   group: number,
-  page: number
-  // user: IUserData //authorization
+  page: number,
+  isLoadFromTextBook: boolean,
+  userAuthorized: boolean,
+  userAuthData: AuthData
 ) {
   AUDIO_QUESTIONS_ARRAY.length = 0;
+
+  AUDIO_USER_WORDS_ARRAY.length = 0;
+
+  AUDIO_STAT.length = 0;
 
   if (page < 0) {
     await getWords(group, PAGES_PER_GROUP, false);
   } else {
     await getWords(group, page, true);
   }
-
-  //  await getUserWords(user);//authorization
+  if (userAuthorized) {
+    //для отбора неизученных слов
+    await getUserWords(userAuthData, isLoadFromTextBook); //получить слова пользователя
+  }
 
   const wordsForQuestions: Array<IWordAudio> = [];
 
@@ -137,9 +316,18 @@ export async function createArrayOfQuestions(
   ) {
     const question = getRandomWord();
 
-    //добавить отбор по пользовательским словам, если запуск со страницы
-    if (!wordsForQuestions.includes(question)) {
+    if (
+      !wordsForQuestions.includes(question) &&
+      !userLearnedWordsArrayToCheck.includes(question.id)
+    ) {
       wordsForQuestions.push(question);
+      if (userAuthorized) {
+        AUDIO_STAT.push({
+          id: question.id,
+          learned: false,
+          new: false,
+        });
+      }
     }
     counter += 1;
   }
@@ -148,8 +336,18 @@ export async function createArrayOfQuestions(
     await getWords(group, page - 1, false);
     const question = getRandomWord();
 
-    if (!wordsForQuestions.includes(question)) {
+    if (
+      !wordsForQuestions.includes(question) &&
+      !userLearnedWordsArrayToCheck.includes(question.id)
+    ) {
       wordsForQuestions.push(question);
+      if (userAuthorized) {
+        AUDIO_STAT.push({
+          id: question.id,
+          learned: false,
+          new: false,
+        });
+      }
     }
   }
 
@@ -159,6 +357,10 @@ export async function createArrayOfQuestions(
       answers: getAnswersForQuestion(word),
     });
   });
+
+  if (userAuthorized) {
+    await getUserWordsForTheGame(userAuthorized, userAuthData);
+  }
 
   function getRandomWord(): IWordAudio {
     return arrAvailableWords[
@@ -199,3 +401,66 @@ function getFilteredArray(group: number, page: number): Array<IWordAudio> {
   }
   return arrAvailableWords;
 }
+
+export async function getPutAudioUserStatistic(
+  userAuthData: AuthData,
+  statisticState: IAudioGameStatistic
+) {
+  const getStat = getUserStatistic(userAuthData);
+
+  await getStat;
+
+  FORMER_STAT.learnedWords += statisticState.gameLearnedWords;
+  FORMER_STAT.optional.audio.bestSeries = statisticState.gameBestSeries;
+  FORMER_STAT.optional.audio.failCounter = statisticState.gameFailCounter;
+  FORMER_STAT.optional.audio.newWords = statisticState.gameNewWords;
+  FORMER_STAT.optional.audio.successCounter = statisticState.gameSuccessCounter;
+
+  const putStat = putUserStatistic(userAuthData, FORMER_STAT);
+  await putStat;
+}
+
+export const getUserStatistic = async ({ userId, token }: IUserData) => {
+  try {
+    const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
+      method: `${Methods.GET}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+    const stat = await rawResponse.json();
+
+    FORMER_STAT.learnedWords = stat.learnedWords;
+    FORMER_STAT.optional.audio.bestSeries = stat.optional.audio.bestSeries;
+    FORMER_STAT.optional.audio.date = stat.optional.audio.date;
+    FORMER_STAT.optional.audio.failCounter = stat.optional.audio.failCounter;
+    FORMER_STAT.optional.audio.newWords = stat.optional.audio.newWords;
+    FORMER_STAT.optional.audio.successCounter =
+      stat.optional.audio.successCounter;
+    FORMER_STAT.optional.sprint.bestSeries = stat.optional.sprint.bestSeries;
+    FORMER_STAT.optional.sprint.date = stat.optional.sprint.date;
+    FORMER_STAT.optional.sprint.failCounter = stat.optional.sprint.failCounter;
+    FORMER_STAT.optional.sprint.newWords = stat.optional.sprint.newWords;
+    FORMER_STAT.optional.sprint.successCounter =
+      stat.optional.sprint.successCounter;
+  } catch {
+    console.log("no stat for you, yet((");
+  }
+};
+
+const putUserStatistic = async (
+  { userId, token }: IUserData,
+  statistic: IStatistic
+) => {
+  const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
+    method: `${Methods.PUT}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(statistic),
+  });
+  const content = await rawResponse.json();
+};

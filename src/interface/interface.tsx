@@ -1,13 +1,13 @@
 export type IStatistic = {
-  learnedWords:number,
-  optional:{
-    game:string,
-    date:string,
-    bestSeries:number,
-    succesCounter:number,
-    failCounter:number,
-    newWords:number
-  }
+  learnedWords: number;
+  optional: {
+    game: string;
+    date: string;
+    bestSeries: number;
+    succesCounter: number;
+    failCounter: number;
+    newWords: number;
+  };
 };
 
 export type ISettings = {
@@ -28,7 +28,7 @@ export interface IUserData {
 
 export interface IUserWord {
   difficulty: string;
-  wordId?:string;
+  wordId?: string;
   optional: {
     learned: boolean;
     group: number;
@@ -66,14 +66,13 @@ export interface IWordInArray {
   wordTranslate: string;
 }
 
-
 export interface AuthorizationComponentProps {
   isRegistration: boolean;
   changeForm: (evt: React.MouseEvent) => void;
   toggleForm: () => void;
 }
 
-export interface IWordInAnswerArray extends IWordInArray{
+export interface IWordInAnswerArray extends IWordInArray {
   isAnwserTrue: boolean;
 }
 
@@ -83,21 +82,20 @@ export interface IWordsOfArrays {
 
 export interface IGameBlockProps {
   word: IWordInArray;
-  randomWordsInGame:Array<IRandomWordInGame>;
-  loadingUserWords:IUserWord[]
+  randomWordsInGame: Array<IRandomWordInGame>;
+  loadingUserWords: IUserWord[];
   changeWordCount: () => void;
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
   changeWord: () => void;
-
 }
 
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
   makeRandomWordsForWork: (wordsInGame: any) => any;
-  changeAllWord: (arr: Array<Array<IWordInArray>>) => void
-  changeLoadingUserWords: (arr: IUserWord[]) => void
+  changeAllWord: (arr: Array<Array<IWordInArray>>) => void;
+  changeLoadingUserWords: (arr: IUserWord[]) => void;
 }
 
 export interface IWordInGame {
@@ -111,10 +109,9 @@ export interface IRandomWordInGame {
   AUDIO: string;
   ENGLISH_WORD: string;
   RUSSIAN_WORD: string;
-  REAL_TRANSLATE:string;
-  TRANSCRIPTION: string
+  REAL_TRANSLATE: string;
+  TRANSCRIPTION: string;
   TYPE_OF_ANSWER: boolean;
   PAGE: number;
-  GROUP: number; 
+  GROUP: number;
 }
-
