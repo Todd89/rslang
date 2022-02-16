@@ -1,100 +1,133 @@
 import "./sprint-game-block.css";
+import { useSelector } from "react-redux";
 import {
   IGameBlockProps,
-  IWordInAnswerArray,
+  IRandomWordInGame,
+  IUserData,
+  IStatistic
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
+import { getUserAuthData } from "../../../store/data/selectors";
+import httpClient from "../../../services/http-client";
+import { SprintNums } from "../../../const/const";
+import {
+  changeScoreX,
+  createNewUserWord,
+  makeAnswersArray,
+  addViewToBonus
+} from "../sprint-methods/sprint-methods";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   word,
+  randomWordsInGame,
   changeWordCount,
   changePageState,
   changeAnswersArray,
-  answer,
-  typeOfAnswer,
-  makeRandomAnswer,
-  englishAnswer,
   changeWord,
+  loadingUserWords,
 }) => {
-  const [answers, setAnswers] = useState<Array<IWordInAnswerArray>>([]);
-  const [seconds, setSeconds] = useState<number>(60);
+  const [answers, setAnswers] = useState<IRandomWordInGame[]>([]);
+  const [seconds, setSeconds] = useState<number>(SprintNums.MINUTE);
   const [score, setScore] = useState<number>(0);
   const [scoreX, setScoreX] = useState<number>(1);
+  const [count, setCount] = useState<number>(0);
+  const [playerRealAnswer, setPlayerRealAnswer] = useState<
+    boolean | undefined
+  >();
+  const [finish, setFinish] = useState<boolean | undefined>(false);
+  const [user, setUser] = useState<IUserData>();
 
+  const USER_DATA = useSelector(getUserAuthData);
+
+  const AUDIO_RIGHT = new Audio();
+  AUDIO_RIGHT.src = "/assets/sound/right.mp3";
+  AUDIO_RIGHT.volume = 0.2;
+
+  const AUDIO_WRONG = new Audio();
+  AUDIO_WRONG.src = "/assets/sound/wrong.mp3";
+  AUDIO_WRONG.volume = 0.2;
+
+  const AUDIO_END = new Audio();
+  AUDIO_END.src = "/assets/sound/end.mp3";
+  AUDIO_END.volume = 0.2;
+
+
+  const userI = useSelector(getUserAuthData);
+
+  if (answers.length === SprintNums.MAX_ANSWERS_LENGTH) {
+    changeAnswersArray(answers);
+    changePageState("congratulation");
+    AUDIO_END.load();
+    AUDIO_END.play();
+  }
+
+  if (!user) {
+    const NEW_USER = {
+      userId: USER_DATA.userId,
+      token: USER_DATA.token,
+    };
+    setUser(NEW_USER);
+  }
 
   useEffect(() => {
     let sec = 60;
     const interval = setInterval(() => {
       sec -= 1;
       if (sec === 0) {
+        setFinish(true);
         clearInterval(interval);
+        changePageState("congratulation");
+        AUDIO_END.load();
+        AUDIO_END.play();
       }
       setSeconds(sec);
     }, 1000);
-    makeRandomAnswer();
     return () => clearInterval(interval);
   }, []);
 
-  const AUDIO_RIGHT = new Audio();
-  AUDIO_RIGHT.src = "/assets/audio/right.mp3";
-
-  const AUDIO_WRONG = new Audio();
-  AUDIO_WRONG.src = "/assets/audio/wrong.mp3";
-
-  if (answers.length === 10) {
-    changeAnswersArray(answers);
-    changePageState("congratulation");
-  }
-
-  const makeAnswersArray = (rightAnswer: boolean, playerAnswer: boolean) => {
-    console.log(word)
-    if (rightAnswer === playerAnswer) {
-      const ANSWER_STATE = { isAnwserTrue: true };
-      const ANWSER_WORD = { ...word, ...ANSWER_STATE };
-      const NEW_ARR = answers.slice();
-      NEW_ARR.push(ANWSER_WORD);
-      setAnswers(NEW_ARR);
-      AUDIO_RIGHT.play();
-    } else {
-      const ANSWER_STATE = { isAnwserTrue: false };
-      const ANWSER_WORD = { ...word, ...ANSWER_STATE };
-      const NEW_ARR = answers.slice();
-      NEW_ARR.push(ANWSER_WORD);
-      setAnswers(NEW_ARR);
-      AUDIO_WRONG.play();
+  useEffect(() => {
+    if (finish) {
+      changeAnswersArray(answers);
     }
-  };
+  }, [finish]);
 
-  const changeScoreX = (answers:IWordInAnswerArray[]) => {
-    let result = 1;
-    const LAST_WORD = answers.length - 1;    
-      if(answers[LAST_WORD]?.isAnwserTrue && answers[LAST_WORD - 1]?.isAnwserTrue && answers[LAST_WORD-2]?.isAnwserTrue) {
-        result = 2;
-      } else if (answers[LAST_WORD]?.isAnwserTrue && answers[LAST_WORD-1]?.isAnwserTrue) {
-        result = 1.5
-      } else if (answers[LAST_WORD]?.isAnwserTrue) {
-        result = 1.25
-      }
-    console.log('result',result)
-    setScoreX(result)
-  };
+  useEffect(() => {
+    if (count > 0) {
+      changeScoreX(answers, setScoreX);
+
+      changeScore(
+        randomWordsInGame[count - 1].TYPE_OF_ANSWER,
+        playerRealAnswer as boolean
+      );
+    }
+  }, [count]);
 
   const changeScore = (answer: boolean, playerAnswer: boolean) => {
-    let newScore = score + (100 * scoreX);
+    let newScore = score + SprintNums.PLUS_TO_SCORE * scoreX;
     if (answer === playerAnswer) {
       setScore(newScore);
     }
   };
 
+  const changeCount = () => {
+    setCount(count + 1);
+  };
+
+  if (document.getElementById("level-up")) {
+    addViewToBonus(scoreX)
+  }
+
   return (
     <div>
       <div className='girl-image'>
-        <img src='/assets/images/png/sprint_girl.png' alt='девочка' />
+        <img src='/assets/images/png/rocket-girl.png' alt='девочка' />
       </div>
       <div className='game-sprint-block'>
         <div className='game-sprint-block__top-lights'>
-          <div className='game-sprint-block__timer'><span className='game-sprint-block__text'>{seconds} sec</span></div>
-          <div className='game-sprint-block__level-up'>
+          <div className='game-sprint-block__timer'>
+            <span className='game-sprint-block__text'>{seconds} sec</span>
+          </div>
+          <div id='level-up' className='game-sprint-block__level-up'>
             <div className='game-sprint-block__cool-symbol'>
               <img src='/assets/images/png/cool.png' alt='класс' />
             </div>
@@ -110,32 +143,104 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           </div>
         </div>
         <div className='game-sprint-block__quastion'>
-          <div className='game-sprint-block__english-word'>{englishAnswer}</div>
-          <div className='game-sprint-block__russian-word'>{answer}</div>
+          <div className='game-sprint-block__english-word'>
+            {randomWordsInGame[count].ENGLISH_WORD}
+          </div>
+          <div className='game-sprint-block__russian-word'>
+            {randomWordsInGame[count].RUSSIAN_WORD}
+          </div>
         </div>
         <div className='game-sprint-block__buttons-block'>
           <button
             className='game-sprint-block__button game-sprint-block__button_wrong'
-            onClick={() => {
-              makeAnswersArray(typeOfAnswer as boolean, false);
-              changeScoreX(answers)
-              changeScore(typeOfAnswer as boolean, false);
+            onClick={async () => {
+              const SUCCESS = randomWordsInGame[count].TYPE_OF_ANSWER
+                ? false
+                : true;
+              const NEW_WORD = createNewUserWord(
+                { ...randomWordsInGame[count] },
+                SUCCESS
+              );
+
+              setPlayerRealAnswer(false);
+              makeAnswersArray(
+                randomWordsInGame[count].TYPE_OF_ANSWER,
+                false,
+                randomWordsInGame,
+                answers,
+                setAnswers,
+                AUDIO_RIGHT,
+                AUDIO_WRONG,
+                count
+              );
               changeWordCount();
               changeWord();
-              makeRandomAnswer();
+              changeCount();
+
+              if (
+                !loadingUserWords.find(
+                  (el) => el.wordId === randomWordsInGame[count].ID
+                )
+              ) {
+                await httpClient.createUserWord(
+                  user as IUserData,
+                  NEW_WORD,
+                  randomWordsInGame[count].ID
+                );
+              } else {
+                await httpClient.updateUserWord(
+                  user as IUserData,
+                  NEW_WORD,
+                  randomWordsInGame[count].ID
+                );
+              }
             }}
           >
             Неверно
           </button>
           <button
             className='game-sprint-block__button game-sprint-block__button_right'
-            onClick={() => {
-              makeAnswersArray(typeOfAnswer as boolean, true);
-              changeScoreX(answers)
-              changeScore(typeOfAnswer as boolean, true);
+            onClick={async () => {
+              const SUCCESS = randomWordsInGame[count].TYPE_OF_ANSWER
+                ? true
+                : false;
+              const NEW_WORD = createNewUserWord(
+                { ...randomWordsInGame[count] },
+                SUCCESS
+              );
+
+              setPlayerRealAnswer(true);
+              makeAnswersArray(
+                randomWordsInGame[count].TYPE_OF_ANSWER,
+                true,
+                randomWordsInGame,
+                answers,
+                setAnswers,
+                AUDIO_RIGHT,
+                AUDIO_WRONG,
+                count
+              );
               changeWordCount();
               changeWord();
-              makeRandomAnswer();
+              changeCount();
+
+              if (
+                !loadingUserWords.find(
+                  (el) => el.wordId === randomWordsInGame[count].ID
+                )
+              ) {
+                await httpClient.createUserWord(
+                  user as IUserData,
+                  NEW_WORD,
+                  randomWordsInGame[count].ID
+                );
+              } else {
+                await httpClient.updateUserWord(
+                  user as IUserData,
+                  NEW_WORD,
+                  randomWordsInGame[count].ID
+                );
+              }
             }}
           >
             Правильно
