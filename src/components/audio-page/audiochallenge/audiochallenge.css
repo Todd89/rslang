@@ -41,23 +41,13 @@
   margin: 10px;
 }
 
-/*.game__left-image {
-  height: 70vh;
-  width: 35vw;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url("/public/assets/images/girl-thinking.png");
-}*/
-
 .game__left-img {
-  /*height: 700px;*/
   width: 350px;
 }
 
 .game__container {
   display: flex;
   flex-direction: column;
-  /*width: 60vw;*/
   width: 60vw;
   margin: 20px 0;
   padding: 20px;
@@ -73,16 +63,7 @@
 }
 
 @media (max-width: 1200px) {
-  /*.game__container {
-    height: 100%;
-  }*/
-  /*.game__left-image {
-    height: 60vh;
-    width: 30vw;
-  }*/
-
   .game__left-img {
-    /* height: 600px;*/
     width: 300px;
   }
 
@@ -92,16 +73,7 @@
 }
 
 @media (max-width: 1024px) {
-  /*.game__container {
-    height: 100%;
-    width: 50vw;
-  }*/
-  /*.game__left-image {
-    height: 35vh;
-    width: 35vw;
-  }*/
   .game__left-img {
-    /*height: 400px;*/
     width: 200px;
   }
 
@@ -111,15 +83,11 @@
 }
 
 @media (max-width: 768px) {
-  /*.game__container {
-    width: 55vw;
-  }*/
   #btn-repeate {
     font-size: 16px;
   }
 
   .game__left-img {
-    /*  height: 300px;*/
     width: 150px;
   }
 }

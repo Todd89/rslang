@@ -36,7 +36,6 @@ export function AudioQuestion(props: IProps) {
   AUDIO.volume = 0.2;
 
   useEffect(() => {
-    //const audio = new Audio();
     AUDIO.volume = 0.2;
     function playAudio(word: IWordAudio) {
       const path = `${AUDIO_PATH_DATA_AUDIO}${word.audio}`;
@@ -44,7 +43,7 @@ export function AudioQuestion(props: IProps) {
       AUDIO.src = path;
       AUDIO.load();
       setTimeout(() => {
-        // AUDIO.play();
+        AUDIO.play();
       }, 500);
     }
     if (!answerReceived && isTimerOn) {
@@ -53,7 +52,6 @@ export function AudioQuestion(props: IProps) {
   }, [answerReceived, isTimerOn, questionWord]);
 
   useEffect(() => {
-    //const audio = new Audio();
     AUDIO.volume = 0.2;
 
     function playAudioAfterAnswer(isCorrectAnswer: boolean) {
@@ -63,7 +61,7 @@ export function AudioQuestion(props: IProps) {
 
       AUDIO.src = path;
       AUDIO.load();
-      //  AUDIO.play();
+      AUDIO.play();
     }
 
     if (answerReceived && rightAnswer && !isTimerOn) {

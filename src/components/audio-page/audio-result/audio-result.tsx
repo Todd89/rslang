@@ -16,7 +16,6 @@ interface IProps {
 export function Result(props: IProps) {
   const { gameResult } = props; //bestSeries Для статистики
 
-  //const audio = new Audio();
   AUDIO.volume = 0.2;
 
   function playAudio(word: IWordAudio) {
@@ -24,7 +23,7 @@ export function Result(props: IProps) {
 
     AUDIO.src = path;
     AUDIO.load();
-    // AUDIO.play();
+    AUDIO.play();
   }
 
   function playAudioResult() {
@@ -32,7 +31,7 @@ export function Result(props: IProps) {
 
     AUDIO.src = path;
     AUDIO.load();
-    //  AUDIO.play();
+    AUDIO.play();
   }
 
   useEffect(() => {

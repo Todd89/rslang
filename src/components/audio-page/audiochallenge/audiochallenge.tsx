@@ -6,13 +6,13 @@ import {
   AUDIO_LIVES_AMOUNT,
   AUDIO_EMPTY_WORD,
   AUDIO_QUESTIONS_ARRAY,
-  AUDIO_USER_WORDS_ARRAY,
+  AUDIO_BEST_SERIES,
+  AUDIO_STAT,
   AUDIO,
 } from "../../../const/const-audio";
 import {
   IWordAudio,
   IAudioResult,
-  IAudioGameStatistic,
 } from "../../../interface/interface-audio";
 import { AudioQuestion } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
@@ -63,16 +63,6 @@ export function Audiochallenge(props: IProps) {
   const initialStateResult: Array<IAudioResult> = [];
   const [gameResult, setGameResult] = useState(initialStateResult);
   const [currentSeries, setCurrentSeries] = useState(0);
-  const [bestSeries, setBestSeries] = useState(0);
-  const initialGameStatistic: IAudioGameStatistic = {
-    gameBestSeries: 0,
-    gameLearnedWords: 0,
-    gameNewWords: 0,
-    gameSuccessCounter: 0,
-    gameFailCounter: 0,
-  };
-
-  const [gameStatistic, setGameStatistic] = useState(initialGameStatistic);
 
   const timerId: { current: NodeJS.Timeout | null } = useRef(null);
 
@@ -89,22 +79,22 @@ export function Audiochallenge(props: IProps) {
     setAnswerReceived(false);
     setIsTimerOn(false);
     setQuestionsAnswered(Array(AUDIO_QUESTIONS_ARRAY.length).fill(false));
+
     setLives(AUDIO_LIVES_AMOUNT);
     setGameResult(initialStateResult);
-    setGameStatistic(initialGameStatistic);
-    // console.log("resetParameters AUDIO_QUESTIONS_ARRAY", AUDIO_QUESTIONS_ARRAY);
-    //console.log(
-    //  "resetParameters AUDIO_USER_WORDS_ARRAY before",
-    //  AUDIO_USER_WORDS_ARRAY
-    // );
-    await getUserWords(userAuthData, isLoadFromTextBook);
-    await getUserWordsForTheGame(userAuthorized, userAuthData);
-    // console.log(AUDIO.src);
+    setCurrentSeries(0);
+    AUDIO_BEST_SERIES[0] = 0;
+
+    if (userAuthorized) {
+      AUDIO_STAT.forEach((item) => {
+        item.learned = false;
+        item.new = false;
+      });
+      await getUserWords(userAuthData, isLoadFromTextBook);
+      await getUserWordsForTheGame(userAuthorized, userAuthData);
+    }
+
     AUDIO.pause();
-    // console.log(
-    //   "resetParameters AUDIO_USER_WORDS_ARRAY after",
-    //   AUDIO_USER_WORDS_ARRAY
-    // );
   }
 
   useEffect(() => {
@@ -127,13 +117,18 @@ export function Audiochallenge(props: IProps) {
 
   function afterAnswer(answer: IWordAudio, correctAnswer: IWordAudio): void {
     setAnswerReceived(true);
+
     if (answer === correctAnswer) {
       setRightAnswer(true);
-      setCurrentSeries(currentSeries + 1);
+      if (userAuthorized) {
+        setCurrentSeries((currentSeries) => currentSeries + 1);
+      }
     } else {
       setLives(lives - 1);
-      setBestSeries((bestSeries) => Math.max(bestSeries, currentSeries));
-      setCurrentSeries(0);
+      if (userAuthorized) {
+        AUDIO_BEST_SERIES[0] = Math.max(AUDIO_BEST_SERIES[0], currentSeries);
+        setCurrentSeries(0);
+      }
     }
     if (timerId.current) {
       clearTimeout(timerId.current);
@@ -146,21 +141,8 @@ export function Audiochallenge(props: IProps) {
     });
   }
 
-  function updateGameStatistic(data: IAudioGameStatistic) {
-    setGameStatistic((gameStatistic) => {
-      const newStat = gameStatistic;
-      newStat.gameBestSeries = Math.max(newStat.gameBestSeries, bestSeries);
-      newStat.gameFailCounter += data.gameFailCounter;
-      newStat.gameLearnedWords += data.gameLearnedWords;
-      newStat.gameNewWords += data.gameNewWords;
-      newStat.gameSuccessCounter += data.gameSuccessCounter;
-      return newStat;
-    });
-  }
-
   function nextQuestion(): void {
     const nextQuestion = currentQuestion + 1;
-
     if (nextQuestion < questionsAmount && lives > 0) {
       setCurrentQuestion(nextQuestion);
       setAnswerReceived(false);
@@ -174,7 +156,22 @@ export function Audiochallenge(props: IProps) {
       });
       setGameResult(arrResult);
       if (userAuthorized) {
-        setBestSeries((bestSeries) => Math.max(bestSeries, currentSeries));
+        AUDIO_BEST_SERIES[0] = Math.max(AUDIO_BEST_SERIES[0], currentSeries);
+        const gameStatistic = {
+          gameLearnedWords: AUDIO_STAT.reduce((sum, item) => {
+            return item.learned ? sum + 1 : sum;
+          }, 0),
+          gameBestSeries: AUDIO_BEST_SERIES[0],
+          gameSuccessCounter: questionsAnswered.reduce((sum, item) => {
+            return item ? sum + 1 : sum;
+          }, 0),
+          gameFailCounter: questionsAnswered.reduce((sum, item) => {
+            return !item ? sum + 1 : sum;
+          }, 0),
+          gameNewWords: AUDIO_STAT.reduce((sum, item) => {
+            return item.new ? sum + 1 : sum;
+          }, 0),
+        };
         getPutAudioUserStatistic(userAuthData, gameStatistic);
       }
       setShowResult(true);
@@ -196,9 +193,8 @@ export function Audiochallenge(props: IProps) {
       createUpdateUserWord(
         paramQuestion.questionWord,
         rightAnswer,
-        updateGameStatistic,
         userAuthData
-      ); //записать слово на сервер
+      );
     }
   });
 

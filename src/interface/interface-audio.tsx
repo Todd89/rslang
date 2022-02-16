@@ -40,14 +40,28 @@ export interface IUserWord {
   };
 }
 
-export type IStatistic = {
+export interface IAudioStat {
+  id: string;
+  learned: boolean;
+  new: boolean;
+}
+
+export interface IStatistic {
   learnedWords: number;
   optional: {
-    game: string;
-    date: string;
-    bestSeries: number;
-    successCounter: number;
-    failCounter: number;
-    newWords: number;
+    audio: {
+      date: string;
+      bestSeries: number;
+      successCounter: number;
+      failCounter: number;
+      newWords: number;
+    };
+    sprint: {
+      date: string;
+      bestSeries: number;
+      successCounter: number;
+      failCounter: number;
+      newWords: number;
+    };
   };
-};
+}
