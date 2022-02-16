@@ -23,16 +23,16 @@ class HTTPClient {
   }
 
   async getChunkOfWords(pageNum: string, groupNum: string) {
-    const data = await fetch(
-      `${Url.DOMEN}/words/?page=${pageNum}&group=${groupNum}`
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
+    try {
+      const res = await fetch(
+      `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
+      )
+      if (res.status === ResponseStatus.OK) {
+        return res.json();
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   }
 
   async getWord(id: string) {
