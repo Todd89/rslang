@@ -116,3 +116,20 @@ export interface UsePagination {
   siblingCount: number;
   currentPage: number;
 }
+
+export interface WordData {
+  id: string;
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: string;
+  image: string;
+  page: string;
+  textExample: string;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+}

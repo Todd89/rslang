@@ -64,3 +64,41 @@ export const enum PaginationData {
 }
 
 export const DOTS = '...';
+
+export const textbookSections = [
+  { 
+    id: 1,
+    name: 1,
+    labelClass: "textbook-nav__label", 
+  }, 
+  { 
+    id: 2,
+    name: 2,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 3,
+    name: 3,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 4,
+    name: 4,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 5,
+    name: 5,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 6,
+    name: 6,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 7,
+    name: "7 - Сложные слова",
+    labelClass: "textbook-nav__label textbook-nav__label--complex",
+  }, 
+];

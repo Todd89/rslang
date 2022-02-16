@@ -1,10 +1,28 @@
-const WordCard:React.FC = () => {
+import { Url } from "../../../const/const";
+import { WordData } from "../../../interface/interface";
+
+
+const createMarkup = (textExample: string) => {
+  return {__html: textExample};
+}
+
+const WordCard:React.FC<WordData> = ({
+  word,
+  image,
+  textExample,
+  textExampleTranslate,
+  textMeaning,
+  textMeaningTranslate,
+  transcription,
+  wordTranslate,
+}) => {
+
   return (
     <article className="word-card">
 
       <div className="word-card__image-wrapper">
         <img 
-            src="https://vismmax-rslang.herokuapp.com/files/02_1221.jpg" 
+            src={`${Url.DOMEN}/${image}`} 
             alt="agreement"
             width="390"
             height="260"
@@ -14,17 +32,17 @@ const WordCard:React.FC = () => {
       <ul className="word-card__word-list">
         <li className="word-card__word-item">
           <span className="word-card__target-word">
-            biodegradable
+            {word}
           </span> 
         </li>
         <li className="word-card__word-item">
           <span className="word-card__transcription">
-            [əgríːmənt]
+            {transcription}
           </span> 
         </li>
         <li className="word-card__word-item word-card__word-item--btn">
           <span className="word-card__translation">
-            соглашение
+            {wordTranslate}
           </span> 
 
           <button className="word-card__audio-btn">
@@ -42,31 +60,34 @@ const WordCard:React.FC = () => {
 
       <ul className="word-card__explanation">
         <li className="word-card__explanation-item">
-          <p className="word-card__explanation-en">
-            An agreement is a formal decision about future action.
-          </p>
+          <p 
+            className="word-card__explanation-en"
+            dangerouslySetInnerHTML={createMarkup(textMeaning)} 
+          />
         </li>
         <li className="word-card__explanation-item">
-          <p className="word-card__explanation-ru">
-            Соглашение - это формальное решение о будущих действиях
-          </p>
+          <p 
+            className="word-card__explanation-ru"
+            dangerouslySetInnerHTML={createMarkup(textMeaningTranslate)}  
+          />
         </li>
       </ul>
 
       <ul className="word-card__example">
         <li className="word-card__example-item">
-          <p className="word-card__example-en">
-            I think you’ll get Tom’s agreement to this proposal.
-          </p>
+          <p 
+            className="word-card__example-en"
+            dangerouslySetInnerHTML={createMarkup(textExample)}
+          />
         </li>
         <li className="word-card__example-item">
-          <p className="word-card__example-ru">
-            Я думаю, что вы получите согласие Тома на это предложение          
-          </p>
+          <p 
+            className="word-card__example-ru"
+            dangerouslySetInnerHTML={createMarkup(textExampleTranslate)}  
+          />
         </li>
       </ul>
 
-      {/* only authorized */}
       <div className="word-card__auth-buttons">
         <button className="word-card__complex-btn">
           <svg className="word-card__complex-icon" width="11" height="24">
