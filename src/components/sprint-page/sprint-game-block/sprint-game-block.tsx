@@ -4,27 +4,26 @@ import {
   IGameBlockProps,
   IRandomWordInGame,
   IUserData,
-  IStatistic
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 import { getUserAuthData } from "../../../store/data/selectors";
-import httpClient from "../../../services/http-client";
 import { SprintNums } from "../../../const/const";
 import {
   changeScoreX,
-  createNewUserWord,
   makeAnswersArray,
-  addViewToBonus
+  addViewToBonus,
+  workWithUserWord
 } from "../sprint-methods/sprint-methods";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   word,
   randomWordsInGame,
+  loadingUserWords,
   changeWordCount,
   changePageState,
   changeAnswersArray,
   changeWord,
-  loadingUserWords,
+  changeLoadingUserWords
 }) => {
   const [answers, setAnswers] = useState<IRandomWordInGame[]>([]);
   const [seconds, setSeconds] = useState<number>(SprintNums.MINUTE);
@@ -51,9 +50,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   AUDIO_END.src = "/assets/sound/end.mp3";
   AUDIO_END.volume = 0.2;
 
-
-  const userI = useSelector(getUserAuthData);
-
   if (answers.length === SprintNums.MAX_ANSWERS_LENGTH) {
     changeAnswersArray(answers);
     changePageState("congratulation");
@@ -62,11 +58,13 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }
 
   if (!user) {
-    const NEW_USER = {
-      userId: USER_DATA.userId,
-      token: USER_DATA.token,
-    };
-    setUser(NEW_USER);
+    if (USER_DATA) {
+      const NEW_USER = {
+        userId: USER_DATA.userId,
+        token: USER_DATA.token,
+      };
+      setUser(NEW_USER);
+    }
   }
 
   useEffect(() => {
@@ -114,7 +112,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   };
 
   if (document.getElementById("level-up")) {
-    addViewToBonus(scoreX)
+    addViewToBonus(scoreX);
   }
 
   return (
@@ -154,14 +152,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={async () => {
-              const SUCCESS = randomWordsInGame[count].TYPE_OF_ANSWER
-                ? false
-                : true;
-              const NEW_WORD = createNewUserWord(
-                { ...randomWordsInGame[count] },
-                SUCCESS
-              );
-
+              console.log(loadingUserWords)
               setPlayerRealAnswer(false);
               makeAnswersArray(
                 randomWordsInGame[count].TYPE_OF_ANSWER,
@@ -173,27 +164,14 @@ const GameBlock: React.FC<IGameBlockProps> = ({
                 AUDIO_WRONG,
                 count
               );
+            
               changeWordCount();
               changeWord();
               changeCount();
 
-              if (
-                !loadingUserWords.find(
-                  (el) => el.wordId === randomWordsInGame[count].ID
-                )
-              ) {
-                await httpClient.createUserWord(
-                  user as IUserData,
-                  NEW_WORD,
-                  randomWordsInGame[count].ID
-                );
-              } else {
-                await httpClient.updateUserWord(
-                  user as IUserData,
-                  NEW_WORD,
-                  randomWordsInGame[count].ID
-                );
-              }
+              if (user) {
+                await workWithUserWord (user as IUserData, loadingUserWords, randomWordsInGame, count, changeLoadingUserWords);
+               }
             }}
           >
             Неверно
@@ -201,14 +179,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_right'
             onClick={async () => {
-              const SUCCESS = randomWordsInGame[count].TYPE_OF_ANSWER
-                ? true
-                : false;
-              const NEW_WORD = createNewUserWord(
-                { ...randomWordsInGame[count] },
-                SUCCESS
-              );
-
               setPlayerRealAnswer(true);
               makeAnswersArray(
                 randomWordsInGame[count].TYPE_OF_ANSWER,
@@ -220,26 +190,13 @@ const GameBlock: React.FC<IGameBlockProps> = ({
                 AUDIO_WRONG,
                 count
               );
+             
               changeWordCount();
               changeWord();
               changeCount();
 
-              if (
-                !loadingUserWords.find(
-                  (el) => el.wordId === randomWordsInGame[count].ID
-                )
-              ) {
-                await httpClient.createUserWord(
-                  user as IUserData,
-                  NEW_WORD,
-                  randomWordsInGame[count].ID
-                );
-              } else {
-                await httpClient.updateUserWord(
-                  user as IUserData,
-                  NEW_WORD,
-                  randomWordsInGame[count].ID
-                );
+              if (user) {
+               await workWithUserWord (user as IUserData, loadingUserWords, randomWordsInGame, count, changeLoadingUserWords);
               }
             }}
           >

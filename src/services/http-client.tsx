@@ -147,7 +147,6 @@ class HTTPClient {
   }
 
   async createUserWord({ userId, token }: IUserData, userWord:IUserWord, wordId:string) {
-    console.log(userWord)
     const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
     method: 'POST',
     headers: {
@@ -160,7 +159,7 @@ class HTTPClient {
       return await rawResponse.json();
   }
 
-  async getUserWord({ userId, token }: IUserData, wordId: string) {
+  async getUserWord({ userId, token }: IUserData, wordId: string):Promise<IUserWord>{
     const data = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
