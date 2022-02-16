@@ -4,6 +4,7 @@ import {
   IGameBlockProps,
   IRandomWordInGame,
   IUserData,
+  IStatistic
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 import { getUserAuthData } from "../../../store/data/selectors";
@@ -12,18 +13,19 @@ import {
   changeScoreX,
   makeAnswersArray,
   addViewToBonus,
-  workWithUserWord
+  workWithUserWord,
+  newStatistic
 } from "../sprint-methods/sprint-methods";
+import httpClient from "../../../services/http-client";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
-  word,
   randomWordsInGame,
   loadingUserWords,
   changeWordCount,
   changePageState,
   changeAnswersArray,
   changeWord,
-  changeLoadingUserWords
+  changeLoadingUserWords,
 }) => {
   const [answers, setAnswers] = useState<IRandomWordInGame[]>([]);
   const [seconds, setSeconds] = useState<number>(SprintNums.MINUTE);
@@ -35,6 +37,9 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   >();
   const [finish, setFinish] = useState<boolean | undefined>(false);
   const [user, setUser] = useState<IUserData>();
+  const [learnWordsInGame, setlearnWordsInGame] = useState<number>(0);
+  const [newWordsInGame, setNewWordsInGame] = useState<number>(0);
+  const [statistic, setStatistic] = useState<IStatistic>();
 
   const USER_DATA = useSelector(getUserAuthData);
 
@@ -52,6 +57,11 @@ const GameBlock: React.FC<IGameBlockProps> = ({
 
   if (answers.length === SprintNums.MAX_ANSWERS_LENGTH) {
     changeAnswersArray(answers);
+    newStatistic( 
+      statistic as IStatistic,
+      user as IUserData,
+      learnWordsInGame,
+      newWordsInGame)
     changePageState("congratulation");
     AUDIO_END.load();
     AUDIO_END.play();
@@ -66,6 +76,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       setUser(NEW_USER);
     }
   }
+
+
+ useEffect(()=> {
+  if(!answers.length) {
+    const getStatisic = async () => {
+      const STATISTIC = await httpClient.getUserStatistic(user as IUserData);
+      setStatistic(STATISTIC)
+    }
+    getStatisic();
+   }
+ }, [])
 
   useEffect(() => {
     let sec = 60;
@@ -86,6 +107,12 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   useEffect(() => {
     if (finish) {
       changeAnswersArray(answers);
+      newStatistic( 
+        statistic as IStatistic,
+        user as IUserData,
+        learnWordsInGame,
+        newWordsInGame)
+
     }
   }, [finish]);
 
@@ -152,7 +179,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={async () => {
-              console.log(loadingUserWords)
               setPlayerRealAnswer(false);
               makeAnswersArray(
                 randomWordsInGame[count].TYPE_OF_ANSWER,
@@ -164,14 +190,26 @@ const GameBlock: React.FC<IGameBlockProps> = ({
                 AUDIO_WRONG,
                 count
               );
-            
+              console.log(statistic, "s")
               changeWordCount();
               changeWord();
               changeCount();
+              console.log(learnWordsInGame);
+              console.log(newWordsInGame);
 
               if (user) {
-                await workWithUserWord (user as IUserData, loadingUserWords, randomWordsInGame, count, changeLoadingUserWords);
-               }
+                await workWithUserWord(
+                  user as IUserData,
+                  loadingUserWords,
+                  randomWordsInGame,
+                  count,
+                  changeLoadingUserWords,
+                  learnWordsInGame,
+                  newWordsInGame,
+                  setNewWordsInGame,
+                  setlearnWordsInGame
+                );
+              }
             }}
           >
             Неверно
@@ -190,13 +228,25 @@ const GameBlock: React.FC<IGameBlockProps> = ({
                 AUDIO_WRONG,
                 count
               );
-             
+              console.log(statistic, "s")
               changeWordCount();
               changeWord();
               changeCount();
+              console.log(learnWordsInGame);
+              console.log(newWordsInGame);
 
               if (user) {
-               await workWithUserWord (user as IUserData, loadingUserWords, randomWordsInGame, count, changeLoadingUserWords);
+                await workWithUserWord(
+                  user as IUserData,
+                  loadingUserWords,
+                  randomWordsInGame,
+                  count,
+                  changeLoadingUserWords,
+                  learnWordsInGame,
+                  newWordsInGame,
+                  setNewWordsInGame,
+                  setlearnWordsInGame
+                );
               }
             }}
           >

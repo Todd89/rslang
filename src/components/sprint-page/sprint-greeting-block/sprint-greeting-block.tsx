@@ -59,7 +59,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
           const WORDS = await getWordsFromGroup((Number(ID) - 1).toString());
           if (newUser) {
             const LOADING_WORDS = await httpClient.getAllUserWords(newUser);
-            console.log(LOADING_WORDS)
+
             changeLoadingUserWords(LOADING_WORDS);
           }
 

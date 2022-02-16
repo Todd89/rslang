@@ -1,9 +1,9 @@
 import "./sprint-congratulation-block.css";
 import CongratulationItemBlock from "./congratulation-item-block/congratulation-item-block";
 import CongratulationNavigation from "./congratulation-navigation/congratulation-navigation";
-import { IRandomWordInGame } from "../../../interface/interface";
+import { IRandomWordInGame, ICongratulationBlock } from "../../../interface/interface";
 
-const CongratulationBlock: React.FC<any> = ({
+const CongratulationBlock: React.FC<ICongratulationBlock> = ({
   answersArray,
   makeRandomWordsForWork,
   allWords,

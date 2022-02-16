@@ -2,7 +2,7 @@ export type IStatistic = {
   learnedWords:number,
   optional:{
     game:string,
-    date:string,
+    date: Date,
     bestSeries:number,
     succesCounter:number,
     failCounter:number,
@@ -95,9 +95,24 @@ export interface IGameBlockProps {
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
-  makeRandomWordsForWork: (wordsInGame: any) => any;
+  makeRandomWordsForWork: ((AllwordsInGame: Array<Array<IWordInArray>>) => IWordInArray[]);
   changeAllWord: (arr: Array<Array<IWordInArray>>) => void
   changeLoadingUserWords: (arr: IUserWord[]) => void
+}
+
+export interface ICongratulationBlock {
+  answersArray:IRandomWordInGame[];
+  makeRandomWordsForWork: (AllwordsInGame: Array<Array<IWordInArray>>) => IWordInArray[];
+  allWords: IWordInArray[][];
+  changePageState: (name: string) => void;
+  changeAnswersArray:(arr: Array<IRandomWordInGame>) => void;
+}
+
+export interface ICongratulationNavi {
+  makeRandomWordsForWork:(AllwordsInGame: IWordInArray[][]) => IWordInArray[]
+  allWords: IWordInArray[][];
+  changePageState: (name: string) => void;
+  changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
 }
 
 export interface IWordInGame {

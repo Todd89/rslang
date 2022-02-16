@@ -32,7 +32,7 @@ export const enum SprintNums {
   MULTIPLIER_DOTE_FIVE = 1.5,
   MULTIPLIER_DOTE_TWENTYFIVE = 1.25,
   PLUS_TO_SCORE = 100,
-  MAX_ANSWERS_LENGTH = 59,
+  MAX_ANSWERS_LENGTH = 10,
 }
 
 export const enum SprintColors {

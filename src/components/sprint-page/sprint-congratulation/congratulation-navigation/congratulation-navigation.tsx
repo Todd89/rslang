@@ -1,6 +1,7 @@
 import "./congratulation-navigation.css";
+import { ICongratulationNavi } from '../../../../interface/interface'
 
-const CongratulationNavigation: React.FC<any> = ({
+const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
   makeRandomWordsForWork,
   allWords,
   changePageState,
