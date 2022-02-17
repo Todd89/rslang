@@ -1,7 +1,8 @@
 import "./congratulation-item-block.css";
-import { Url } from '../../../../const/const'
+import { Url } from '../../../../const/const';
+import { IRandomWordInGame } from '../../../../interface/interface';
 
-const CongratulationItemBlock: React.FC<any> = ({
+const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
   AUDIO,
   ENGLISH_WORD,
   REAL_TRANSLATE,

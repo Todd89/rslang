@@ -1,13 +1,21 @@
 export type IStatistic = {
-  learnedWords: number;
-  optional: {
-    game: string;
-    date: string;
-    bestSeries: number;
-    succesCounter: number;
-    failCounter: number;
-    newWords: number;
-  };
+  learnedWords:number,
+  optional:{
+    sprint: {
+    date: Date,
+    bestSeries:number,
+    successCounter:number,
+    failCounter:number,
+    newWords:number
+    },
+    audio:{
+    date: Date,
+    bestSeries:number,
+    successCounter:number,
+    failCounter:number,
+    newWords:number
+    },
+  }
 };
 
 export type ISettings = {
@@ -28,7 +36,8 @@ export interface IUserData {
 
 export interface IUserWord {
   difficulty: string;
-  wordId?: string;
+  id?:string;
+  wordId?:string;
   optional: {
     learned: boolean;
     group: number;
@@ -82,20 +91,36 @@ export interface IWordsOfArrays {
 
 export interface IGameBlockProps {
   word: IWordInArray;
-  randomWordsInGame: Array<IRandomWordInGame>;
-  loadingUserWords: IUserWord[];
-  changeWordCount: () => void;
+  randomWordsInGame:Array<IRandomWordInGame>;
+  loadingUserWords:IUserWord[]
+  // changeWordCount: () => void;
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
-  changeWord: () => void;
+  // changeWord: () => void;
+  changeLoadingUserWords: (arr: IUserWord[]) => void
 }
-
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
-  makeRandomWordsForWork: (wordsInGame: any) => any;
-  changeAllWord: (arr: Array<Array<IWordInArray>>) => void;
-  changeLoadingUserWords: (arr: IUserWord[]) => void;
+  makeRandomWordsForWork: ((AllwordsInGame: Array<Array<IWordInArray>>) => IWordInArray[]);
+  changeAllWord: (arr: Array<Array<IWordInArray>>) => void
+  changeLoadingUserWords: (arr: IUserWord[]) => void
+
+}
+
+export interface ICongratulationBlock {
+  answersArray:IRandomWordInGame[];
+  makeRandomWordsForWork: (AllwordsInGame: Array<Array<IWordInArray>>) => IWordInArray[];
+  allWords: IWordInArray[][];
+  changePageState: (name: string) => void;
+  changeAnswersArray:(arr: Array<IRandomWordInGame>) => void;
+}
+
+export interface ICongratulationNavi {
+  makeRandomWordsForWork:(AllwordsInGame: IWordInArray[][]) => IWordInArray[]
+  allWords: IWordInArray[][];
+  changePageState: (name: string) => void;
+  changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
 }
 
 export interface IWordInGame {

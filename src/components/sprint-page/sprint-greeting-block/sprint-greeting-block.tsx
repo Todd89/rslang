@@ -1,5 +1,5 @@
 import "./sprint-greeting-block.css";
-import { IGreetingBlockProps } from "../../../interface/interface";
+import { IGreetingBlockProps, IUserData } from "../../../interface/interface";
 import { BUTTONS_NUMS, SPRINT_RULE, SprintColors } from "../../../const/const";
 import { getWordsFromGroup } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
@@ -13,11 +13,15 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   changeAllWord,
   changeLoadingUserWords,
 }) => {
+  let newUser:IUserData
   const USER_DATA = useSelector(getUserAuthData);
-  const NEW_USER = {
-    userId: USER_DATA.userId,
-    token: USER_DATA.token,
-  };
+  if (USER_DATA) {
+    newUser = {
+      userId: USER_DATA.userId,
+      token: USER_DATA.token,
+    };
+  }
+  
 
   const BUTTONS = BUTTONS_NUMS.map((item) => {
     const ID = item.toString();
@@ -53,10 +57,12 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
         className='greeting-sprint-block__button'
         onClick={async () => {
           const WORDS = await getWordsFromGroup((Number(ID) - 1).toString());
+          if (newUser) {
+            const LOADING_WORDS = await httpClient.getAllUserWords(newUser);
 
-          const LOADING_WORDS = await httpClient.getAllUserWords(NEW_USER);
+            changeLoadingUserWords(LOADING_WORDS);
+          }
 
-          changeLoadingUserWords(LOADING_WORDS);
           changeAllWord(WORDS);
 
           const WORDS_FOR_WORK = await makeRandomWordsForWork(WORDS);

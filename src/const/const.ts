@@ -1,3 +1,5 @@
+import { IStatistic } from '../interface/interface'
+
 export const enum AppRoute {
   ROOT = "/",
   AUDIO_CHALLENGE = "/audio-challenge",
@@ -32,7 +34,7 @@ export const enum SprintNums {
   MULTIPLIER_DOTE_FIVE = 1.5,
   MULTIPLIER_DOTE_TWENTYFIVE = 1.25,
   PLUS_TO_SCORE = 100,
-  MAX_ANSWERS_LENGTH = 59,
+  MAX_ANSWERS_LENGTH = 10,
 }
 
 export const enum SprintColors {
@@ -43,6 +45,28 @@ export const enum SprintColors {
   FIVE = '#3cb10e',
   SIX = '#c808f9',
 }
+
+export const NULL_STATISTIC: IStatistic = {
+  learnedWords: 0,
+  optional: {
+    sprint: 
+      {
+        date: new Date(),
+        bestSeries: 0,
+        successCounter: 0,
+        failCounter: 0,
+        newWords: 0,
+      },
+    audio: 
+      {
+        date: new Date(),
+        bestSeries: 0,
+        successCounter: 0,
+        failCounter: 0,
+        newWords: 0,
+      },
+  },
+};
 
 export const SPRINT_RULE = 'В данной игре необходимо ответить правильный или нет дан перевод английского слова. Если ответ правильный, то увеличивается множитель очков. У Вас 60 секунд, попробуйте набрать максимальное количество очков.'
 

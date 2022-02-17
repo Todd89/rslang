@@ -4,6 +4,8 @@ import {
   IWordInArray,
   IRandomWordInGame,
   IUserWord,
+  IUserData,
+  IStatistic,
 } from "../../../interface/interface";
 
 const getWordsFromGroup = async (group: string) => {
@@ -81,7 +83,7 @@ const createNewUserWord = (
   success: boolean
 ): IUserWord => {
   const newWord: IUserWord = {
-    difficulty: "weak",
+    difficulty: "false",
     optional: {
       learned: false,
       group: GROUP,
@@ -91,22 +93,11 @@ const createNewUserWord = (
       new: true,
     },
   };
-  if (success && !newWord.optional.learned) {
+
+  if (success) {
     newWord.optional.successCounter++;
-  } else {
-    newWord.optional.failCounter++;
-    newWord.optional.successCounter = 0;
   }
 
-  if (newWord.difficulty === "weak") {
-    if (newWord.optional.successCounter === SprintNums.MAX_SUCCESS_LIGTH_MODE) {
-      newWord.optional.learned = true;
-    }
-  } else {
-    if (newWord.optional.successCounter === SprintNums.MAX_SUCCESS_HARD_MODE) {
-      newWord.optional.learned = true;
-    }
-  }
   return newWord;
 };
 
@@ -116,11 +107,14 @@ const makeAnswersArray = (
   randomWordsInGame: IRandomWordInGame[],
   answers: IRandomWordInGame[],
   setAnswers: (arr: IRandomWordInGame[]) => void,
-  AUDIO_RIGHT:HTMLAudioElement,
-  AUDIO_WRONG:HTMLAudioElement,
-  count:number
+  makeBestSeries: () => void,
+  nullBestSeries: () => void,
+  AUDIO_RIGHT: HTMLAudioElement,
+  AUDIO_WRONG: HTMLAudioElement,
+  count: number
 ) => {
   if (rightAnswer === playerAnswer) {
+    makeBestSeries()
     const ANSWER_STATE = { TYPE_OF_ANSWER: true };
     const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
     const NEW_ARR = answers.slice();
@@ -128,6 +122,7 @@ const makeAnswersArray = (
     setAnswers(NEW_ARR);
     AUDIO_RIGHT.play();
   } else {
+    nullBestSeries();
     const ANSWER_STATE = { TYPE_OF_ANSWER: false };
     const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
     const NEW_ARR = answers.slice();
@@ -137,12 +132,11 @@ const makeAnswersArray = (
   }
 };
 
-const addViewToBonus = (scoreX:number) => {
+const addViewToBonus = (scoreX: number) => {
   const EL = document.getElementById("level-up") as HTMLElement;
   const EL_FIRST = EL.firstElementChild;
   const EL_SECOND = EL.firstElementChild?.nextElementSibling;
-  const EL_THIRD =
-    EL.firstElementChild?.nextElementSibling?.nextElementSibling;
+  const EL_THIRD = EL.firstElementChild?.nextElementSibling?.nextElementSibling;
   const EL_ARR = [EL_FIRST, EL_SECOND, EL_THIRD];
 
   switch (scoreX) {
@@ -158,9 +152,13 @@ const addViewToBonus = (scoreX:number) => {
     default:
       EL_ARR.forEach((el) => el?.classList.remove("view"));
   }
-}
+};
 
-const makeWord = (state: boolean, word:IWordInArray, russianVariant:string) => {
+const makeWord = (
+  state: boolean,
+  word: IWordInArray,
+  russianVariant: string
+) => {
   let newRandomQuastion: IRandomWordInGame;
 
   const ID = word.id;
@@ -169,7 +167,7 @@ const makeWord = (state: boolean, word:IWordInArray, russianVariant:string) => {
   const GROUP = word.group;
   const ENGLISH_WORD = word.word.toUpperCase();
   const RUSSIAN_WORD = russianVariant.toUpperCase();
-  const REAL_TRANSLATE =  word.wordTranslate.toUpperCase()
+  const REAL_TRANSLATE = word.wordTranslate.toUpperCase();
   const TRANSCRIPTION = word.transcription.toUpperCase();
 
   const TYPE_OF_ANSWER = state;
@@ -184,32 +182,149 @@ const makeWord = (state: boolean, word:IWordInArray, russianVariant:string) => {
     REAL_TRANSLATE,
     TYPE_OF_ANSWER,
     PAGE,
-    GROUP
+    GROUP,
   };
 
   return newRandomQuastion;
-}
+};
 
-const makeRandomAnswerArray = (word: IWordInArray, wordsInGame:Array<IWordInArray>): IRandomWordInGame => {
-    
+const makeRandomAnswerArray = (
+  word: IWordInArray,
+  wordsInGame: Array<IWordInArray>
+): IRandomWordInGame => {
   const VALUE = randomNum(9);
 
   if (VALUE < 5) {
-    return makeWord(true, word, word.wordTranslate)
+    return makeWord(true, word, word.wordTranslate);
   } else {
     const WRONG_NUM = randomNum(59);
     if (
       wordsInGame[WRONG_NUM].wordTranslate !==
       (word as IWordInArray).wordTranslate
     ) {
-      return makeWord(false, word,  wordsInGame[WRONG_NUM].wordTranslate)
+      return makeWord(false, word, wordsInGame[WRONG_NUM].wordTranslate);
     } else {
       makeRandomAnswerArray(word, wordsInGame);
     }
   }
-  return makeWord(true, word, word.wordTranslate)
+  return makeWord(true, word, word.wordTranslate);
 };
 
+const chooseMaxSuccess = (difficulty: string) => {
+  if (difficulty === "false") return 3;
+  return 5;
+};
+
+const updateWord = (
+  word: IUserWord,
+  success: boolean,
+  learnWordsInGame: number,
+  setlearnWordsInGame: React.Dispatch<React.SetStateAction<number>>
+) => {
+  const MAX_NUM = chooseMaxSuccess(word.difficulty);
+  delete word.id;
+  delete word.wordId;
+
+  if (success && !word.optional.learned) {
+    word.optional.successCounter += 1;
+    if (word.optional.successCounter === MAX_NUM) {
+      word.optional.learned = true;
+      setlearnWordsInGame(learnWordsInGame + 1);
+    }
+  } else {
+    word.optional.learned = false;
+    word.optional.successCounter = 0;
+  }
+
+  return word;
+};
+
+const workWithUserWord = async (
+  user: IUserData,
+  loadingUserWords: IUserWord[],
+  randomWordsInGame: IRandomWordInGame[],
+  count: number,
+  changeLoadingUserWords: (arr: IUserWord[]) => void,
+  learnWordsInGame: number,
+  newWordsInGame: number,
+  setNewWordsInGame: React.Dispatch<React.SetStateAction<number>>,
+  setlearnWordsInGame: React.Dispatch<React.SetStateAction<number>>
+) => {
+  const FIND = loadingUserWords.find(
+    (el: IUserWord) => el.wordId === randomWordsInGame[count].ID
+  );
+
+  const SUCCESS = !randomWordsInGame[count].TYPE_OF_ANSWER ? true : false;
+
+  if (!FIND) {
+    const NEW_WORD = createNewUserWord(
+      { ...randomWordsInGame[count] },
+      SUCCESS
+    );
+    setNewWordsInGame(newWordsInGame + 1);
+    loadingUserWords.push(NEW_WORD);
+    changeLoadingUserWords(loadingUserWords);
+
+    await httpClient.createUserWord(
+      user as IUserData,
+      NEW_WORD,
+      randomWordsInGame[count].ID
+    );
+  } else {
+    const WORD = await httpClient.getUserWord(
+      user as IUserData,
+      randomWordsInGame[count].ID
+    );
+
+    const UPDATE_WORD = updateWord(
+      WORD,
+      SUCCESS,
+      learnWordsInGame,
+      setlearnWordsInGame
+    );
+    await httpClient.updateUserWord(
+      user as IUserData,
+      UPDATE_WORD,
+      randomWordsInGame[count].ID
+    );
+  }
+};
+
+const newStatistic = async (
+  statistic: IStatistic,
+  user: IUserData,
+  learnWordsInGame: number,
+  newWordsInGame: number,
+  bestSeries: number
+) => {
+  let newWords = 0;
+  let best = 0;
+  if (statistic.optional.sprint.newWords > 0) {
+    newWords = statistic.optional.sprint.newWords;
+  }
+
+  if (bestSeries > statistic.optional.sprint.bestSeries) {
+    best = bestSeries
+  } else {
+    best = statistic.optional.sprint.bestSeries
+  }
+
+  const NEW_STATISTIC: IStatistic = {
+    learnedWords: statistic.learnedWords + learnWordsInGame,
+    optional: {
+      sprint:{ 
+        date: new Date(),
+        bestSeries: best,
+        successCounter: 0,
+        failCounter: 0,
+        newWords: newWords + newWordsInGame,
+      },
+      audio:statistic.optional.audio
+    },
+  };
+  console.log(NEW_STATISTIC);
+  await httpClient.putUserStatistic(user as IUserData, NEW_STATISTIC);
+};
 
 export {
   getWordsFromGroup,
@@ -220,5 +335,7 @@ export {
   makeAnswersArray,
   addViewToBonus,
   makeWord,
-  makeRandomAnswerArray
+  makeRandomAnswerArray,
+  workWithUserWord,
+  newStatistic
 };
