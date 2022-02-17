@@ -4,27 +4,25 @@ import {
   IGameBlockProps,
   IRandomWordInGame,
   IUserData,
-  IStatistic
+  IStatistic,
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 import { getUserAuthData } from "../../../store/data/selectors";
-import { SprintNums } from "../../../const/const";
+import { SprintNums, NULL_STATISTIC } from "../../../const/const";
 import {
   changeScoreX,
   makeAnswersArray,
   addViewToBonus,
   workWithUserWord,
-  newStatistic
+  newStatistic,
 } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   randomWordsInGame,
   loadingUserWords,
-  changeWordCount,
   changePageState,
   changeAnswersArray,
-  changeWord,
   changeLoadingUserWords,
 }) => {
   const [answers, setAnswers] = useState<IRandomWordInGame[]>([]);
@@ -35,11 +33,11 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [playerRealAnswer, setPlayerRealAnswer] = useState<
     boolean | undefined
   >();
-  const [finish, setFinish] = useState<boolean | undefined>(false);
   const [user, setUser] = useState<IUserData>();
   const [learnWordsInGame, setlearnWordsInGame] = useState<number>(0);
   const [newWordsInGame, setNewWordsInGame] = useState<number>(0);
   const [statistic, setStatistic] = useState<IStatistic>();
+  const [bestSeries, setBestSeries] = useState<number>(0);
 
   const USER_DATA = useSelector(getUserAuthData);
 
@@ -55,17 +53,55 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   AUDIO_END.src = "/assets/sound/end.mp3";
   AUDIO_END.volume = 0.2;
 
-  if (answers.length === SprintNums.MAX_ANSWERS_LENGTH) {
+  const makeEndGame = () => {
     changeAnswersArray(answers);
-    newStatistic( 
-      statistic as IStatistic,
-      user as IUserData,
-      learnWordsInGame,
-      newWordsInGame)
+    if (user) {
+      newStatistic(
+        statistic as IStatistic,
+        user as IUserData,
+        learnWordsInGame,
+        newWordsInGame,
+        bestSeries
+      );
+    }
     changePageState("congratulation");
-    AUDIO_END.load();
     AUDIO_END.play();
-  }
+  };
+
+
+  const getAnswer = async (type:boolean) => {
+    setPlayerRealAnswer(type);
+    console.log(type)
+    console.log(count)
+    makeAnswersArray(
+      randomWordsInGame[count].TYPE_OF_ANSWER,
+      type,
+      randomWordsInGame,
+      answers,
+      setAnswers,
+      makeBestSeries,
+      nullBestSeries,
+      AUDIO_RIGHT,
+      AUDIO_WRONG,
+      count
+    );
+    changeCount();
+    
+    if (user) {
+      await workWithUserWord(
+        user as IUserData,
+        loadingUserWords,
+        randomWordsInGame,
+        count,
+        changeLoadingUserWords,
+        learnWordsInGame,
+        newWordsInGame,
+        setNewWordsInGame,
+        setlearnWordsInGame
+      );
+    }
+  } 
+
 
   if (!user) {
     if (USER_DATA) {
@@ -77,44 +113,35 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     }
   }
 
+  if (answers.length === SprintNums.MAX_ANSWERS_LENGTH) {
+    makeEndGame();
+  }
 
- useEffect(()=> {
-  if(!answers.length) {
-    const getStatisic = async () => {
-      const STATISTIC = await httpClient.getUserStatistic(user as IUserData);
-      setStatistic(STATISTIC)
+  useEffect(() => {
+    if (!answers.length && user) {
+      const getStatisic = async () => {
+        const STATISTIC = await httpClient.getUserStatistic(user as IUserData);
+        if (!STATISTIC) {
+          await httpClient.putUserStatistic(user as IUserData, NULL_STATISTIC);
+          setStatistic(NULL_STATISTIC);
+        }
+        if (STATISTIC) setStatistic(STATISTIC);
+      };
+      getStatisic();
     }
-    getStatisic();
-   }
- }, [])
+  }, []);
 
   useEffect(() => {
     let sec = 60;
     const interval = setInterval(() => {
       sec -= 1;
       if (sec === 0) {
-        setFinish(true);
-        clearInterval(interval);
-        changePageState("congratulation");
-        AUDIO_END.load();
-        AUDIO_END.play();
+        makeEndGame();
       }
       setSeconds(sec);
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    if (finish) {
-      changeAnswersArray(answers);
-      newStatistic( 
-        statistic as IStatistic,
-        user as IUserData,
-        learnWordsInGame,
-        newWordsInGame)
-
-    }
-  }, [finish]);
 
   useEffect(() => {
     if (count > 0) {
@@ -138,9 +165,31 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     setCount(count + 1);
   };
 
+  const makeBestSeries = () => {
+    setBestSeries(bestSeries + 1)
+  }
+
+  const nullBestSeries = () => {
+    setBestSeries(0)
+  }
+
   if (document.getElementById("level-up")) {
     addViewToBonus(scoreX);
   }
+
+  // document.addEventListener("keydown", async (e) => {
+  //   if (e.keyCode === 37) {
+  //     e.stopPropagation()
+  //     e.stopImmediatePropagation()
+  //     getAnswer(false)
+  //   } else if (e.keyCode === 39) {
+  //     e.stopPropagation();
+  //     e.stopImmediatePropagation();
+  //     getAnswer(true)
+  //   }
+  // })
+
+
 
   return (
     <div>
@@ -179,37 +228,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={async () => {
-              setPlayerRealAnswer(false);
-              makeAnswersArray(
-                randomWordsInGame[count].TYPE_OF_ANSWER,
-                false,
-                randomWordsInGame,
-                answers,
-                setAnswers,
-                AUDIO_RIGHT,
-                AUDIO_WRONG,
-                count
-              );
-              console.log(statistic, "s")
-              changeWordCount();
-              changeWord();
-              changeCount();
-              console.log(learnWordsInGame);
-              console.log(newWordsInGame);
-
-              if (user) {
-                await workWithUserWord(
-                  user as IUserData,
-                  loadingUserWords,
-                  randomWordsInGame,
-                  count,
-                  changeLoadingUserWords,
-                  learnWordsInGame,
-                  newWordsInGame,
-                  setNewWordsInGame,
-                  setlearnWordsInGame
-                );
-              }
+              getAnswer(false)
             }}
           >
             Неверно
@@ -217,37 +236,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_right'
             onClick={async () => {
-              setPlayerRealAnswer(true);
-              makeAnswersArray(
-                randomWordsInGame[count].TYPE_OF_ANSWER,
-                true,
-                randomWordsInGame,
-                answers,
-                setAnswers,
-                AUDIO_RIGHT,
-                AUDIO_WRONG,
-                count
-              );
-              console.log(statistic, "s")
-              changeWordCount();
-              changeWord();
-              changeCount();
-              console.log(learnWordsInGame);
-              console.log(newWordsInGame);
-
-              if (user) {
-                await workWithUserWord(
-                  user as IUserData,
-                  loadingUserWords,
-                  randomWordsInGame,
-                  count,
-                  changeLoadingUserWords,
-                  learnWordsInGame,
-                  newWordsInGame,
-                  setNewWordsInGame,
-                  setlearnWordsInGame
-                );
-              }
+              getAnswer(true)
             }}
           >
             Правильно

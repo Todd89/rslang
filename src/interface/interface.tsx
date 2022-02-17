@@ -1,12 +1,20 @@
 export type IStatistic = {
   learnedWords:number,
   optional:{
-    game:string,
+    sprint: {
     date: Date,
     bestSeries:number,
-    succesCounter:number,
+    successCounter:number,
     failCounter:number,
     newWords:number
+    },
+    audio:{
+    date: Date,
+    bestSeries:number,
+    successCounter:number,
+    failCounter:number,
+    newWords:number
+    },
   }
 };
 
@@ -86,10 +94,10 @@ export interface IGameBlockProps {
   word: IWordInArray;
   randomWordsInGame:Array<IRandomWordInGame>;
   loadingUserWords:IUserWord[]
-  changeWordCount: () => void;
+  // changeWordCount: () => void;
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
-  changeWord: () => void;
+  // changeWord: () => void;
   changeLoadingUserWords: (arr: IUserWord[]) => void
 }
 export interface IGreetingBlockProps {

@@ -107,11 +107,14 @@ const makeAnswersArray = (
   randomWordsInGame: IRandomWordInGame[],
   answers: IRandomWordInGame[],
   setAnswers: (arr: IRandomWordInGame[]) => void,
+  makeBestSeries: () => void,
+  nullBestSeries: () => void,
   AUDIO_RIGHT: HTMLAudioElement,
   AUDIO_WRONG: HTMLAudioElement,
   count: number
 ) => {
   if (rightAnswer === playerAnswer) {
+    makeBestSeries()
     const ANSWER_STATE = { TYPE_OF_ANSWER: true };
     const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
     const NEW_ARR = answers.slice();
@@ -119,6 +122,7 @@ const makeAnswersArray = (
     setAnswers(NEW_ARR);
     AUDIO_RIGHT.play();
   } else {
+    nullBestSeries();
     const ANSWER_STATE = { TYPE_OF_ANSWER: false };
     const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
     const NEW_ARR = answers.slice();
@@ -247,7 +251,7 @@ const workWithUserWord = async (
   setlearnWordsInGame: React.Dispatch<React.SetStateAction<number>>
 ) => {
   const FIND = loadingUserWords.find(
-    (el: any) => el.wordId === randomWordsInGame[count].ID
+    (el: IUserWord) => el.wordId === randomWordsInGame[count].ID
   );
 
   const SUCCESS = !randomWordsInGame[count].TYPE_OF_ANSWER ? true : false;
@@ -290,21 +294,32 @@ const newStatistic = async (
   statistic: IStatistic,
   user: IUserData,
   learnWordsInGame: number,
-  newWordsInGame: number
+  newWordsInGame: number,
+  bestSeries: number
 ) => {
   let newWords = 0;
-  if (statistic.optional.newWords) {
-    newWords = statistic.optional.newWords;
+  let best = 0;
+  if (statistic.optional.sprint.newWords > 0) {
+    newWords = statistic.optional.sprint.newWords;
   }
+
+  if (bestSeries > statistic.optional.sprint.bestSeries) {
+    best = bestSeries
+  } else {
+    best = statistic.optional.sprint.bestSeries
+  }
+
   const NEW_STATISTIC: IStatistic = {
     learnedWords: statistic.learnedWords + learnWordsInGame,
     optional: {
-      game: "sprint",
-      date: new Date(),
-      bestSeries: 0,
-      succesCounter: 0,
-      failCounter: 0,
-      newWords: newWords + newWordsInGame,
+      sprint:{ 
+        date: new Date(),
+        bestSeries: best,
+        successCounter: 0,
+        failCounter: 0,
+        newWords: newWords + newWordsInGame,
+      },
+      audio:statistic.optional.audio
     },
   };
   console.log(NEW_STATISTIC);

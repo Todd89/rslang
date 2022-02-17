@@ -12,7 +12,6 @@ import {
 
 
 const MainBlock: React.FC = () => {
-  let [wordCount, setCount] = useState<number>(0);
   let [pageState, setPage] = useState<string>("greeting");
 
   const [loadingUserWords, setLoadingUserWords] = useState<IUserWord[]>([])
@@ -45,22 +44,13 @@ const MainBlock: React.FC = () => {
     setAllWords(NEW_ARR);
   };
 
-  const changeWord = () => {
-    const newWord: IWordInArray = wordsInGame[wordCount + 1];
-    setWord(newWord);
-  };
-
-  const changeAnswersArray = (arr: any) => {
+  const changeAnswersArray = (arr:Array<IRandomWordInGame>) => {
     const NEW_ARR = arr.slice();
     setAnswersArray(NEW_ARR);
   };
 
   const changePageState = (name: string) => {
     setPage(name);
-  };
-
-  const changeWordCount = () => {
-    setCount((wordCount += 1));
   };
 
   const changeLoadingUserWords = (arr:IUserWord[]) => {
@@ -95,10 +85,8 @@ const MainBlock: React.FC = () => {
           <GameBlock
             word={word as IWordInArray}
             randomWordsInGame={randomWordsInGame}
-            changeWordCount={changeWordCount}
             changePageState={changePageState}
             changeAnswersArray={changeAnswersArray}
-            changeWord={changeWord}
             loadingUserWords={loadingUserWords}
             changeLoadingUserWords={changeLoadingUserWords}
           />
