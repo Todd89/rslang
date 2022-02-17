@@ -14,8 +14,9 @@ function AudioPage() {
 
   if (location.state) {
     const locationState = location.state as any;
-    const wordsFromBook = locationState.words;
-    console.log("wordsFromBook: ", wordsFromBook);
+    const { group, page} = locationState;
+    console.log("group", group);
+    console.log("page", page);
   }
 
   function changeState(isOn: boolean) {

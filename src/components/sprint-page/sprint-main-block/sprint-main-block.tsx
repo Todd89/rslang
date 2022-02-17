@@ -28,8 +28,9 @@ const MainBlock: React.FC = () => {
   const location = useLocation<LocationState>();
   if (location.state) {
     const locationState = location.state as any;
-    const wordsFromBook = locationState.words;
-    console.log("wordsFromBook: ", wordsFromBook);
+    const { group, page} = locationState;
+    console.log("group", group);
+    console.log("page", page);
   }
 
   const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
