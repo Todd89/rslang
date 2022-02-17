@@ -26,9 +26,9 @@ const MainBlock: React.FC = () => {
     []
   );
 
-  const makeRandomQuastions = (wordsInGame: Array<IWordInArray>) => {
-    const RANDOM_QUASTIONS = wordsInGame.map((el) => {
-      return makeRandomAnswerArray(el, wordsInGame);
+  const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
+    const RANDOM_QUASTIONS = gameWords.map((el) => {
+      return makeRandomAnswerArray(el, gameWords);
     });
 
     setRandomWordsInGame(RANDOM_QUASTIONS);
