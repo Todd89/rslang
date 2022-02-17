@@ -41,16 +41,25 @@ const TextBook: React.FC = () => {
                   className="game-link__link" 
                   to={{
                     pathname: AppRoute.SPRINT,
-                    state: { fromTextbook: true }
+                    state: {
+                      words
+                    },
                   }}
-                  
                 >
                   Спринт
                 </Link>
               </li>
   
               <li className="game-link__item">
-                <Link className="game-link__link" to={AppRoute.AUDIO_CHALLENGE}>
+                <Link 
+                  className="game-link__link"
+                  to={{
+                    pathname: AppRoute.AUDIO_CHALLENGE,
+                    state: {
+                      words
+                    },
+                  }}
+                >
                   Аудиовызов
                 </Link>
               </li>

@@ -133,3 +133,15 @@ export interface WordData {
   word: string;
   wordTranslate: string;
 }
+
+type LState = {
+  fromTextbook: boolean;
+  words: WordData
+}
+export interface LocationState {
+  hash: string;
+  key: string;
+  pathname: string;
+  search: string;
+  state?: LState;
+}

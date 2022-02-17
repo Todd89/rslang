@@ -3,8 +3,9 @@ import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
 import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
-import { IWordInArray, IWordInAnswerArray  } from '../../../interface/interface';
+import { IWordInArray, IWordInAnswerArray, LocationState } from '../../../interface/interface';
 import {  makeTreeRandomPage, shuffle, randomNum  } from '../sprint-methods/sprint-methods'
+import { useLocation } from "react-router";
 
 
 const MainBlock: React.FC = () => {
@@ -17,6 +18,14 @@ const MainBlock: React.FC = () => {
   const [answer, setAnswer] = useState<string>("");
   const [typeOfAnswer, setTypeOfAnswer] = useState<boolean | undefined>();
   const [englishAnswer, setEnglishAnswer] = useState<string>("");
+
+  const location = useLocation<LocationState>();
+  if (location.state) {
+    const locationState = location.state as any;
+    const wordsFromBook = locationState.words;
+    console.log("wordsFromBook: ", wordsFromBook);
+  }
+
   
   const makeRandomAnswer = () => {
 
