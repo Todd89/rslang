@@ -50,9 +50,13 @@ const Pagination: React.FC<PaginationComponentProps> = ({
       >
         <div className="arrow left" />
       </li>
-      {paginationRange.map(pageNumber => {
+      {paginationRange.map((pageNumber, i) => {
         if (pageNumber === DOTS) {
-          return <li key={pageNumber} className="pagination-item dots">&#8230;</li>;
+          return (
+            <li key={pageNumber + paginationRange[i-1]} className="pagination-item dots">
+              &#8230;
+            </li>
+          );
         }
 
         return (
