@@ -1,5 +1,5 @@
 import Header from "../header/header";
-import MainBlock from './main-block/sprint-main-block';
+import MainBlock from './sprint-main-block/sprint-main-block';
 
 import "./sprint-page.css";
 

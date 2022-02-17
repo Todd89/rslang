@@ -1,6 +1,14 @@
 import "./audio-level.css";
 import { createArrayOfQuestions } from "../audio-utils/audio-utils";
 
+import { useSelector } from "react-redux";
+import {
+  getUserAuthData,
+  getAuthorizeStatus,
+} from "../../../store/data/selectors";
+
+import { AuthData } from "../../../interface/auth-interface";
+
 interface IProps {
   id: number;
   isGameLoaded: boolean;
@@ -18,11 +26,17 @@ export function AudioLevel(props: IProps) {
     changeIsGameChosen,
   } = props;
 
-  function loadGame() {
+  function loadGame(userAuthorized: boolean, userAuthData: AuthData) {
     changeIsGameChosen(true);
     (async () => {
       if (!isGameLoaded) {
-        await createArrayOfQuestions(id - 1, -1);
+        await createArrayOfQuestions(
+          id - 1,
+          -1,
+          false,
+          userAuthorized,
+          userAuthData
+        );
         changeState(true);
         changeGameLoadedStatus(true);
       }
@@ -57,11 +71,14 @@ export function AudioLevel(props: IProps) {
     return color;
   }
 
+  const userAuthData = useSelector(getUserAuthData);
+  const userAuthorized = useSelector(getAuthorizeStatus);
+
   return (
     <button
       className="btn__level"
       onClick={() => {
-        loadGame();
+        loadGame(userAuthorized, userAuthData);
       }}
       style={{
         backgroundColor: btnColor(id),

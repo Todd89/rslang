@@ -5,10 +5,9 @@ import {
   IUserData,
   IUserWord,
 } from "../interface/interface";
-import { Url, Methods, ResponseStatus } from '../const/const'
+import { Url, Methods, ResponseStatus } from "../const/const";
 
 class HTTPClient {
-
   // Words
 
   async getWords(): Promise<void> {
@@ -47,7 +46,7 @@ class HTTPClient {
   }
 
   //Users
-  async createUser (user: IUser) {
+  async createUser(user: IUser) {
     try {
       const res = await fetch(`${Url.DOMEN}/users`, {
         method: Methods.POST,
@@ -107,17 +106,14 @@ class HTTPClient {
     console.log("in getNewToken userId", userId);
     console.log("in getNewToken token", token);
     try {
-      const res = await fetch(
-        `${Url.DOMEN}/users/${userId}/tokens`,
-        {
-          method: Methods.GET,
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      const res = await fetch(`${Url.DOMEN}/users/${userId}/tokens`, {
+        method: Methods.GET,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -146,64 +142,16 @@ class HTTPClient {
     return data;
   }
 
-  async createUserWord({ userId, token }: IUserData, userWord:IUserWord) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
-      {
-        method: `${Methods.POST}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userWord),
-      }
-    ).then((response) => {
-      return response.json();
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
-  }
-
-
-  async getUserWord({ userId, token }: IUserData, wordId: string) {
-    const data = await fetch(
+  async createUserWord(
+    { userId, token }: IUserData,
+    userWord: IUserWord,
+    wordId: string
+  ) {
+    console.log(userWord);
+    const rawResponse = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
-        method: `${Methods.GET}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
-      }
-    ).then((response) => {
-      return response.json();
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
-  }
-
-  async updateUserWord({ userId, token }: IUserData, userWord:IUserWord) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
-      {
-        method: `${Methods.PUT}`,
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -211,12 +159,37 @@ class HTTPClient {
         },
         body: JSON.stringify(userWord),
       }
-    ).then((response) => {
-      return response.json();
+    );
+    return await rawResponse.json();
+  }
+
+  async getUserWord({ userId, token }: IUserData, wordId: string) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
+      method: `${Methods.GET}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }).catch((error) => {
+      console.log(console.log(error));
+    });
+    return data;
+  }
+
+  async updateUserWord(
+    { userId, token }: IUserData,
+    userWord: IUserWord,
+    wordId: string
+  ) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
+      method: `${Methods.PUT}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userWord),
     })
-      .then((response) => {
-        return response.json();
-      })
       .then((response) => {
         return response.json();
       })
@@ -226,25 +199,22 @@ class HTTPClient {
     return data;
   }
 
-  async deleteUserWord({ userId, token }: IUserData, userWord:IUserWord) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
-      {
-        method: `${Methods.DELETE}`,
-        headers: {
-          Authorization: `Bearer ${userWord}`,
-          Accept: "application/json",
-        },
-      }
-    ).then((response) => {
-      return response.json();
+  async deleteUserWord(
+    { userId, token }: IUserData,
+    userWord: IUserWord,
+    wordId: string
+  ) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
+      method: `${Methods.DELETE}`,
+      headers: {
+        Authorization: `Bearer ${userWord}`,
+        Accept: "application/json",
+      },
     })
       .then((response) => {
         return response.json();
       })
-      .then((response) => {
-        return response.json();
-      })
+
       .catch((error) => {
         console.log(console.log(error));
       });
@@ -264,9 +234,6 @@ class HTTPClient {
       .then((response) => {
         return response.json();
       })
-      .then((response) => {
-        return response.json();
-      })
       .catch((error) => {
         console.log(console.log(error));
       });
@@ -279,12 +246,10 @@ class HTTPClient {
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(statistic),
     })
-      .then((response) => {
-        return response.json();
-      })
       .then((response) => {
         return response.json();
       })
@@ -307,9 +272,6 @@ class HTTPClient {
       .then((response) => {
         return response.json();
       })
-      .then((response) => {
-        return response.json();
-      })
       .catch((error) => {
         console.log(console.log(error));
       });
@@ -325,9 +287,6 @@ class HTTPClient {
       },
       body: JSON.stringify(statistic),
     })
-      .then((response) => {
-        return response.json();
-      })
       .then((response) => {
         return response.json();
       })

@@ -51,4 +51,10 @@
   background-color: rgb(183, 0, 255);
   border: 1px solid rgb(121, 6, 252);
   border-radius: 25%;
+  cursor: pointer;
+  transition: .5s;
+}
+
+.greeting-sprint-block__button:hover{
+  transform: scale(1.1);
 }

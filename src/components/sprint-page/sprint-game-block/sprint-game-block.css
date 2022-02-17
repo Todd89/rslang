@@ -1,5 +1,3 @@
-
-
 .game-sprint-block {
   background-color:  rgba(255, 186, 67, .2);
   position: absolute;
@@ -16,7 +14,7 @@
   justify-content: space-around;
   height: 20%;
   border-bottom: 4px solid #ffba43;
-  color: rgb(17, 0, 255);
+  color: #b621fe;
 }
 
 .game-sprint-block__quastion{
@@ -38,6 +36,11 @@
   border: none;
   background-color: #ffba43;
   border-radius: 10px;
+  cursor: pointer;
+  transition: .3s;
+}
+.game-sprint-block__button:hover {
+  transform: scale(1.1);
 }
 
 .girl-image{
@@ -86,4 +89,12 @@
 
 .game-sprint-block__text{
   display: block;
+}
+
+.game-sprint-block__cool-symbol {
+  opacity: 0;
+}
+
+.view {
+  opacity: 1;
 }
