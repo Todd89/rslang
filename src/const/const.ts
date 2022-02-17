@@ -86,37 +86,37 @@ export const DOTS = '...';
 
 export const textbookSections = [
   { 
-    id: 1,
+    id: 0,
     name: 1,
     labelClass: "textbook-nav__label", 
   }, 
   { 
-    id: 2,
+    id: 1,
     name: 2,
     labelClass: "textbook-nav__label",
    }, 
   { 
-    id: 3,
+    id: 2,
     name: 3,
     labelClass: "textbook-nav__label",
    }, 
   { 
-    id: 4,
+    id: 3,
     name: 4,
     labelClass: "textbook-nav__label",
    }, 
   { 
-    id: 5,
+    id: 4,
     name: 5,
     labelClass: "textbook-nav__label",
    }, 
   { 
-    id: 6,
+    id: 5,
     name: 6,
     labelClass: "textbook-nav__label",
    }, 
   { 
-    id: 7,
+    id: 6,
     name: "7 - Сложные слова",
     labelClass: "textbook-nav__label textbook-nav__label--complex",
   }, 

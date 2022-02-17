@@ -8,22 +8,26 @@ import { useState, useEffect } from "react";
 import httpClient from "../../services/http-client";
 import LoadingScreen from "../loading-screen/loading-screen";
 import { WordData } from "../../interface/interface";
+import { useDispatch, useSelector } from "react-redux";
+import { addTextbookState } from "../../store/action";
+import { getTextbookState } from "../../store/data/selectors";
+
 
 const TextBook: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [activeGroup, setActiveGroup] = useState<number>(1);
-  const [words, setWords] = useState<WordData[] | null>(null)
+  const [words, setWords] = useState<WordData[] | null>(null);
+  const dispatch = useDispatch();
+  let {group, page} = useSelector(getTextbookState);
 
   useEffect(() => {
     const getWords = async () => {
-      const pageIndex = (currentPage - 1).toString();
-      const groupIndex = (activeGroup - 1).toString();
+      const pageIndex = String(page);
+      const groupIndex = String(group);
 
       const data = await httpClient.getChunkOfWords(pageIndex, groupIndex);
       setWords(data);
     }
     getWords();
-  }, [currentPage, activeGroup])
+  }, [group, page])
 
   return (
     <>
@@ -41,9 +45,7 @@ const TextBook: React.FC = () => {
                   className="game-link__link" 
                   to={{
                     pathname: AppRoute.SPRINT,
-                    state: {
-                      words
-                    },
+                    state: { group, page },
                   }}
                 >
                   Спринт
@@ -55,9 +57,7 @@ const TextBook: React.FC = () => {
                   className="game-link__link"
                   to={{
                     pathname: AppRoute.AUDIO_CHALLENGE,
-                    state: {
-                      words
-                    },
+                    state: { group, page },
                   }}
                 >
                   Аудиовызов
@@ -77,14 +77,14 @@ const TextBook: React.FC = () => {
                   <input 
                       className="textbook-nav__control visually-hidden"
                       name="word-sections" 
-                      id={`textbook-${name}`} 
+                      id={`textbook-${id}`} 
                       type="radio" 
-                      defaultChecked={name === activeGroup}
+                      defaultChecked={id === group}
                   />
                   <label 
                       className={labelClass}
-                      htmlFor={`textbook-${name}`}
-                      onClick={() => setActiveGroup(id)} 
+                      htmlFor={`textbook-${id}`}
+                      onClick={() => dispatch(addTextbookState({group: id}))} 
                   >
                     Часть {name}
                   </label>
@@ -116,11 +116,11 @@ const TextBook: React.FC = () => {
           {
             words && 
             <Pagination
-                currentPage={currentPage}
+                currentPage={page || 1}
                 totalCount={PaginationData.TOTAL_COUNT}
                 siblingCount={PaginationData.SIBLING_COUNT}
                 pageSize={PaginationData.PAGE_SIZE} 
-                onPageChange={(page: number) => setCurrentPage(page)}
+                onPageChange={(currPage: number) => dispatch(addTextbookState({page: currPage}))}
             />
           }
 

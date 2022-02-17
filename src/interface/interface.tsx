@@ -159,3 +159,8 @@ export interface LocationState {
   search: string;
   state?: LState;
 }
+
+export interface TextbookState {
+  group?: number;
+  page?: number;
+}
