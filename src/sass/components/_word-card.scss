@@ -34,6 +34,8 @@
     padding-right: 25px;
     padding-bottom: 30px;
     border-radius: 29px;
+
+    min-height: 426px;
   }
 }
 
@@ -46,7 +48,7 @@
   border-radius: 18px;
   
   & img {
-    object-fit: fill;
+    object-fit: cover;
     width: 100%;
   }
 
@@ -55,6 +57,10 @@
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 3;
+  }
+
+  @media (min-width: $desktop-width) {
+    max-height: 215px;
   }
 }
 
