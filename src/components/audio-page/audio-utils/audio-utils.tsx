@@ -14,6 +14,7 @@ import {
   IWordAudio,
   IStatistic,
   IAudioGameStatistic,
+  ILongTerm,
 } from "../../../interface/interface-audio";
 
 import { Url, Methods } from "../../../const/const";
@@ -407,15 +408,56 @@ export async function getPutAudioUserStatistic(
   statisticState: IAudioGameStatistic
 ) {
   const getStat = getUserStatistic(userAuthData);
+  const arrLength = FORMER_STAT.optional.longTerm.stat.length;
+  // const dataArr = FORMER_STAT.optional.longTerm.stat;
+  let newStat: ILongTerm;
 
   await getStat;
 
+  console.log("before", FORMER_STAT.optional);
+  console.log("before", "new", statisticState.gameNewWords);
+  console.log("before", "learned", statisticState.gameLearnedWords);
+  console.log("before", "success", statisticState.gameSuccessCounter);
+
   FORMER_STAT.learnedWords += statisticState.gameLearnedWords;
   FORMER_STAT.optional.audio.bestSeries = statisticState.gameBestSeries;
-  FORMER_STAT.optional.audio.failCounter = statisticState.gameFailCounter;
-  FORMER_STAT.optional.audio.newWords = statisticState.gameNewWords;
-  FORMER_STAT.optional.audio.successCounter = statisticState.gameSuccessCounter;
+  FORMER_STAT.optional.audio.failCounter =
+    FORMER_STAT.optional.audio.failCounter + statisticState.gameFailCounter;
+  FORMER_STAT.optional.audio.newWords =
+    FORMER_STAT.optional.audio.newWords + statisticState.gameNewWords;
+  FORMER_STAT.optional.audio.successCounter =
+    FORMER_STAT.optional.audio.successCounter +
+    statisticState.gameSuccessCounter;
+  FORMER_STAT.optional.audio.learnedWords =
+    FORMER_STAT.optional.audio.learnedWords + statisticState.gameLearnedWords;
 
+  if (arrLength === 0) {
+    newStat = {
+      data: new Date().toLocaleDateString(),
+      newWordsInData: statisticState.gameNewWords,
+      newLearnedInData: statisticState.gameLearnedWords,
+    };
+    FORMER_STAT.optional.longTerm.stat.push(newStat);
+  } else if (
+    FORMER_STAT.optional.longTerm.stat[arrLength - 1].data !==
+    new Date().toLocaleDateString()
+  ) {
+    newStat = {
+      data: new Date().toLocaleDateString(),
+      newWordsInData: statisticState.gameNewWords,
+      newLearnedInData: statisticState.gameLearnedWords,
+    };
+    FORMER_STAT.optional.longTerm.stat.push(newStat);
+  } else {
+    FORMER_STAT.optional.longTerm.stat[arrLength - 1].newLearnedInData =
+      FORMER_STAT.optional.longTerm.stat[arrLength - 1].newLearnedInData +
+      statisticState.gameLearnedWords;
+    FORMER_STAT.optional.longTerm.stat[arrLength - 1].newWordsInData =
+      FORMER_STAT.optional.longTerm.stat[arrLength - 1].newWordsInData +
+      statisticState.gameNewWords;
+  }
+
+  console.log("after", FORMER_STAT.optional);
   const putStat = putUserStatistic(userAuthData, FORMER_STAT);
   await putStat;
 }
@@ -431,19 +473,33 @@ export const getUserStatistic = async ({ userId, token }: IUserData) => {
     });
     const stat = await rawResponse.json();
 
+    const currentData = new Date().toLocaleDateString();
+
     FORMER_STAT.learnedWords = stat.learnedWords;
-    FORMER_STAT.optional.audio.bestSeries = stat.optional.audio.bestSeries;
-    FORMER_STAT.optional.audio.date = stat.optional.audio.date;
-    FORMER_STAT.optional.audio.failCounter = stat.optional.audio.failCounter;
-    FORMER_STAT.optional.audio.newWords = stat.optional.audio.newWords;
-    FORMER_STAT.optional.audio.successCounter =
-      stat.optional.audio.successCounter;
-    FORMER_STAT.optional.sprint.bestSeries = stat.optional.sprint.bestSeries;
-    FORMER_STAT.optional.sprint.date = stat.optional.sprint.date;
-    FORMER_STAT.optional.sprint.failCounter = stat.optional.sprint.failCounter;
-    FORMER_STAT.optional.sprint.newWords = stat.optional.sprint.newWords;
-    FORMER_STAT.optional.sprint.successCounter =
-      stat.optional.sprint.successCounter;
+
+    if (stat.optional.audio.date === currentData) {
+      FORMER_STAT.optional.audio.bestSeries = stat.optional.audio.bestSeries;
+      FORMER_STAT.optional.audio.date = stat.optional.audio.date;
+      FORMER_STAT.optional.audio.failCounter = stat.optional.audio.failCounter;
+      FORMER_STAT.optional.audio.newWords = stat.optional.audio.newWords;
+      FORMER_STAT.optional.audio.successCounter =
+        stat.optional.audio.successCounter;
+      FORMER_STAT.optional.audio.learnedWords =
+        stat.optional.audio.learnedWords;
+      FORMER_STAT.optional.sprint.bestSeries = stat.optional.sprint.bestSeries;
+      FORMER_STAT.optional.sprint.date = stat.optional.sprint.date;
+      FORMER_STAT.optional.sprint.failCounter =
+        stat.optional.sprint.failCounter;
+      FORMER_STAT.optional.sprint.newWords = stat.optional.sprint.newWords;
+      FORMER_STAT.optional.sprint.successCounter =
+        stat.optional.sprint.successCounter;
+      FORMER_STAT.optional.sprint.learnedWords =
+        stat.optional.sprint.learnedWords;
+      //  console.log("FORMER_STAT", FORMER_STAT);
+    }
+    for (let i = 0; i < stat.optional.longTerm.stat.length; i += 1) {
+      FORMER_STAT.optional.longTerm.stat[i] = stat.optional.longTerm.stat[i];
+    }
   } catch {
     console.log("no stat for you, yet((");
   }
@@ -453,6 +509,7 @@ const putUserStatistic = async (
   { userId, token }: IUserData,
   statistic: IStatistic
 ) => {
+  console.log("putUserStatistic", statistic);
   const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
     method: `${Methods.PUT}`,
     headers: {

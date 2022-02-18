@@ -22,7 +22,7 @@ function AudioPage() {
       <Header />
       <main>
         <div className="container">
-          <h2>Audio Challenge</h2>
+          <h2>Аудиовызов</h2>
           {isGameOn && isGameLoaded ? (
             <Audiochallenge
               changeState={changeState}

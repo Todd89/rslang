@@ -55,6 +55,7 @@ export interface IStatistic {
       successCounter: number;
       failCounter: number;
       newWords: number;
+      learnedWords: number;
     };
     sprint: {
       date: string;
@@ -62,6 +63,16 @@ export interface IStatistic {
       successCounter: number;
       failCounter: number;
       newWords: number;
+      learnedWords: number;
+    };
+    longTerm: {
+      stat: Array<ILongTerm>;
     };
   };
 }
+
+export type ILongTerm = {
+  data: any;
+  newWordsInData: number;
+  newLearnedInData: number;
+};

@@ -10,10 +10,7 @@ import {
   AUDIO_STAT,
   AUDIO,
 } from "../../../const/const-audio";
-import {
-  IWordAudio,
-  IAudioResult,
-} from "../../../interface/interface-audio";
+import { IWordAudio, IAudioResult } from "../../../interface/interface-audio";
 import { AudioQuestion } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
 import { AudioLives } from "../audio-lives/audio-lives";
