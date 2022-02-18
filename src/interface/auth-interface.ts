@@ -16,6 +16,10 @@ export type State = {
   user: UserIdData | null;
   userAuthData: null | AuthData,
   authorizeStatus: boolean,
+  textBookState: {
+    group: number;
+    page: number;
+  },
 }
 
 export type UserAction = {

@@ -75,3 +75,49 @@ export const teamMembers = [
   }
 ]
 
+export const enum PaginationData {
+  START_INDEX = 1,
+  TOTAL_COUNT = 600,
+  SIBLING_COUNT = 0,
+  PAGE_SIZE = 30,
+}
+
+export const DOTS = '...';
+
+export const textbookSections = [
+  { 
+    id: 0,
+    name: 1,
+    labelClass: "textbook-nav__label", 
+  }, 
+  { 
+    id: 1,
+    name: 2,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 2,
+    name: 3,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 3,
+    name: 4,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 4,
+    name: 5,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 5,
+    name: 6,
+    labelClass: "textbook-nav__label",
+   }, 
+  { 
+    id: 6,
+    name: "7 - Сложные слова",
+    labelClass: "textbook-nav__label textbook-nav__label--complex",
+  }, 
+];

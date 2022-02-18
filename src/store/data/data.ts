@@ -4,7 +4,8 @@ import {
   addUserAuthData,
   addNewTokens,
   changeAuthorizeStatus,
-  resetStore
+  resetStore,
+  addTextbookState
 } from '../action';
 import { State } from '../../interface/auth-interface';
 
@@ -13,6 +14,10 @@ export const initialState: State = {
   user: null,
   userAuthData: null,
   authorizeStatus: false,
+  textBookState: {
+    group: 0,
+    page: 0,
+  },
 };
 
 
@@ -37,6 +42,9 @@ const data = createReducer(initialState, (builder) => {
     })
     .addCase(resetStore, (state, action) => {
       state = action.payload;
+    })
+    .addCase(addTextbookState, (state, action) => {
+      state.textBookState = Object.assign({}, state.textBookState, action.payload);
     });
 });
 

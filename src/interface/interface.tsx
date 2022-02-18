@@ -115,3 +115,52 @@ export interface IRandomWordInGame {
   PAGE: number;
   GROUP: number;
 }
+
+export interface PaginationComponentProps {
+  onPageChange: any;
+  totalCount: number;
+  siblingCount: number;
+  currentPage: number;
+  pageSize: number;
+}
+
+export interface UsePagination {
+  totalCount: number;
+  pageSize: number;
+  siblingCount: number;
+  currentPage: number;
+}
+
+export interface WordData {
+  id: string;
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: string;
+  image: string;
+  page: string;
+  textExample: string;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+}
+
+type LState = {
+  fromTextbook: boolean;
+  words: WordData
+}
+export interface LocationState {
+  hash: string;
+  key: string;
+  pathname: string;
+  search: string;
+  state?: LState;
+}
+
+export interface TextbookState {
+  group?: number;
+  page?: number;
+}
