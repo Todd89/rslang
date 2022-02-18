@@ -3,11 +3,16 @@ import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
 import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
-import { IWordInArray, IRandomWordInGame, IUserWord, LocationState } from "../../../interface/interface";
+import {
+  IWordInArray,
+  IRandomWordInGame,
+  IUserWord,
+  LocationState,
+} from "../../../interface/interface";
 import {
   makeTreeRandomPage,
   shuffle,
-  makeRandomAnswerArray
+  makeRandomAnswerArray,
 } from "../sprint-methods/sprint-methods";
 import { useLocation } from "react-router";
 
@@ -15,7 +20,7 @@ const MainBlock: React.FC = () => {
   let [wordCount, setCount] = useState<number>(0);
   let [pageState, setPage] = useState<string>("greeting");
 
-  const [loadingUserWords, setLoadingUserWords] = useState<IUserWord[]>([])
+  const [loadingUserWords, setLoadingUserWords] = useState<IUserWord[]>([]);
   const [allWords, setAllWords] = useState<Array<Array<IWordInArray>>>([]);
   const [wordsInGame, setwordsInGame] = useState<Array<IWordInArray>>([]);
   const [randomWordsInGame, setRandomWordsInGame] = useState<
@@ -28,7 +33,7 @@ const MainBlock: React.FC = () => {
   const location = useLocation<LocationState>();
   if (location.state) {
     const locationState = location.state as any;
-    const { group, page} = locationState;
+    const { group, page } = locationState;
     console.log("group", group);
     console.log("page", page);
   }
@@ -70,10 +75,9 @@ const MainBlock: React.FC = () => {
     setCount((wordCount += 1));
   };
 
-  const changeLoadingUserWords = (arr:IUserWord[]) => {
-    setLoadingUserWords(arr)
-  }
-
+  const changeLoadingUserWords = (arr: IUserWord[]) => {
+    setLoadingUserWords(arr);
+  };
 
   const setFirstWord = (arr: Array<IWordInArray>) => {
     const newWord: IWordInArray = arr[0];
@@ -98,8 +102,8 @@ const MainBlock: React.FC = () => {
 
   if (pageState === "game") {
     return (
-      <main className='main-sprint-block'>
-        <div className='sprint-container container'>
+      <main className="main-sprint-block">
+        <div className="sprint-container container">
           <GameBlock
             word={word as IWordInArray}
             randomWordsInGame={randomWordsInGame}
@@ -114,8 +118,8 @@ const MainBlock: React.FC = () => {
     );
   } else if (pageState === "congratulation") {
     return (
-      <main className='main-sprint-block'>
-        <div className='sprint-container container'>
+      <main className="main-sprint-block">
+        <div className="sprint-container container">
           <CongratulationBlock
             answersArray={answersArray}
             makeRandomWordsForWork={makeRandomWordsForWork}
@@ -128,8 +132,8 @@ const MainBlock: React.FC = () => {
     );
   }
   return (
-    <main className='main-sprint-block'>
-      <div className='sprint-container container'>
+    <main className="main-sprint-block">
+      <div className="sprint-container container">
         <SprintrGreetingBlock
           changePageState={changePageState}
           setFirstWord={setFirstWord}

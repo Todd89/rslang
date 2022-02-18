@@ -1,6 +1,7 @@
-import Header from "../header/header";
 import { useState } from "react";
+import Header from "../header/header";
 import { Audiochallenge } from "./audiochallenge/audiochallenge";
+import { AudioAuto } from "./audio-auto/audio-auto";
 import "./audiopage.css";
 import { useLocation } from "react-router";
 import { LocationState } from "../../interface/interface";
@@ -11,12 +12,20 @@ function AudioPage() {
   const [isGameOn, SetIsGameOn] = useState(false);
   const [isGameLoaded, SetIsGameLoaded] = useState(false);
   const location = useLocation<LocationState>();
+  let group = -1;
+  let page = -1;
 
   if (location.state) {
     const locationState = location.state as any;
-    const { group, page} = locationState;
+    group = locationState.group;
+    page = locationState.page;
+
     console.log("group", group);
     console.log("page", page);
+  } else {
+    group = 2;
+    page = 10;
+    console.log("example group, page", group, page);
   }
 
   function changeState(isOn: boolean) {
@@ -36,6 +45,14 @@ function AudioPage() {
           {isGameOn && isGameLoaded ? (
             <Audiochallenge
               changeState={changeState}
+              changeGameLoadedStatus={changeGameLoadedStatus}
+            />
+          ) : group >= 0 ? (
+            <AudioAuto
+              group={group}
+              page={page}
+              changeState={changeState}
+              isGameLoaded={isGameLoaded}
               changeGameLoadedStatus={changeGameLoadedStatus}
             />
           ) : (

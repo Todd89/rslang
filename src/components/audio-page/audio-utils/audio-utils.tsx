@@ -408,16 +408,13 @@ export async function getPutAudioUserStatistic(
   statisticState: IAudioGameStatistic
 ) {
   const getStat = getUserStatistic(userAuthData);
-  const arrLength = FORMER_STAT.optional.longTerm.stat.length;
-  // const dataArr = FORMER_STAT.optional.longTerm.stat;
+
   let newStat: ILongTerm;
 
   await getStat;
 
-  console.log("before", FORMER_STAT.optional);
-  console.log("before", "new", statisticState.gameNewWords);
-  console.log("before", "learned", statisticState.gameLearnedWords);
-  console.log("before", "success", statisticState.gameSuccessCounter);
+  let dataArr = FORMER_STAT.optional.longTerm.stat;
+  const arrLength = dataArr.length;
 
   FORMER_STAT.learnedWords += statisticState.gameLearnedWords;
   FORMER_STAT.optional.audio.bestSeries = statisticState.gameBestSeries;
@@ -437,27 +434,21 @@ export async function getPutAudioUserStatistic(
       newWordsInData: statisticState.gameNewWords,
       newLearnedInData: statisticState.gameLearnedWords,
     };
-    FORMER_STAT.optional.longTerm.stat.push(newStat);
-  } else if (
-    FORMER_STAT.optional.longTerm.stat[arrLength - 1].data !==
-    new Date().toLocaleDateString()
-  ) {
+    dataArr.push(newStat);
+  } else if (dataArr[arrLength - 1].data !== new Date().toLocaleDateString()) {
     newStat = {
       data: new Date().toLocaleDateString(),
       newWordsInData: statisticState.gameNewWords,
       newLearnedInData: statisticState.gameLearnedWords,
     };
-    FORMER_STAT.optional.longTerm.stat.push(newStat);
+    dataArr.push(newStat);
   } else {
-    FORMER_STAT.optional.longTerm.stat[arrLength - 1].newLearnedInData =
-      FORMER_STAT.optional.longTerm.stat[arrLength - 1].newLearnedInData +
-      statisticState.gameLearnedWords;
-    FORMER_STAT.optional.longTerm.stat[arrLength - 1].newWordsInData =
-      FORMER_STAT.optional.longTerm.stat[arrLength - 1].newWordsInData +
-      statisticState.gameNewWords;
+    dataArr[arrLength - 1].newLearnedInData += statisticState.gameLearnedWords;
+    dataArr[arrLength - 1].newWordsInData += statisticState.gameNewWords;
   }
 
-  console.log("after", FORMER_STAT.optional);
+  FORMER_STAT.optional.longTerm.stat = dataArr;
+
   const putStat = putUserStatistic(userAuthData, FORMER_STAT);
   await putStat;
 }
@@ -495,10 +486,21 @@ export const getUserStatistic = async ({ userId, token }: IUserData) => {
         stat.optional.sprint.successCounter;
       FORMER_STAT.optional.sprint.learnedWords =
         stat.optional.sprint.learnedWords;
-      //  console.log("FORMER_STAT", FORMER_STAT);
     }
+    FORMER_STAT.optional.longTerm.stat.length = 0;
     for (let i = 0; i < stat.optional.longTerm.stat.length; i += 1) {
-      FORMER_STAT.optional.longTerm.stat[i] = stat.optional.longTerm.stat[i];
+      const newStat = {
+        data: stat.optional.longTerm.stat[i].data,
+        newWordsInData:
+          stat.optional.longTerm.stat[i].newWordsInData === undefined
+            ? 0
+            : stat.optional.longTerm.stat[i].newWordsInData,
+        newLearnedInData:
+          stat.optional.longTerm.stat[i].newLearnedInData === undefined
+            ? 0
+            : stat.optional.longTerm.stat[i].newLearnedInData,
+      };
+      FORMER_STAT.optional.longTerm.stat.push(newStat);
     }
   } catch {
     console.log("no stat for you, yet((");
@@ -509,7 +511,6 @@ const putUserStatistic = async (
   { userId, token }: IUserData,
   statistic: IStatistic
 ) => {
-  console.log("putUserStatistic", statistic);
   const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
     method: `${Methods.PUT}`,
     headers: {
