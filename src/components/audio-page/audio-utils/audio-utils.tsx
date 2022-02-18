@@ -30,7 +30,7 @@ import httpClient from "../../../services/http-client";
 const wordsArray: Array<IWordAudio> = [];
 
 const userLearnedWordsArray: Array<string> = [];
-//const userWordsArray: Array<IUserWord> = [];
+
 let userLearnedWordsArrayToCheck: Array<string> = [];
 
 async function getWords(
@@ -134,13 +134,22 @@ export function createUpdateUserWord(
   if (!learnedBefore && userWord.optional.learned) {
     AUDIO_STAT[indStat].learned = true;
   }
+  const userWordServer: IUserWord = {
+    difficulty: userWord.difficulty,
+    optional: {
+      learned: userWord.optional.learned,
+      group: userWord.optional.group,
+      page: userWord.optional.page,
+      successCounter: userWord.optional.successCounter,
+      failCounter: userWord.optional.failCounter,
+      new: userWord.optional.new,
+    },
+  };
   if (isNewUserWord) {
-    //httpClient.createUserWord(userAuthData, userWord);
-    createUserWord(userAuthData, userWord);
+    httpClient.createUserWord(userAuthData, userWordServer, userWord.wordId);
     AUDIO_USER_WORDS_ARRAY.push(userWord);
   } else {
-    //httpClient.updateUserWord(userAuthData, userWord);
-    updateUserWord(userAuthData, userWord);
+    httpClient.updateUserWord(userAuthData, userWordServer, userWord.wordId);
     const findWordIndex = AUDIO_USER_WORDS_ARRAY.findIndex(
       (item) => item.wordId === userWord.wordId
     );
@@ -148,7 +157,7 @@ export function createUpdateUserWord(
   }
 }
 
-const createUserWord = async (
+/*const createUserWord = async (
   { userId, token }: IUserData,
   userWord: IUserWord
 ) => {
@@ -207,7 +216,7 @@ const updateUserWord = async (
     }
   );
   const content = await rawResponse.json();
-};
+};*/
 
 export async function getUserWords(
   userAuthData: AuthData,
@@ -236,6 +245,7 @@ export async function getUserWords(
             new: boolean;
           };
         }) => {
+          console.log(item.wordId);
           const itemWord = {
             wordId: item.wordId,
             difficulty: item.difficulty,

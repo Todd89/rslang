@@ -24,8 +24,8 @@ class HTTPClient {
   async getChunkOfWords(pageNum: string, groupNum: string) {
     try {
       const res = await fetch(
-      `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
-      )
+        `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
+      );
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -34,7 +34,7 @@ class HTTPClient {
     }
   }
 
-  async getWord(id: string) {
+  /*async getWord(id: string) {
     const data = await fetch(`${Url.DOMEN}/words/${id}`)
       .then((response) => {
         return response.json();
@@ -43,6 +43,23 @@ class HTTPClient {
         console.log(console.log(error));
       });
     return data;
+  }*/
+
+  async getWord(id: string) {
+    try {
+      const data = await fetch(`${Url.DOMEN}/words/${id}`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+      if (data.status === ResponseStatus.OK) {
+        return data.json();
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      return null;
+    }
   }
 
   //Users
@@ -147,7 +164,6 @@ class HTTPClient {
     userWord: IUserWord,
     wordId: string
   ) {
-    console.log(userWord);
     const rawResponse = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
@@ -163,7 +179,7 @@ class HTTPClient {
     return await rawResponse.json();
   }
 
-  async getUserWord({ userId, token }: IUserData, wordId: string) {
+  /* async getUserWord({ userId, token }: IUserData, wordId: string) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
       method: `${Methods.GET}`,
       headers: {
@@ -174,7 +190,28 @@ class HTTPClient {
       console.log(console.log(error));
     });
     return data;
-  }
+  }*/
+
+  getUserWord = async ({ userId, token }: IUserData, wordId: string) => {
+    try {
+      const rawResponse = await fetch(
+        `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+      if (rawResponse.status === ResponseStatus.OK) {
+        return rawResponse.json();
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      return null;
+    }
+  };
 
   async updateUserWord(
     { userId, token }: IUserData,
