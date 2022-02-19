@@ -19,13 +19,9 @@ function AudioPage() {
     const locationState = location.state as any;
     group = locationState.group;
     page = locationState.page;
-
-    console.log("group", group);
-    console.log("page", page);
   } else {
-    group = 2;
-    page = 10;
-    console.log("example group, page", group, page);
+    group = -1;
+    page = -1;
   }
 
   function changeState(isOn: boolean) {

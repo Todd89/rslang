@@ -41,10 +41,7 @@ async function getWords(
   const promiseArray = [];
 
   if (strong) {
-    const wordsServer = httpClient.getChunkOfWords(
-      String(page - 1),
-      String(group)
-    );
+    const wordsServer = httpClient.getChunkOfWords(String(page), String(group));
     promiseArray.push(wordsServer);
   } else {
     for (let i = 0; i < page; i += 1) {
@@ -245,7 +242,6 @@ export async function getUserWords(
             new: boolean;
           };
         }) => {
-          console.log(item.wordId);
           const itemWord = {
             wordId: item.wordId,
             difficulty: item.difficulty,
@@ -385,8 +381,14 @@ export async function createArrayOfQuestions(
 
     while (arrAnswers.length < AUDIO_ANSWER_AMOUNT) {
       const answer = getRandomWord();
+
       if (!arrAnswers.includes(answer)) {
-        arrAnswers.push(answer);
+        const checkingArr = arrAnswers.filter(
+          (item) => item.word === answer.word
+        );
+        if (checkingArr.length === 0) {
+          arrAnswers.push(answer);
+        }
       }
     }
     arrAnswers.sort(() => Math.random() - 0.5);
