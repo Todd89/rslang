@@ -30,10 +30,10 @@ export const enum SprintNums {
   MINUTE = 60,
   MAX_SUCCESS_HARD_MODE = 5,
   MAX_SUCCESS_LIGTH_MODE = 3,
-  MULTIPLIER_TWO = 2,
-  MULTIPLIER_DOTE_FIVE = 1.5,
-  MULTIPLIER_DOTE_TWENTYFIVE = 1.25,
-  PLUS_TO_SCORE = 100,
+  MULTIPLIER_TWO = 3,
+  MULTIPLIER_DOTE_FIVE = 2,
+  MULTIPLIER_DOTE_TWENTYFIVE = 1.5,
+  PLUS_TO_SCORE = 10,
   MAX_ANSWERS_LENGTH = 10,
 }
 
@@ -49,22 +49,31 @@ export const enum SprintColors {
 export const NULL_STATISTIC: IStatistic = {
   learnedWords: 0,
   optional: {
-    sprint: 
-      {
-        date: new Date(),
-        bestSeries: 0,
-        successCounter: 0,
-        failCounter: 0,
-        newWords: 0,
-      },
-    audio: 
-      {
-        date: new Date(),
-        bestSeries: 0,
-        successCounter: 0,
-        failCounter: 0,
-        newWords: 0,
-      },
+    sprint:
+    {
+      date: new Date().toLocaleDateString(),
+      bestSeries: 0,
+      successCounter: 0,
+      failCounter: 0,
+      newWords: 0,
+    },
+    audio:
+    {
+      date: new Date(),
+      bestSeries: 0,
+      successCounter: 0,
+      failCounter: 0,
+      newWords: 0,
+    },
+    longTerm: {
+      stat: [
+        {
+          data: new Date().toLocaleDateString(),
+          newWordsInData: 0,
+          newLearnedInData: 0,
+        }
+      ]
+    }
   },
 };
 

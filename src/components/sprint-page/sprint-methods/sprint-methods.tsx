@@ -6,6 +6,7 @@ import {
   IUserWord,
   IUserData,
   IStatistic,
+  ILongTerm
 } from "../../../interface/interface";
 
 const getWordsFromGroup = async (group: string) => {
@@ -15,7 +16,6 @@ const getWordsFromGroup = async (group: string) => {
     const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group);
     PROMIS_ARR.push(WORDS_CHUNK);
   }
-
   await Promise.all(PROMIS_ARR).then((values) => {
     RESULT = values;
   });
@@ -229,6 +229,7 @@ const updateWord = (
     word.optional.successCounter += 1;
     if (word.optional.successCounter === MAX_NUM) {
       word.optional.learned = true;
+      word.optional.successCounter = 0;
       setlearnWordsInGame(learnWordsInGame + 1);
     }
   } else {
@@ -276,7 +277,7 @@ const workWithUserWord = async (
       randomWordsInGame[count].ID
     );
 
-    const UPDATE_WORD = updateWord(
+    const UPDATE_WORD = updateWord (
       WORD,
       SUCCESS,
       learnWordsInGame,
@@ -295,10 +296,14 @@ const newStatistic = async (
   user: IUserData,
   learnWordsInGame: number,
   newWordsInGame: number,
-  bestSeries: number
+  bestSeries: number,
 ) => {
   let newWords = 0;
   let best = 0;
+  let newStat:ILongTerm;
+  let dataArr = statistic.optional.longTerm.stat
+  let lastItem = statistic.optional.longTerm.stat.length - 1;
+
   if (statistic.optional.sprint.newWords > 0) {
     newWords = statistic.optional.sprint.newWords;
   }
@@ -308,18 +313,33 @@ const newStatistic = async (
   } else {
     best = statistic.optional.sprint.bestSeries
   }
+  
+  if (statistic.optional.longTerm.stat[lastItem].data !== new Date().toLocaleDateString()) {
+        newStat = {
+          data: new Date ().toLocaleDateString(),
+          newWordsInData: newWordsInGame,
+          newLearnedInData: learnWordsInGame,
+      }
+      dataArr.push(newStat)
+  } else {
+     dataArr[lastItem].newLearnedInData = statistic.learnedWords + learnWordsInGame;
+     dataArr[lastItem].newWordsInData = newWords + newWordsInGame;
+  }
 
   const NEW_STATISTIC: IStatistic = {
     learnedWords: statistic.learnedWords + learnWordsInGame,
     optional: {
       sprint:{ 
-        date: new Date(),
+        date: new Date().toLocaleDateString(),
         bestSeries: best,
         successCounter: 0,
         failCounter: 0,
         newWords: newWords + newWordsInGame,
       },
-      audio:statistic.optional.audio
+      audio:statistic.optional.audio,
+      longTerm:{
+        stat: dataArr,
+       }
     },
   };
   console.log(NEW_STATISTIC);

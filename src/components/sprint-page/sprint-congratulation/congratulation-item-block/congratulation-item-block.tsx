@@ -24,7 +24,7 @@ const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
   return (
     <>
       <div className='congratulation-item__audio congratulation-text' onClick={() => playAudio(AUDIO)}>
-        <img src='/assets/images/png/audio.png' alt='звук' />
+        <img src='/assets/images/audio.png' alt='звук' />
       </div>
       <span className='congratulation-item__english-word congratulation-text'>{ENGLISH_WORD}</span>
       <span className='congratulation-item__translation congratulation-text'>{TRANSCRIPTION}</span>

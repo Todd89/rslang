@@ -1,8 +1,15 @@
+
+export type ILongTerm = {
+  data: any,
+  newWordsInData: number,
+  newLearnedInData: number,
+}
+
 export type IStatistic = {
   learnedWords:number,
   optional:{
     sprint: {
-    date: Date,
+    date: any,
     bestSeries:number,
     successCounter:number,
     failCounter:number,
@@ -15,6 +22,9 @@ export type IStatistic = {
     failCounter:number,
     newWords:number
     },
+    longTerm:{
+     stat:Array<ILongTerm>,
+    }
   }
 };
 
@@ -93,10 +103,8 @@ export interface IGameBlockProps {
   word: IWordInArray;
   randomWordsInGame:Array<IRandomWordInGame>;
   loadingUserWords:IUserWord[]
-  // changeWordCount: () => void;
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
-  // changeWord: () => void;
   changeLoadingUserWords: (arr: IUserWord[]) => void
 }
 export interface IGreetingBlockProps {
@@ -140,3 +148,5 @@ export interface IRandomWordInGame {
   PAGE: number;
   GROUP: number;
 }
+
+

@@ -79,7 +79,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   return (
     <div className='greeting-sprint-block'>
       <div className='girl-image'>
-        <img src='/assets/images/png/think_girl.png' alt='девочка' />
+        <img src='/assets/images/think_girl.png' alt='девочка' />
       </div>
       <div className='greeting-sprint-levelchange-block'>
         <div className='greeting-sprint-levelchange-block__rules'>

@@ -23,7 +23,7 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
   return (
     <div className='congratulation-container'>
       <div className='girl-image'>
-        <img src='/assets/images/png/sprint_girl.png' alt='девочка' />
+        <img src='/assets/images/sprint_girl.png' alt='девочка' />
       </div>
       <div className='congratulation-block'>
         <CongratulationNavigation

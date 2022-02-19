@@ -13,11 +13,8 @@ import {
   changeScoreX,
   makeAnswersArray,
   addViewToBonus,
-<<<<<<< HEAD
-=======
   workWithUserWord,
   newStatistic,
->>>>>>> start-long-statistic
 } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
 
@@ -41,9 +38,10 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [newWordsInGame, setNewWordsInGame] = useState<number>(0);
   const [statistic, setStatistic] = useState<IStatistic>();
   const [bestSeries, setBestSeries] = useState<number>(0);
+  const [finish, setFinish] = useState<boolean | undefined>(false);
 
   const USER_DATA = useSelector(getUserAuthData);
-
+  
   const AUDIO_RIGHT = new Audio();
   AUDIO_RIGHT.src = "/assets/sound/right.mp3";
   AUDIO_RIGHT.volume = 0.2;
@@ -56,23 +54,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   AUDIO_END.src = "/assets/sound/end.mp3";
   AUDIO_END.volume = 0.2;
 
-<<<<<<< HEAD
-  const userI = useSelector(getUserAuthData);
-
-  if (answers.length === SprintNums.MAX_ANSWERS_LENGTH) {
-=======
   const makeEndGame = () => {
->>>>>>> start-long-statistic
-    changeAnswersArray(answers);
     if (user) {
       newStatistic(
         statistic as IStatistic,
         user as IUserData,
         learnWordsInGame,
         newWordsInGame,
-        bestSeries
+        bestSeries,
       );
     }
+    changeAnswersArray(answers);
     changePageState("congratulation");
     AUDIO_END.play();
   };
@@ -80,8 +72,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
 
   const getAnswer = async (type:boolean) => {
     setPlayerRealAnswer(type);
-    console.log(type)
-    console.log(count)
     makeAnswersArray(
       randomWordsInGame[count].TYPE_OF_ANSWER,
       type,
@@ -95,7 +85,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       count
     );
     changeCount();
-    
     if (user) {
       await workWithUserWord(
         user as IUserData,
@@ -110,7 +99,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       );
     }
   } 
-
 
   if (!user) {
     if (USER_DATA) {
@@ -141,16 +129,25 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }, []);
 
   useEffect(() => {
-    let sec = 60;
+    let sec = 10;
     const interval = setInterval(() => {
       sec -= 1;
       if (sec === 0) {
-        makeEndGame();
+        setFinish(true);
+        clearInterval(interval);
+        changePageState("congratulation");
+        AUDIO_END.play();
       }
       setSeconds(sec);
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (finish) {
+      changeAnswersArray(answers);
+    }
+  }, [finish]);
 
   useEffect(() => {
     if (count > 0) {
@@ -186,56 +183,63 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     addViewToBonus(scoreX);
   }
 
-  // document.addEventListener("keydown", async (e) => {
-  //   if (e.keyCode === 37) {
-  //     e.stopPropagation()
-  //     e.stopImmediatePropagation()
-  //     getAnswer(false)
-  //   } else if (e.keyCode === 39) {
-  //     e.stopPropagation();
-  //     e.stopImmediatePropagation();
-  //     getAnswer(true)
-  //   }
-  // })
+  useEffect(()=>{
 
+    const checkAnswer = async (e: KeyboardEvent) => {
+      if (e.keyCode === 37) {
+        e.stopPropagation()
+        e.stopImmediatePropagation()
+        await getAnswer(false)
+      } else if (e.keyCode === 39) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        await getAnswer(true)
+      }
+    };
 
+  document.addEventListener("keydown", checkAnswer, false);
+
+  return () => {
+    document.removeEventListener("keydown", checkAnswer, false);
+  };
+})
 
   return (
     <div>
-      <div className="girl-image">
-        <img src="/assets/images/png/rocket-girl.png" alt="девочка" />
+      <div className='girl-image'>
+        <img src='/assets/images/rocket-girl.png' alt='девочка' />
       </div>
-      <div className="game-sprint-block">
-        <div className="game-sprint-block__top-lights">
-          <div className="game-sprint-block__timer">
-            <span className="game-sprint-block__text">{seconds} sec</span>
+      <div className='game-sprint-block'>
+        <div className='game-sprint-block__top-lights'>
+          <div className='game-sprint-block__timer'>
+            <span className='game-sprint-block__text'>{seconds} sec</span>
           </div>
-          <div id="level-up" className="game-sprint-block__level-up">
-            <div className="game-sprint-block__cool-symbol">
-              <img src="/assets/images/cool.png" alt="класс" />
+          <div id='level-up' className='game-sprint-block__level-up'>
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
-            <div className="game-sprint-block__cool-symbol">
-              <img src="/assets/images/cool.png" alt="класс" />
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
-            <div className="game-sprint-block__cool-symbol">
-              <img src="/assets/images/cool.png" alt="класс" />
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
           </div>
-          <div className="game-sprint-block__score">
-            <span className="game-sprint-block__text">Score:{score}</span>
+          <div className='game-sprint-block__score'>
+            <span className='game-sprint-block__text'>Score:{score}</span>
           </div>
         </div>
-        <div className="game-sprint-block__quastion">
-          <div className="game-sprint-block__english-word">
+        <div className='game-sprint-block__quastion'>
+          <div className='game-sprint-block__english-word'>
             {randomWordsInGame[count].ENGLISH_WORD}
           </div>
-          <div className="game-sprint-block__russian-word">
+          <div className='game-sprint-block__russian-word'>
             {randomWordsInGame[count].RUSSIAN_WORD}
           </div>
         </div>
-        <div className="game-sprint-block__buttons-block">
+        <div className='game-sprint-block__buttons-block'>
           <button
-            className="game-sprint-block__button game-sprint-block__button_wrong"
+            className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={async () => {
               getAnswer(false)
             }}
@@ -243,7 +247,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
             Неверно
           </button>
           <button
-            className="game-sprint-block__button game-sprint-block__button_right"
+            className='game-sprint-block__button game-sprint-block__button_right'
             onClick={async () => {
               getAnswer(true)
             }}
