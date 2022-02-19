@@ -6,8 +6,10 @@ import {
   IUserWord,
   IUserData,
   IStatistic,
-  ILongTerm
+  ILongTerm,
+  TextbookState
 } from "../../../interface/interface";
+
 
 const getWordsFromGroup = async (group: string) => {
   const PROMIS_ARR = [];
@@ -190,21 +192,27 @@ const makeWord = (
 
 const makeRandomAnswerArray = (
   word: IWordInArray,
-  wordsInGame: Array<IWordInArray>
+  wordsInGame: Array<IWordInArray>,
+  state:any
 ): IRandomWordInGame => {
+  let maxWord = 59;
+  if(state) {
+    maxWord = state.page * 20;
+  }
   const VALUE = randomNum(9);
-
+  console.log(wordsInGame, "wordsInGame")
+  console.log(maxWord)
   if (VALUE < 5) {
     return makeWord(true, word, word.wordTranslate);
   } else {
-    const WRONG_NUM = randomNum(59);
+    const WRONG_NUM = randomNum(maxWord);
     if (
       wordsInGame[WRONG_NUM].wordTranslate !==
       (word as IWordInArray).wordTranslate
     ) {
       return makeWord(false, word, wordsInGame[WRONG_NUM].wordTranslate);
     } else {
-      makeRandomAnswerArray(word, wordsInGame);
+      makeRandomAnswerArray(word, wordsInGame, state);
     }
   }
   return makeWord(true, word, word.wordTranslate);

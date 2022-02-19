@@ -3,21 +3,28 @@ import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
 import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
-import { IWordInArray, IRandomWordInGame, IUserWord, LocationState, IUserData } from "../../../interface/interface";
+import {
+  IWordInArray,
+  IRandomWordInGame,
+  IUserWord,
+  LocationState,
+  IUserData,
+  TextbookState
+} from "../../../interface/interface";
 import {
   makeTreeRandomPage,
   shuffle,
-  makeRandomAnswerArray
+  makeRandomAnswerArray,
 } from "../sprint-methods/sprint-methods";
 import { useLocation } from "react-router";
 import httpClient from "../../../services/http-client";
 import { useSelector } from "react-redux";
-import { getUserAuthData } from '../../../store/data/selectors'
+import { getUserAuthData } from "../../../store/data/selectors";
 
 const MainBlock: React.FC = () => {
   let [pageState, setPage] = useState<string>("greeting");
 
-  const [loadingUserWords, setLoadingUserWords] = useState<IUserWord[]>([])
+  const [loadingUserWords, setLoadingUserWords] = useState<IUserWord[]>([]);
   const [allWords, setAllWords] = useState<Array<Array<IWordInArray>>>([]);
   const [wordsInGame, setwordsInGame] = useState<Array<IWordInArray>>([]);
   const [randomWordsInGame, setRandomWordsInGame] = useState<
@@ -27,9 +34,11 @@ const MainBlock: React.FC = () => {
   const [answersArray, setAnswersArray] = useState<Array<IRandomWordInGame>>(
     []
   );
-  const [fromTextBook, setFromTextBook] = useState(false)
- 
-  let newUser:IUserData
+
+  const location = useLocation<LocationState>();
+  const state = location.state;
+    console.log(state)
+  let newUser: IUserData;
   const USER_DATA = useSelector(getUserAuthData);
   if (USER_DATA) {
     newUser = {
@@ -38,9 +47,9 @@ const MainBlock: React.FC = () => {
     };
   }
 
-    const changeLoadingUserWords = (arr:IUserWord[]) => {
-    setLoadingUserWords(arr)
-  }
+  const changeLoadingUserWords = (arr: IUserWord[]) => {
+    setLoadingUserWords(arr);
+  };
 
   // const getWordsFromGroupFromTextBook = async (page:number, group: number) => {
   //   const PROMIS_ARR = [];
@@ -52,7 +61,7 @@ const MainBlock: React.FC = () => {
   //   await Promise.all(PROMIS_ARR).then((values) => {
   //     RESULT = values;
   //   });
-  
+
   //   return RESULT;
   // };
 
@@ -61,9 +70,7 @@ const MainBlock: React.FC = () => {
   //   const FLAT_WORDS_FOR_WORK = WORDS.flat();
   //   setwordsInGame(FLAT_WORDS_FOR_WORK);
   //   setFirstWord(FLAT_WORDS_FOR_WORK);
-  // } 
-
-
+  // }
 
   // const makeUserWords = async () => {
   //   if (newUser) {
@@ -72,10 +79,6 @@ const MainBlock: React.FC = () => {
   //   }
   // }
 
-  // const location = useLocation<LocationState>();
-
-  
- 
   // useEffect (() => {
   //   if (location.state) {
   //     const locationState = location.state as any;
@@ -90,13 +93,6 @@ const MainBlock: React.FC = () => {
   //   }
   // },[])
 
-  const {state = {}} = useLocation<LocationState>();
-
-  useEffect(()=>{
-
-    console.log(state)
-  },[state])
-
   // if (state) {
   //     const locationState = state as any;
   //     const {group, page} = locationState;
@@ -108,12 +104,10 @@ const MainBlock: React.FC = () => {
   //     setFromTextBook(true)
   //     // setPage("game")
   //   }
- 
-  
 
   const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
     const RANDOM_QUASTIONS = gameWords.map((el) => {
-      return makeRandomAnswerArray(el, gameWords);
+      return makeRandomAnswerArray(el, gameWords, state);
     });
 
     setRandomWordsInGame(RANDOM_QUASTIONS);
@@ -130,7 +124,7 @@ const MainBlock: React.FC = () => {
     setAllWords(NEW_ARR);
   };
 
-  const changeAnswersArray = (arr:Array<IRandomWordInGame>) => {
+  const changeAnswersArray = (arr: Array<IRandomWordInGame>) => {
     const NEW_ARR = arr.slice();
     setAnswersArray(NEW_ARR);
   };
@@ -139,19 +133,19 @@ const MainBlock: React.FC = () => {
     setPage(name);
   };
 
-
   const setFirstWord = (arr: Array<IWordInArray>) => {
     const newWord: IWordInArray = arr[0];
     setWord(newWord);
   };
 
   const makeRandomWordsForWork = (
-    AllwordsInGame: Array<Array<IWordInArray>>
+    AllwordsInGame: Array<Array<IWordInArray>>,
+    state?:any
   ) => {
     const WORDS = AllwordsInGame;
     const RANDOM_PAGES_NUMS: number[] = makeTreeRandomPage();
     const RESULT_WORDS: IWordInArray[][] = [];
-
+    
     RANDOM_PAGES_NUMS.forEach((el) => RESULT_WORDS.push(WORDS[el]));
 
     const RANDOM_WORDS_FOR_WORK = shuffle(RESULT_WORDS.flat());
@@ -161,8 +155,25 @@ const MainBlock: React.FC = () => {
     return RANDOM_WORDS_FOR_WORK;
   };
 
+  const getWordsForWorkFromTextBook = async (page:number, group: number) => {
+    const PROMIS_ARR = [];
+    let RESULT: Array<Array<IWordInArray>> = [];
+    for (let i = page; i > 0; i--) {
+      const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
+      PROMIS_ARR.push(shuffle(await WORDS_CHUNK));
+    }
+    await Promise.all(PROMIS_ARR).then((values) => {
+      RESULT = values;
+    });
+  
+    return RESULT;
+  };
 
-  if (pageState === "game" || fromTextBook) {
+  const changeWordsInGame = (arr: any) => {
+    setwordsInGame(arr);
+  };
+
+  if (pageState === "game") {
     return (
       <main className='main-sprint-block'>
         <div className='sprint-container container'>
@@ -187,6 +198,7 @@ const MainBlock: React.FC = () => {
             allWords={allWords}
             changePageState={changePageState}
             changeAnswersArray={changeAnswersArray}
+            getWordsForWorkFromTextBook={getWordsForWorkFromTextBook}
           />
         </div>
       </main>
@@ -201,6 +213,7 @@ const MainBlock: React.FC = () => {
           makeRandomWordsForWork={makeRandomWordsForWork}
           changeAllWord={changeAllWord}
           changeLoadingUserWords={changeLoadingUserWords}
+          changeWordsInGame={changeWordsInGame}
         />
       </div>
     </main>

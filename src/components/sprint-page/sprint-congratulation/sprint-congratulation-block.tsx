@@ -8,7 +8,8 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
   makeRandomWordsForWork,
   allWords,
   changePageState,
-  changeAnswersArray
+  changeAnswersArray,
+  getWordsForWorkFromTextBook
 }) => {
   let id = 100;
   const ELEMEMENTS = answersArray.map((el: IRandomWordInGame) => {
@@ -31,6 +32,7 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
           allWords={allWords}
           changePageState={changePageState}
           changeAnswersArray={changeAnswersArray}
+          getWordsForWorkFromTextBook={getWordsForWorkFromTextBook}
         />
         <div className='congratulation-list-block'>
           <div className="congratulation-list-block__description">

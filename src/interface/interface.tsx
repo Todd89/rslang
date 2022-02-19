@@ -111,8 +111,9 @@ export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
   makeRandomWordsForWork: ((AllwordsInGame: Array<Array<IWordInArray>>) => IWordInArray[]);
-  changeAllWord: (arr: Array<Array<IWordInArray>>) => void
-  changeLoadingUserWords: (arr: IUserWord[]) => void
+  changeAllWord: (arr: Array<Array<IWordInArray>>) => void;
+  changeLoadingUserWords: (arr: IUserWord[]) => void;
+  changeWordsInGame:(arr:any) => void;
 
 }
 
@@ -122,6 +123,7 @@ export interface ICongratulationBlock {
   allWords: IWordInArray[][];
   changePageState: (name: string) => void;
   changeAnswersArray:(arr: Array<IRandomWordInGame>) => void;
+  getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
 }
 
 export interface ICongratulationNavi {
@@ -129,6 +131,8 @@ export interface ICongratulationNavi {
   allWords: IWordInArray[][];
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
+  getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
+  
 }
 
 export interface IWordInGame {
