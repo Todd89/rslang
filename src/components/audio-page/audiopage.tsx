@@ -11,6 +11,8 @@ import { AudioLevels } from "./audio-levels/audio-levels";
 function AudioPage() {
   const [isGameOn, SetIsGameOn] = useState(false);
   const [isGameLoaded, SetIsGameLoaded] = useState(false);
+  // const [groupFromTextBook, SetGroupFromTextBook] = useState(-1);
+  // const [pageFromTextBook, SetPageFromTextBook] = useState(-1);
   const location = useLocation<LocationState>();
   let group = -1;
   let page = -1;
@@ -19,9 +21,6 @@ function AudioPage() {
     const locationState = location.state as any;
     group = locationState.group;
     page = locationState.page;
-  } else {
-    group = -1;
-    page = -1;
   }
 
   function changeState(isOn: boolean) {
