@@ -44,7 +44,7 @@ const TextBook: React.FC = () => {
                 <Link 
                   className="game-link__link" 
                   to={{
-                    pathname: AppRoute.SPRINT,
+                    pathname: AppRoute.SPRINT,               
                     state: { group, page },
                   }}
                 >

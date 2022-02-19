@@ -5,6 +5,8 @@ import {
   IRandomWordInGame,
   IUserData,
   IStatistic,
+  IWordInArray,
+  LocationState
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 import { getUserAuthData } from "../../../store/data/selectors";
@@ -17,6 +19,7 @@ import {
   newStatistic,
 } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
+import { useLocation } from "react-router";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   randomWordsInGame,

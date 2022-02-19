@@ -3,13 +3,16 @@ import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
 import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
-import { IWordInArray, IRandomWordInGame, IUserWord, LocationState } from "../../../interface/interface";
+import { IWordInArray, IRandomWordInGame, IUserWord, LocationState, IUserData } from "../../../interface/interface";
 import {
   makeTreeRandomPage,
   shuffle,
   makeRandomAnswerArray
 } from "../sprint-methods/sprint-methods";
 import { useLocation } from "react-router";
+import httpClient from "../../../services/http-client";
+import { useSelector } from "react-redux";
+import { getUserAuthData } from '../../../store/data/selectors'
 
 const MainBlock: React.FC = () => {
   let [pageState, setPage] = useState<string>("greeting");
@@ -24,13 +27,89 @@ const MainBlock: React.FC = () => {
   const [answersArray, setAnswersArray] = useState<Array<IRandomWordInGame>>(
     []
   );
-  const location = useLocation<LocationState>();
-  if (location.state) {
-    const locationState = location.state as any;
-    const { group, page} = locationState;
-    console.log("group", group);
-    console.log("page", page);
+  const [fromTextBook, setFromTextBook] = useState(false)
+ 
+  let newUser:IUserData
+  const USER_DATA = useSelector(getUserAuthData);
+  if (USER_DATA) {
+    newUser = {
+      userId: USER_DATA.userId,
+      token: USER_DATA.token,
+    };
   }
+
+    const changeLoadingUserWords = (arr:IUserWord[]) => {
+    setLoadingUserWords(arr)
+  }
+
+  // const getWordsFromGroupFromTextBook = async (page:number, group: number) => {
+  //   const PROMIS_ARR = [];
+  //   let RESULT: Array<Array<IWordInArray>> = [];
+  //   for (let i = page; i >= 0; i--) {
+  //     const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
+  //     PROMIS_ARR.push(WORDS_CHUNK);
+  //   }
+  //   await Promise.all(PROMIS_ARR).then((values) => {
+  //     RESULT = values;
+  //   });
+  
+  //   return RESULT;
+  // };
+
+  // const makeAnwersArrayFromTextBook = async (page:number, group: number) => {
+  //   const WORDS =  await getWordsFromGroupFromTextBook(page, group);
+  //   const FLAT_WORDS_FOR_WORK = WORDS.flat();
+  //   setwordsInGame(FLAT_WORDS_FOR_WORK);
+  //   setFirstWord(FLAT_WORDS_FOR_WORK);
+  // } 
+
+
+
+  // const makeUserWords = async () => {
+  //   if (newUser) {
+  //     const LOADING_WORDS = await httpClient.getAllUserWords(newUser);
+  //     changeLoadingUserWords(LOADING_WORDS);
+  //   }
+  // }
+
+  // const location = useLocation<LocationState>();
+
+  
+ 
+  // useEffect (() => {
+  //   if (location.state) {
+  //     const locationState = location.state as any;
+  //     const {group, page} = locationState;
+  //     console.log("group", group);
+  //     console.log("page", page);
+  //     makeUserWords();
+  //     makeAnwersArrayFromTextBook(page, group);
+  //     console.log(wordsInGame)
+  //     setFromTextBook(true)
+  //     // setPage("game")
+  //   }
+  // },[])
+
+  const {state = {}} = useLocation<LocationState>();
+
+  useEffect(()=>{
+
+    console.log(state)
+  },[state])
+
+  // if (state) {
+  //     const locationState = state as any;
+  //     const {group, page} = locationState;
+  //     console.log("group", group);
+  //     console.log("page", page);
+  //     makeUserWords();
+  //     makeAnwersArrayFromTextBook(page, group);
+  //     console.log(wordsInGame)
+  //     setFromTextBook(true)
+  //     // setPage("game")
+  //   }
+ 
+  
 
   const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
     const RANDOM_QUASTIONS = gameWords.map((el) => {
@@ -60,9 +139,6 @@ const MainBlock: React.FC = () => {
     setPage(name);
   };
 
-  const changeLoadingUserWords = (arr:IUserWord[]) => {
-    setLoadingUserWords(arr)
-  }
 
   const setFirstWord = (arr: Array<IWordInArray>) => {
     const newWord: IWordInArray = arr[0];
@@ -85,7 +161,8 @@ const MainBlock: React.FC = () => {
     return RANDOM_WORDS_FOR_WORK;
   };
 
-  if (pageState === "game") {
+
+  if (pageState === "game" || fromTextBook) {
     return (
       <main className='main-sprint-block'>
         <div className='sprint-container container'>
