@@ -22,7 +22,7 @@ const Footer = () => {
         </div>
 
 
-        <nav className="footer__nav nav nav--footer container">
+        <nav className="footer__nav nav nav--footer">
             <ul className="nav__list nav__list--footer">
                 <li className="nav__item">
                   <Link to={AppRoute.TEXTBOOK} className="nav__link">

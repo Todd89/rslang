@@ -3,13 +3,13 @@ import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
 import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
-import { IWordInArray, IRandomWordInGame, IUserWord } from "../../../interface/interface";
+import { IWordInArray, IRandomWordInGame, IUserWord, LocationState } from "../../../interface/interface";
 import {
   makeTreeRandomPage,
   shuffle,
   makeRandomAnswerArray
 } from "../sprint-methods/sprint-methods";
-
+import { useLocation } from "react-router";
 
 const MainBlock: React.FC = () => {
   let [pageState, setPage] = useState<string>("greeting");
@@ -24,10 +24,17 @@ const MainBlock: React.FC = () => {
   const [answersArray, setAnswersArray] = useState<Array<IRandomWordInGame>>(
     []
   );
+  const location = useLocation<LocationState>();
+  if (location.state) {
+    const locationState = location.state as any;
+    const { group, page} = locationState;
+    console.log("group", group);
+    console.log("page", page);
+  }
 
-  const makeRandomQuastions = (wordsInGame: Array<IWordInArray>) => {
-    const RANDOM_QUASTIONS = wordsInGame.map((el) => {
-      return makeRandomAnswerArray(el, wordsInGame);
+  const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
+    const RANDOM_QUASTIONS = gameWords.map((el) => {
+      return makeRandomAnswerArray(el, gameWords);
     });
 
     setRandomWordsInGame(RANDOM_QUASTIONS);
