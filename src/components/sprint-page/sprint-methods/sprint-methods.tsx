@@ -200,8 +200,7 @@ const makeRandomAnswerArray = (
     maxWord = state.page * 20;
   }
   const VALUE = randomNum(9);
-  console.log(wordsInGame, "wordsInGame")
-  console.log(maxWord)
+
   if (VALUE < 5) {
     return makeWord(true, word, word.wordTranslate);
   } else {

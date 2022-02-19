@@ -57,54 +57,8 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   AUDIO_END.src = "/assets/sound/end.mp3";
   AUDIO_END.volume = 0.2;
 
-
-  // const getWordsFromGroupFromTextBook = async (page:number, group: number) => {
-  //   const PROMIS_ARR = [];
-  //   let RESULT: Array<Array<IWordInArray>> = [];
-  //   for (let i = page; i >= 0; i--) {
-  //     const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
-  //     PROMIS_ARR.push(WORDS_CHUNK);
-  //   }
-  //   await Promise.all(PROMIS_ARR).then((values) => {
-  //     RESULT = values;
-  //   });
-  
-  //   return RESULT;
-  // };
-
-  // const makeAnwersArrayFromTextBook = async (page:number, group: number) => {
-  //   const WORDS =  await getWordsFromGroupFromTextBook(page, group);
-  //   changeAllWord(WORDS);
-  //   const FLAT_WORDS_FOR_WORK = WORDS.flat();
-  //   setwordsInGame(FLAT_WORDS_FOR_WORK);
-  //   setFirstWord(FLAT_WORDS_FOR_WORK);
-  //   console.log(FLAT_WORDS_FOR_WORK)
-  // } 
-
-  // const makeUserWords = async () => {
-  //   if (user) {
-  //     const LOADING_WORDS = await httpClient.getAllUserWords(user);
-  
-  //     changeLoadingUserWords(LOADING_WORDS);
-  
-  //   }
-  // }
-
-  // const location = useLocation<LocationState>();
-
-  // useEffect (() => {
-  //   if (location.state) {
-  //     const locationState = location.state as any;
-  //     const {group, page} = locationState;
-  //     console.log("group", group);
-  //     console.log("page", page);
-  //     makeUserWords();
-  //     makeAnwersArrayFromTextBook(page, group);
-  //   }
-  // },[])
- 
-
-  
+  const location = useLocation<LocationState>();
+  const state = location.state as any;
 
   const makeEndGame = () => {
     if (user) {
@@ -162,9 +116,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     }
   }
 
-  if (answers.length === SprintNums.MAX_ANSWERS_LENGTH) {
-    makeEndGame();
+  if (state) {
+    if(answers.length === (state.page * 20) - 1) {
+      makeEndGame();
+    }
+  } else {
+    if (answers.length === SprintNums.MAX_ANSWERS_LENGTH) {
+      makeEndGame();
+    }
   }
+
+
 
   useEffect(() => {
     if (!answers.length && user) {

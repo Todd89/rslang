@@ -51,59 +51,7 @@ const MainBlock: React.FC = () => {
     setLoadingUserWords(arr);
   };
 
-  // const getWordsFromGroupFromTextBook = async (page:number, group: number) => {
-  //   const PROMIS_ARR = [];
-  //   let RESULT: Array<Array<IWordInArray>> = [];
-  //   for (let i = page; i >= 0; i--) {
-  //     const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
-  //     PROMIS_ARR.push(WORDS_CHUNK);
-  //   }
-  //   await Promise.all(PROMIS_ARR).then((values) => {
-  //     RESULT = values;
-  //   });
 
-  //   return RESULT;
-  // };
-
-  // const makeAnwersArrayFromTextBook = async (page:number, group: number) => {
-  //   const WORDS =  await getWordsFromGroupFromTextBook(page, group);
-  //   const FLAT_WORDS_FOR_WORK = WORDS.flat();
-  //   setwordsInGame(FLAT_WORDS_FOR_WORK);
-  //   setFirstWord(FLAT_WORDS_FOR_WORK);
-  // }
-
-  // const makeUserWords = async () => {
-  //   if (newUser) {
-  //     const LOADING_WORDS = await httpClient.getAllUserWords(newUser);
-  //     changeLoadingUserWords(LOADING_WORDS);
-  //   }
-  // }
-
-  // useEffect (() => {
-  //   if (location.state) {
-  //     const locationState = location.state as any;
-  //     const {group, page} = locationState;
-  //     console.log("group", group);
-  //     console.log("page", page);
-  //     makeUserWords();
-  //     makeAnwersArrayFromTextBook(page, group);
-  //     console.log(wordsInGame)
-  //     setFromTextBook(true)
-  //     // setPage("game")
-  //   }
-  // },[])
-
-  // if (state) {
-  //     const locationState = state as any;
-  //     const {group, page} = locationState;
-  //     console.log("group", group);
-  //     console.log("page", page);
-  //     makeUserWords();
-  //     makeAnwersArrayFromTextBook(page, group);
-  //     console.log(wordsInGame)
-  //     setFromTextBook(true)
-  //     // setPage("game")
-  //   }
 
   const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
     const RANDOM_QUASTIONS = gameWords.map((el) => {
@@ -154,18 +102,20 @@ const MainBlock: React.FC = () => {
 
     return RANDOM_WORDS_FOR_WORK;
   };
-
+  console.log(wordsInGame)
   const getWordsForWorkFromTextBook = async (page:number, group: number) => {
     const PROMIS_ARR = [];
     let RESULT: Array<Array<IWordInArray>> = [];
     for (let i = page; i > 0; i--) {
       const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
-      PROMIS_ARR.push(shuffle(await WORDS_CHUNK));
+      const NEW_ARR = shuffle(await WORDS_CHUNK)
+      console.log(NEW_ARR,"AAAa")
+      PROMIS_ARR.push(NEW_ARR);
     }
     await Promise.all(PROMIS_ARR).then((values) => {
       RESULT = values;
     });
-  
+    changeWordsInGame(RESULT.flat())
     return RESULT;
   };
 
@@ -214,6 +164,7 @@ const MainBlock: React.FC = () => {
           changeAllWord={changeAllWord}
           changeLoadingUserWords={changeLoadingUserWords}
           changeWordsInGame={changeWordsInGame}
+          getWordsForWorkFromTextBook={getWordsForWorkFromTextBook}
         />
       </div>
     </main>

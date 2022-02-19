@@ -114,7 +114,7 @@ export interface IGreetingBlockProps {
   changeAllWord: (arr: Array<Array<IWordInArray>>) => void;
   changeLoadingUserWords: (arr: IUserWord[]) => void;
   changeWordsInGame:(arr:any) => void;
-
+  getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
 }
 
 export interface ICongratulationBlock {

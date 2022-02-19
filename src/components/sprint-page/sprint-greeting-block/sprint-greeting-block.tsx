@@ -14,25 +14,10 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   makeRandomWordsForWork,
   changeAllWord,
   changeLoadingUserWords,
-  changeWordsInGame
+  getWordsForWorkFromTextBook
 }) => {
 
   const location = useLocation<LocationState>();
-
-  const getWordsForWorkFromTextBook = async (page:number, group: number) => {
-    const PROMIS_ARR = [];
-    let RESULT: Array<Array<IWordInArray>> = [];
-    for (let i = page; i > 0; i--) {
-      const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
-      PROMIS_ARR.push(shuffle(await WORDS_CHUNK));
-    }
-    await Promise.all(PROMIS_ARR).then((values) => {
-      RESULT = values;
-    });
-    changeWordsInGame(RESULT.flat())
-    return RESULT;
-  };
-
 
   useEffect(()=>{
     const makeGame = async () => {
@@ -42,7 +27,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
         console.log("group", group);
         console.log("page", page);
         const WORDS = await getWordsForWorkFromTextBook(page, group);
-        console.log(WORDS)
+  
         if (newUser) {
           const LOADING_WORDS = await httpClient.getAllUserWords(newUser);
   
@@ -50,8 +35,6 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
         }
   
         changeAllWord(WORDS);
-
-        // changeWordsInGame(WORDS.flat())
         setFirstWord(WORDS.flat());
         changePageState("game");
       }

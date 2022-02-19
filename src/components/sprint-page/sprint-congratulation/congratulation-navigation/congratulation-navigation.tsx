@@ -17,14 +17,15 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
     <div>
       <button
         className='sprint-navigation-block__button-repeat '
-        onClick={() => {
-          console.log(allWords);
+        onClick={async () =>  {
           if(state) {
-            getWordsForWorkFromTextBook(state.page, state.group)
+            await getWordsForWorkFromTextBook(state.page, state.group);
+            changePageState("game");
           } else {
             makeRandomWordsForWork(allWords);
+            changePageState("game");
           }
-          changePageState("game");
+
           changeAnswersArray([])
         }}
       >
