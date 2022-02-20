@@ -296,7 +296,7 @@
   box-sizing: border-box;
 
   &:hover {
-    background-color: #b621fe;
+    background-color: rgba(180, 33, 254, 0.4);
     color: $basic-white;
     border: 2px solid #b621fe;
 
@@ -311,6 +311,10 @@
   color: $basic-white;
   border: 2px solid #b621fe;
 
+  &:hover {
+    background-color: rgba(180, 33, 254, 0.7);
+  }
+
   & .word-card__complex-icon {
     fill: $basic-white;
   }
@@ -318,7 +322,7 @@
 
 .word-card__check-btn {
   &:hover {
-    background-color: $green;
+    background-color: rgba(60, 183, 126, 0.5);
     color: $basic-white;
     border: 2px solid $green;
 
@@ -332,6 +336,10 @@
   background-color: $green;
   color: $basic-white;
   border: 2px solid $green;
+
+  &:hover {
+    background-color: rgba(60, 183, 126, 0.7);
+  }
 
   & .word-card__check-icon {
     fill: $basic-white;
