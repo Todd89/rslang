@@ -70,7 +70,7 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
     }
 
     dispatch(addUserAuthData(response));
-    toggleForm();
+    toggleForm();    
   }
 
   return (
@@ -95,7 +95,6 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
 
         <div className="modal__guts">
           {errorMessage && <p className="authorization__error">{errorMessage}</p>}
-          {/* <p className="authorization__error">Пользователь с таким email уже существует</p> */}
           <form className="authorization__form" autoComplete="off"
             onSubmit={(evt) => {
               evt.preventDefault();
@@ -190,7 +189,6 @@ const Authorization: React.FC<AuthorizationComponentProps> = ({
                   onClick={(evt) => {
                     changeForm(evt);
                     setErrorMessage("");
-                    // changeFocus();
                   }}
                 >
                   {isRegistration ? "Войдите" : "Зарегистрируйтесь"}
