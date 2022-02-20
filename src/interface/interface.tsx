@@ -105,7 +105,8 @@ export interface IGameBlockProps {
   loadingUserWords:IUserWord[]
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
-  changeLoadingUserWords: (arr: IUserWord[]) => void
+  changeLoadingUserWords: (arr: IUserWord[]) => void;
+  state:TextbookState | undefined
 }
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
@@ -115,6 +116,7 @@ export interface IGreetingBlockProps {
   changeLoadingUserWords: (arr: IUserWord[]) => void;
   changeWordsInGame:(arr:any) => void;
   getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
+  state:TextbookState | undefined
 }
 
 export interface ICongratulationBlock {

@@ -34,7 +34,7 @@ const MainBlock: React.FC = () => {
   const [answersArray, setAnswersArray] = useState<Array<IRandomWordInGame>>(
     []
   );
-  const [state, setState] = useState<any>();
+  const [state, setState] = useState<TextbookState | undefined>();
 
   const location = useLocation<LocationState>();
   const SourceState = location.state as any;
@@ -119,12 +119,11 @@ const MainBlock: React.FC = () => {
     for (let i = page - 1; i >= 0; i--) {
       const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
       const NEW_ARR = shuffle(await WORDS_CHUNK)
-      PROMIS_ARR.push(WORDS_CHUNK);
+      PROMIS_ARR.push(NEW_ARR);
     }
     await Promise.all(PROMIS_ARR).then((values) => {
       RESULT = values;
     });
-    console.log(RESULT, "RESULT")
     setwordsInGame(RESULT.flat())
     return RESULT;
   };
@@ -133,7 +132,6 @@ const MainBlock: React.FC = () => {
     setwordsInGame(arr);
   };
 
-  console.log(wordsInGame)
 
   if (pageState === "game") {
     return (
@@ -146,6 +144,7 @@ const MainBlock: React.FC = () => {
             changeAnswersArray={changeAnswersArray}
             loadingUserWords={loadingUserWords}
             changeLoadingUserWords={changeLoadingUserWords}
+            state={state}
           />
         </div>
       </main>
@@ -178,6 +177,7 @@ const MainBlock: React.FC = () => {
           changeLoadingUserWords={changeLoadingUserWords}
           changeWordsInGame={changeWordsInGame}
           getWordsForWorkFromTextBook={getWordsForWorkFromTextBook}
+          state={state}
         />
       </div>
     </main>

@@ -27,6 +27,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   changePageState,
   changeAnswersArray,
   changeLoadingUserWords,
+  state
 }) => {
   const [answers, setAnswers] = useState<IRandomWordInGame[]>([]);
   const [seconds, setSeconds] = useState<number>(SprintNums.MINUTE);
@@ -58,8 +59,8 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   AUDIO_END.src = "/assets/sound/end.mp3";
   AUDIO_END.volume = 0.2;
 
-  const location = useLocation<LocationState>();
-  const state = location.state as any;
+  // const location = useLocation<LocationState>();
+  // const state = location.state as any;
 
   const makeEndGame = () => {
     if (user) {
@@ -125,7 +126,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }
 
   if (state) {
-    if(answers.length === ((state.page) * 20) - 1) {
+    if(answers.length === ((state.page as number) * 20) - 1) {
       makeEndGame();
     }
   } else {

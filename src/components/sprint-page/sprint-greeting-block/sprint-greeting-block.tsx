@@ -1,5 +1,5 @@
 import "./sprint-greeting-block.css";
-import { IGreetingBlockProps, IUserData, LocationState, IWordInArray } from "../../../interface/interface";
+import { IGreetingBlockProps, IUserData, TextbookState, LocationState, IWordInArray } from "../../../interface/interface";
 import { BUTTONS_NUMS, SPRINT_RULE, SprintColors } from "../../../const/const";
 import { getWordsFromGroup, shuffle } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
@@ -14,19 +14,20 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   makeRandomWordsForWork,
   changeAllWord,
   changeLoadingUserWords,
-  getWordsForWorkFromTextBook
+  getWordsForWorkFromTextBook,
+  state
 }) => {
 
-  const location = useLocation<LocationState>();
+  // const location = useLocation<LocationState>();
 
   useEffect(()=>{
     const makeGame = async () => {
-      if (location.state) {
-        const locationState = location.state as any;
+      if (state) {
+        const locationState = state as TextbookState;
         const { group, page} = locationState;
         console.log("group", group);
         console.log("page", page);
-        const WORDS = await getWordsForWorkFromTextBook(page, group);
+        const WORDS = await getWordsForWorkFromTextBook(page as number, group as number);
   
         if (newUser) {
           const LOADING_WORDS = await httpClient.getAllUserWords(newUser);
@@ -40,7 +41,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
       }
     }
     makeGame()
-  },[location])
+  },[state])
 
  
 
