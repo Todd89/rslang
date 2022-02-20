@@ -7,27 +7,75 @@ import Pagination from "./pagination/pagination";
 import { useState, useEffect } from "react";
 import httpClient from "../../services/http-client";
 import LoadingScreen from "../loading-screen/loading-screen";
-import { WordData } from "../../interface/interface";
+import { WordData, IUserWord } from "../../interface/interface";
 import { useDispatch, useSelector } from "react-redux";
 import { addTextbookState } from "../../store/action";
-import { getTextbookState } from "../../store/data/selectors";
+import { getTextbookState, getUserAuthData} from "../../store/data/selectors";
 
+const COMPLEX_GROUP_INDEX = 6;
+const PAGE_START_INDEX = 0;
+const PAGINATION_START_INDEX = 1;
+
+const checkWord = (curWordId: string, userWords: IUserWord[]): [boolean, boolean, boolean] => {
+  const index = userWords.map(({wordId}) => wordId).indexOf(curWordId);
+  if (index === -1) {
+    return [false, false, false];
+  }
+  const { difficulty, optional: { learned }} = userWords[index]; 
+  const isDifficulty = difficulty === "true" ? true : false;
+  return [isDifficulty, learned, true];
+}
 
 const TextBook: React.FC = () => {
   const [words, setWords] = useState<WordData[] | null>(null);
+  const [userWords, setUserWords] = useState(null);
+  const userAuthData = useSelector(getUserAuthData);
+
   const dispatch = useDispatch();
-  let {group, page} = useSelector(getTextbookState);
+  const { group, page } = useSelector(getTextbookState);
 
   useEffect(() => {
     const getWords = async () => {
-      const pageIndex = String(page);
+      const pageIndex = page ? String(page - 1) : String(PAGE_START_INDEX);
       const groupIndex = String(group);
 
       const data = await httpClient.getChunkOfWords(pageIndex, groupIndex);
       setWords(data);
     }
-    getWords();
+
+    const getDifficultWords = async () => {
+      if (userAuthData && userAuthData.userId && userAuthData.token) {
+        const { userId, token } = userAuthData;
+        const data = await httpClient.getDifficultWords({ userId, token });
+        const difficultWords = data[0]["paginatedResults"];
+        console.log(difficultWords);
+        const adaptedComplexWords = difficultWords.map((wordData: any) => {
+          const adaptWordData = Object.assign({}, wordData, {id: wordData._id});
+          delete adaptWordData._id;
+          return adaptWordData;
+        })
+        setWords(adaptedComplexWords);
+      }
+    }
+
+    if (group === COMPLEX_GROUP_INDEX) {
+      getDifficultWords();
+    } else {
+      getWords();
+    }
   }, [group, page])
+
+  useEffect(() => {
+    const getUserWord = async () => {
+      if (userAuthData && userAuthData.userId && userAuthData.token) {
+        const { userId, token } = userAuthData;
+        const usedWords = await httpClient.getAllUserWords({ userId, token });
+        setUserWords(usedWords);
+      }
+    };
+
+    getUserWord();
+  }, [userAuthData])
 
   return (
     <>
@@ -84,7 +132,10 @@ const TextBook: React.FC = () => {
                   <label 
                       className={labelClass}
                       htmlFor={`textbook-${id}`}
-                      onClick={() => dispatch(addTextbookState({group: id}))} 
+                      onClick={() => {
+                        dispatch(addTextbookState({group: id}));
+                        dispatch(addTextbookState({page: PAGINATION_START_INDEX}));
+                      }} 
                   >
                     Часть {name}
                   </label>
@@ -94,27 +145,41 @@ const TextBook: React.FC = () => {
           </section>
 
           {
-            !words && 
+            (!words || !(!userAuthData || userWords)) && 
             <LoadingScreen />
           }
 
           {
-            words && 
+            words && (!userAuthData || userWords) && 
             <section className="textbook__words">
               <ul className="textbook__words-list">
-                {words.map((data) => (
-                  <li className="textbook__words-item" key={data.id}>
-                    <WordCard 
-                      {...data}
-                    />
-                  </li>
-                ))}
+                { 
+                  words.map((data) => {
+                    let difficulty = false; 
+                    let learned = false; 
+                    let hasUserWord = false;
+                    if (userAuthData && userWords) {
+                      [difficulty, learned, hasUserWord] = checkWord(data.id, userWords);
+                    }
+
+                    return (
+                    <li className="textbook__words-item" key={data.id}>
+                      <WordCard 
+                        {...data} 
+                        difficulty={Boolean(difficulty)}
+                        learned={learned}
+                        hasUserWord={hasUserWord}
+                      />
+                    </li>
+                  )
+                })
+                }
               </ul>
             </section>
           }
           
           {
-            words && 
+            (group !== COMPLEX_GROUP_INDEX) && words && (!userAuthData || userWords) &&
             <Pagination
                 currentPage={page || 1}
                 totalCount={PaginationData.TOTAL_COUNT}

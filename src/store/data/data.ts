@@ -16,7 +16,7 @@ export const initialState: State = {
   authorizeStatus: false,
   textBookState: {
     group: 0,
-    page: 0,
+    page: 1,
   },
 };
 
