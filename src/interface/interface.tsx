@@ -132,6 +132,7 @@ export interface UsePagination {
 }
 
 export interface WordData {
+  _id: string;
   id: string;
   audio: string;
   audioExample: string;
@@ -146,6 +147,23 @@ export interface WordData {
   transcription: string;
   word: string;
   wordTranslate: string;
+}
+
+
+export interface WordContentComponent {
+  word: string;
+  wordTranslate: string;
+  transcription: string;
+  textExample: string;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+} 
+
+export type WordCardComponent = WordData & {
+  difficulty: boolean; 
+  learned: boolean;
+  hasUserWord: boolean;
 }
 
 type LState = {
