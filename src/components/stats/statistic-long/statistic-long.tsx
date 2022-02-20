@@ -1,57 +1,77 @@
 import "./statistic-long.css";
-import Chart from 'chart.js/auto';
-import { useEffect } from "react";
+import Chart from "chart.js/auto";
+import { useEffect, useState } from "react";
+import httpClient from "../../../services/http-client";
+import { getUserAuthData } from "../../../store/data/selectors";
+import { useSelector } from "react-redux";
+import { IStatistic, IUserData } from '../../../interface/interface'
 
 const LongStatistic: React.FC = () => {
+  const [user, setUser] = useState<IUserData>();
+  const USER_DATA = useSelector(getUserAuthData);
 
-useEffect (()=>{
-let canvas = document.getElementById('myChart') as HTMLCanvasElement;
-console.log(canvas)
-
-let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-console.log(ctx)
-if (canvas)  {
-  const myChart = new Chart(canvas, {
-    type: 'bar',
-    data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
+  if (!user) {
+    if (USER_DATA) {
+      const NEW_USER = {
+        userId: USER_DATA.userId,
+        token: USER_DATA.token,
+      };
+      setUser(NEW_USER);
     }
-});
-}
-},[])
+  }
+
+ 
+  useEffect(() => {
+    
+    const getStatistic = async () => {;
+      const STATISTIC:IStatistic = await httpClient.getUserStatistic(user as IUserData);
+      let { stat } = STATISTIC.optional.longTerm;
+      let labels:string[] = stat.map((el) => el.data);
+      let newWords:number[] = stat.map((el) => el.newWordsInData);
+      let learnedWords:number[] = stat.map((el) => el.newLearnedInData);
+
+
+      let canvas = document.getElementById("myChart") as HTMLCanvasElement;
+      let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+      const myChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "New Words",
+              data: newWords,
+              backgroundColor: "rgba(54, 162, 235)",
+            },
+            {
+            label: "Learned Words",
+            data: learnedWords,
+            backgroundColor: "rgba(255, 99, 132)",
+          },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    return () => {
+      myChart.destroy()
+    }
+
+    }
+    getStatistic()
+
+  }, []);
 
   return (
-   <div>
-     <canvas id="myChart" width="400" height="200"></canvas>
-   </div>
+    <div>
+      <canvas id='myChart' width='400' height='200'></canvas>
+    </div>
   );
 };
 
