@@ -19,7 +19,7 @@ import {
 
 import { Url, Methods } from "../../../const/const";
 
-import { IUserWord, IUserData } from "../../../interface/interface";
+import { IUserWord, IUserData, IUser } from "../../../interface/interface";
 
 import { AuthData } from "../../../interface/auth-interface";
 //import { IWord, IUserData } from "../../../interface/interface";
@@ -28,6 +28,7 @@ import { WORDS_PER_PAGE, PAGES_PER_GROUP } from "../../../const/const-audio";
 import httpClient from "../../../services/http-client";
 
 const wordsArray: Array<IWordAudio> = [];
+const wordsArrayDifficult: Array<IUserWord> = [];
 
 const userLearnedWordsArray: Array<string> = [];
 
@@ -371,7 +372,7 @@ export async function createArrayOfQuestions(
 
   function getRandomWord(): IWordAudio {
     return arrAvailableWords[
-      Math.floor(Math.random() * (arrAvailableWords.length - 1))
+      Math.floor(Math.random() * arrAvailableWords.length)
     ];
   }
 
@@ -379,7 +380,10 @@ export async function createArrayOfQuestions(
     const arrAnswers: Array<IWordAudio> = [];
     arrAnswers.push(questionWord);
 
-    while (arrAnswers.length < AUDIO_ANSWER_AMOUNT) {
+    while (
+      arrAnswers.length < AUDIO_ANSWER_AMOUNT &&
+      arrAnswers.length < wordsArray.length
+    ) {
       const answer = getRandomWord();
 
       if (!arrAnswers.includes(answer)) {
@@ -534,3 +538,150 @@ const putUserStatistic = async (
   });
   const content = await rawResponse.json();
 };
+
+export async function createArrayOfQuestionsFromDifficultWords(
+  group: number,
+  page: number,
+  isLoadFromTextBook: boolean,
+  userAuthorized: boolean,
+  userAuthData: AuthData
+) {
+  if (!userAuthorized) {
+    return;
+  }
+
+  AUDIO_QUESTIONS_ARRAY.length = 0;
+
+  AUDIO_USER_WORDS_ARRAY.length = 0;
+
+  AUDIO_STAT.length = 0;
+
+  await getDifficultUserWords(userAuthData);
+  console.log(wordsArrayDifficult);
+
+  for (let i = 0; i < wordsArrayDifficult.length; i++) {
+    const item = wordsArrayDifficult[i];
+    const getWord = await httpClient.getWord(item.wordId || "");
+    const word = {
+      id: getWord.id,
+      group: getWord.group,
+      page: getWord.page,
+      word: getWord.word,
+      image: getWord.image,
+      audio: getWord.audio,
+      transcription: getWord.transcription,
+      wordTranslate: getWord.wordTranslate,
+    };
+
+    wordsArray.push(word);
+  }
+
+  console.log(wordsArray);
+
+  const wordsForQuestions: Array<IWordAudio> = [];
+
+  const questionAmount = Math.min(wordsArray.length, AUDIO_MAX_QUESTION_AMOUNT);
+
+  let counter = 0;
+
+  while (
+    wordsForQuestions.length < questionAmount &&
+    counter <= wordsArray.length
+  ) {
+    const question = getRandomDifficultWord();
+    if (!wordsForQuestions.includes(question)) {
+      wordsForQuestions.push(question);
+      AUDIO_STAT.push({
+        id: question.id,
+        learned: false,
+        new: false,
+      });
+    }
+    counter += 1;
+  }
+
+  console.log(wordsForQuestions);
+
+  wordsForQuestions.forEach((word) => {
+    console.log(word);
+    AUDIO_QUESTIONS_ARRAY.push({
+      questionWord: word,
+      answers: getAnswersForQuestion(word),
+    });
+  });
+
+  await getUserWordsForTheGame(userAuthorized, userAuthData);
+
+  function getRandomDifficultWord(): IWordAudio {
+    return wordsArray[Math.floor(Math.random() * wordsArray.length)];
+  }
+
+  function getAnswersForQuestion(questionWord: IWordAudio): Array<IWordAudio> {
+    const arrAnswers: Array<IWordAudio> = [];
+    arrAnswers.push(questionWord);
+
+    while (
+      arrAnswers.length < AUDIO_ANSWER_AMOUNT &&
+      arrAnswers.length < wordsArray.length
+    ) {
+      const answer = getRandomDifficultWord();
+
+      if (!arrAnswers.includes(answer)) {
+        const checkingArr = arrAnswers.filter(
+          (item) => item.word === answer.word
+        );
+        if (checkingArr.length === 0) {
+          arrAnswers.push(answer);
+        }
+      }
+    }
+    arrAnswers.sort(() => Math.random() - 0.5);
+    return arrAnswers;
+  }
+}
+
+export async function getDifficultUserWords(userAuthData: AuthData) {
+  const promiseArray = [];
+  AUDIO_USER_WORDS_ARRAY.length = 0;
+
+  userLearnedWordsArray.length = 0;
+
+  const userWords = httpClient.getAllUserWords(userAuthData);
+
+  promiseArray.push(userWords);
+  await Promise.all(promiseArray).then((values) => {
+    for (let i = 0; i < values.length; i++) {
+      values[i].forEach(
+        (item: {
+          wordId: string;
+          difficulty: string;
+          optional: {
+            learned: boolean;
+            group: number;
+            page: number;
+            successCounter: number;
+            failCounter: number;
+            new: boolean;
+          };
+        }) => {
+          const itemWord = {
+            wordId: item.wordId,
+            difficulty: item.difficulty,
+            optional: {
+              learned: item.optional.learned,
+              group: item.optional.group,
+              page: item.optional.page,
+              successCounter: item.optional.successCounter,
+              failCounter: item.optional.failCounter,
+              new: item.optional.new,
+            },
+          };
+
+          if (itemWord.difficulty === "true" && !itemWord.optional.learned) {
+            wordsArrayDifficult.push(itemWord);
+          }
+        }
+      );
+    }
+  });
+}
