@@ -58,10 +58,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const AUDIO_END = new Audio();
   AUDIO_END.src = "/assets/sound/end.mp3";
   AUDIO_END.volume = 0.2;
-
-  // const location = useLocation<LocationState>();
-  // const state = location.state as any;
-
+  // console.log(statistic)
   const makeEndGame = () => {
     if (user) {
       newStatistic(
@@ -70,6 +67,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         learnWordsInGame,
         newWordsInGame,
         bestSeries,
+        answers
       );
     }
     changeAnswersArray(answers);
@@ -102,6 +100,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     changeCount();
     if (user) {
       await workWithUserWord(
+        type,
         user as IUserData,
         loadingUserWords,
         randomWordsInGame,
@@ -110,7 +109,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         learnWordsInGame,
         newWordsInGame,
         setNewWordsInGame,
-        setlearnWordsInGame
+        setlearnWordsInGame,
       );
     }
   } 
@@ -126,7 +125,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }
 
   if (state) {
-    if(answers.length === ((state.page as number) * 20) - 1) {
+    if(answers.length === ((state.page as number) * 20)) {
       makeEndGame();
     }
   } else {
@@ -190,7 +189,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   };
 
   const changeCount = () => {
-    setCount(count + 1);
+    if(count < randomWordsInGame.length - 1) setCount(count + 1);
   };
 
   const makeBestSeries = () => {
@@ -264,6 +263,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={async () => {
+              console.log(count)
               getAnswer(false)
             }}
           >

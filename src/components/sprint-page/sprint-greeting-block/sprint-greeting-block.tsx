@@ -18,7 +18,6 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   state
 }) => {
 
-  // const location = useLocation<LocationState>();
 
   useEffect(()=>{
     const makeGame = async () => {

@@ -234,7 +234,6 @@ const updateWord = (
   const MAX_NUM = chooseMaxSuccess(word.difficulty);
   delete word.id;
   delete word.wordId;
-
   if (success && !word.optional.learned) {
     word.optional.successCounter += 1;
     if (word.optional.successCounter === MAX_NUM) {
@@ -242,7 +241,7 @@ const updateWord = (
       word.optional.successCounter = 0;
       setlearnWordsInGame(learnWordsInGame + 1);
     }
-  } else {
+  } else if (!success) {
     word.optional.learned = false;
     word.optional.successCounter = 0;
   }
@@ -251,6 +250,7 @@ const updateWord = (
 };
 
 const workWithUserWord = async (
+  type:boolean,
   user: IUserData,
   loadingUserWords: IUserWord[],
   randomWordsInGame: IRandomWordInGame[],
@@ -259,13 +259,13 @@ const workWithUserWord = async (
   learnWordsInGame: number,
   newWordsInGame: number,
   setNewWordsInGame: React.Dispatch<React.SetStateAction<number>>,
-  setlearnWordsInGame: React.Dispatch<React.SetStateAction<number>>
+  setlearnWordsInGame: React.Dispatch<React.SetStateAction<number>>,
 ) => {
   const FIND = loadingUserWords.find(
     (el: IUserWord) => el.wordId === randomWordsInGame[count].ID
   );
 
-  const SUCCESS = !randomWordsInGame[count].TYPE_OF_ANSWER ? true : false;
+  const SUCCESS = randomWordsInGame[count].TYPE_OF_ANSWER === type;
 
   if (!FIND) {
     const NEW_WORD = createNewUserWord(
@@ -307,12 +307,26 @@ const newStatistic = async (
   learnWordsInGame: number,
   newWordsInGame: number,
   bestSeries: number,
+  answers:IRandomWordInGame[]
 ) => {
   let newWords = 0;
   let best = 0;
   let newStat:ILongTerm;
-  let dataArr = statistic.optional.longTerm.stat
+  let successCounter = 0;
+  let failCounter = 0;
+  let dataArr = statistic.optional.longTerm.stat;
   let lastItem = statistic.optional.longTerm.stat.length - 1;
+  let successAnswers = answers.filter((el) => el.TYPE_OF_ANSWER === true);
+  let successCounterInGame = successAnswers.length;
+  let failCounterInGame = answers.length - successAnswers.length;
+
+
+  if (statistic.optional.sprint.successCounter > 0) {
+    successCounter = statistic.optional.sprint.successCounter;
+  }
+  if (statistic.optional.sprint.failCounter > 0) {
+    failCounter = statistic.optional.sprint.failCounter;
+  }
 
   if (statistic.optional.sprint.newWords > 0) {
     newWords = statistic.optional.sprint.newWords;
@@ -342,8 +356,8 @@ const newStatistic = async (
       sprint:{ 
         date: new Date().toLocaleDateString(),
         bestSeries: best,
-        successCounter: 0,
-        failCounter: 0,
+        successCounter: successCounter + successCounterInGame,
+        failCounter: failCounter + failCounterInGame,
         newWords: newWords + newWordsInGame,
       },
       audio:statistic.optional.audio,
