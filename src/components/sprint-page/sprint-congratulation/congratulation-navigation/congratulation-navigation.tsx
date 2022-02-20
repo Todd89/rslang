@@ -7,11 +7,13 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
   allWords,
   changePageState,
   changeAnswersArray,
-  getWordsForWorkFromTextBook
+  getWordsForWorkFromTextBook,
+  changeState
 }) => {
 
   const location = useLocation<LocationState>();
-  const state = location.state as any;
+  let state = location.state as any;
+  
 
   return (
     <div>
@@ -33,7 +35,10 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
       </button>
       <button
         className='sprint-navigation-block__button-change '
-        onClick={() => changePageState("greeting")}
+        onClick={() => {
+          changeState(undefined)
+          changePageState("greeting")
+        }}
       >
         Выбрать уровень
       </button>

@@ -12,7 +12,7 @@ import {
   TextbookState
 } from "../../../interface/interface";
 import {
-  makeTreeRandomPage,
+  makeFourRandomPage,
   shuffle,
   makeRandomAnswerArray,
 } from "../sprint-methods/sprint-methods";
@@ -34,10 +34,16 @@ const MainBlock: React.FC = () => {
   const [answersArray, setAnswersArray] = useState<Array<IRandomWordInGame>>(
     []
   );
+  const [state, setState] = useState<any>();
 
   const location = useLocation<LocationState>();
-  const state = location.state;
-    console.log(state)
+  const SourceState = location.state as any;
+
+  useEffect(()=> {
+    changeState(SourceState)
+  },[location])
+ 
+    
   let newUser: IUserData;
   const USER_DATA = useSelector(getUserAuthData);
   if (USER_DATA) {
@@ -51,7 +57,9 @@ const MainBlock: React.FC = () => {
     setLoadingUserWords(arr);
   };
 
-
+  const changeState = (state:any) => {
+    setState(state)
+  }
 
   const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
     const RANDOM_QUASTIONS = gameWords.map((el) => {
@@ -66,6 +74,7 @@ const MainBlock: React.FC = () => {
       makeRandomQuastions(wordsInGame);
     }
   }, [wordsInGame]);
+
 
   const changeAllWord = (arr: Array<Array<IWordInArray>>) => {
     const NEW_ARR = arr.slice();
@@ -91,7 +100,7 @@ const MainBlock: React.FC = () => {
     state?:any
   ) => {
     const WORDS = AllwordsInGame;
-    const RANDOM_PAGES_NUMS: number[] = makeTreeRandomPage();
+    const RANDOM_PAGES_NUMS: number[] = makeFourRandomPage();
     const RESULT_WORDS: IWordInArray[][] = [];
     
     RANDOM_PAGES_NUMS.forEach((el) => RESULT_WORDS.push(WORDS[el]));
@@ -102,26 +111,29 @@ const MainBlock: React.FC = () => {
 
     return RANDOM_WORDS_FOR_WORK;
   };
-  console.log(wordsInGame)
+  
   const getWordsForWorkFromTextBook = async (page:number, group: number) => {
     const PROMIS_ARR = [];
     let RESULT: Array<Array<IWordInArray>> = [];
-    for (let i = page; i > 0; i--) {
+    
+    for (let i = page - 1; i >= 0; i--) {
       const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
       const NEW_ARR = shuffle(await WORDS_CHUNK)
-      console.log(NEW_ARR,"AAAa")
-      PROMIS_ARR.push(NEW_ARR);
+      PROMIS_ARR.push(WORDS_CHUNK);
     }
     await Promise.all(PROMIS_ARR).then((values) => {
       RESULT = values;
     });
-    changeWordsInGame(RESULT.flat())
+    console.log(RESULT, "RESULT")
+    setwordsInGame(RESULT.flat())
     return RESULT;
   };
 
   const changeWordsInGame = (arr: any) => {
     setwordsInGame(arr);
   };
+
+  console.log(wordsInGame)
 
   if (pageState === "game") {
     return (
@@ -149,6 +161,7 @@ const MainBlock: React.FC = () => {
             changePageState={changePageState}
             changeAnswersArray={changeAnswersArray}
             getWordsForWorkFromTextBook={getWordsForWorkFromTextBook}
+            changeState={changeState}
           />
         </div>
       </main>

@@ -31,7 +31,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [answers, setAnswers] = useState<IRandomWordInGame[]>([]);
   const [seconds, setSeconds] = useState<number>(SprintNums.MINUTE);
   const [score, setScore] = useState<number>(0);
-  const [scoreX, setScoreX] = useState<number>(1);
+  const [scoreX, setScoreX] = useState<number>(10);
   const [count, setCount] = useState<number>(0);
   const [playerRealAnswer, setPlayerRealAnswer] = useState<
     boolean | undefined
@@ -42,6 +42,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [statistic, setStatistic] = useState<IStatistic>();
   const [bestSeries, setBestSeries] = useState<number>(0);
   const [finish, setFinish] = useState<boolean | undefined>(false);
+  const [rightAnswerCount, setRightAnswerCount] = useState<number>(0);
 
   const USER_DATA = useSelector(getUserAuthData);
   
@@ -71,10 +72,16 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       );
     }
     changeAnswersArray(answers);
-    changePageState("congratulation");
     AUDIO_END.play();
+    changePageState("congratulation");
   };
-
+  const changeRightAnswersCount = (type:boolean) => {
+    if(type) {
+      setRightAnswerCount(rightAnswerCount + 1)
+    } else {
+      setRightAnswerCount(0)
+    }
+  }
 
   const getAnswer = async (type:boolean) => {
     setPlayerRealAnswer(type);
@@ -83,6 +90,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       type,
       randomWordsInGame,
       answers,
+      changeRightAnswersCount,
       setAnswers,
       makeBestSeries,
       nullBestSeries,
@@ -117,7 +125,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }
 
   if (state) {
-    if(answers.length === (state.page * 20) - 1) {
+    if(answers.length === ((state.page) * 20) - 1) {
       makeEndGame();
     }
   } else {
@@ -125,7 +133,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       makeEndGame();
     }
   }
-
 
 
   useEffect(() => {
@@ -143,7 +150,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }, []);
 
   useEffect(() => {
-    let sec = 10;
+    let sec = 40;
     const interval = setInterval(() => {
       sec -= 1;
       if (sec === 0) {
@@ -165,17 +172,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
 
   useEffect(() => {
     if (count > 0) {
-      changeScoreX(answers, setScoreX);
+      changeScoreX(rightAnswerCount, setScoreX);
 
       changeScore(
         randomWordsInGame[count - 1].TYPE_OF_ANSWER,
         playerRealAnswer as boolean
       );
     }
-  }, [count]);
+  }, [rightAnswerCount]);
 
   const changeScore = (answer: boolean, playerAnswer: boolean) => {
-    let newScore = score + SprintNums.PLUS_TO_SCORE * scoreX;
+    let newScore = score + scoreX;
     if (answer === playerAnswer) {
       setScore(newScore);
     }
@@ -194,7 +201,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }
 
   if (document.getElementById("level-up")) {
-    addViewToBonus(scoreX);
+    addViewToBonus(rightAnswerCount);
   }
 
   useEffect(()=>{
@@ -247,6 +254,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <div className='game-sprint-block__english-word'>
             {randomWordsInGame[count].ENGLISH_WORD}
           </div>
+          <div className="game-sprint-block__score-x">+{scoreX}</div>
           <div className='game-sprint-block__russian-word'>
             {randomWordsInGame[count].RUSSIAN_WORD}
           </div>

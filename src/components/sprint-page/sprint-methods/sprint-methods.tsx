@@ -45,9 +45,9 @@ function shuffle(array: Array<IWordInArray>) {
   return array;
 }
 
-const makeTreeRandomPage = () => {
+const makeFourRandomPage = () => {
   const RANDOM_PAGES_NUMS: number[] = [];
-  while (RANDOM_PAGES_NUMS.length < 3) {
+  while (RANDOM_PAGES_NUMS.length < 4) {
     const RANDOM_PAGE = randomNum(30);
     if (RANDOM_PAGES_NUMS.indexOf(RANDOM_PAGE) === -1) {
       RANDOM_PAGES_NUMS.push(RANDOM_PAGE);
@@ -57,27 +57,26 @@ const makeTreeRandomPage = () => {
 };
 
 export const changeScoreX = (
-  answers: IRandomWordInGame[],
+  rightAnswerCount: number,
   setScoreX: (num: number) => void
 ) => {
-  let result = 1;
-  const LAST_WORD = answers.length - 1;
-  if (
-    answers[LAST_WORD]?.TYPE_OF_ANSWER &&
-    answers[LAST_WORD - 1]?.TYPE_OF_ANSWER &&
-    answers[LAST_WORD - 2]?.TYPE_OF_ANSWER
-  ) {
-    result = SprintNums.MULTIPLIER_TWO;
-  } else if (
-    answers[LAST_WORD]?.TYPE_OF_ANSWER &&
-    answers[LAST_WORD - 1]?.TYPE_OF_ANSWER
-  ) {
-    result = SprintNums.MULTIPLIER_DOTE_FIVE;
-  } else if (answers[LAST_WORD]?.TYPE_OF_ANSWER) {
-    result = SprintNums.MULTIPLIER_DOTE_TWENTYFIVE;
+  let NUM = rightAnswerCount;
+  let result
+
+  if(NUM >= 4 && NUM <= 7) {
+    result = 20;
+  } 
+  if(NUM >= 8 && NUM < 11) {
+    result = 30;
+  } 
+  if(NUM >= 11) {
+    result = 40;
+  } 
+  if (NUM <= 3 ) {
+    result = 10;
   }
 
-  setScoreX(result);
+  setScoreX(result as number);
 };
 
 const createNewUserWord = (
@@ -108,6 +107,7 @@ const makeAnswersArray = (
   playerAnswer: boolean,
   randomWordsInGame: IRandomWordInGame[],
   answers: IRandomWordInGame[],
+  changeRightAnswerCount:(type:boolean) => void,
   setAnswers: (arr: IRandomWordInGame[]) => void,
   makeBestSeries: () => void,
   nullBestSeries: () => void,
@@ -116,6 +116,7 @@ const makeAnswersArray = (
   count: number
 ) => {
   if (rightAnswer === playerAnswer) {
+    changeRightAnswerCount(true);
     makeBestSeries()
     const ANSWER_STATE = { TYPE_OF_ANSWER: true };
     const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
@@ -124,6 +125,7 @@ const makeAnswersArray = (
     setAnswers(NEW_ARR);
     AUDIO_RIGHT.play();
   } else {
+    changeRightAnswerCount(false);
     nullBestSeries();
     const ANSWER_STATE = { TYPE_OF_ANSWER: false };
     const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
@@ -134,25 +136,26 @@ const makeAnswersArray = (
   }
 };
 
-const addViewToBonus = (scoreX: number) => {
+
+const addViewToBonus = (rightAnswerCount: number) => {
   const EL = document.getElementById("level-up") as HTMLElement;
   const EL_FIRST = EL.firstElementChild;
   const EL_SECOND = EL.firstElementChild?.nextElementSibling;
   const EL_THIRD = EL.firstElementChild?.nextElementSibling?.nextElementSibling;
   const EL_ARR = [EL_FIRST, EL_SECOND, EL_THIRD];
-
-  switch (scoreX) {
-    case SprintNums.MULTIPLIER_DOTE_TWENTYFIVE:
-      EL_FIRST?.classList.add("view");
-      break;
-    case SprintNums.MULTIPLIER_DOTE_FIVE:
-      EL_SECOND?.classList.add("view");
-      break;
-    case SprintNums.MULTIPLIER_TWO:
-      EL_THIRD?.classList.add("view");
-      break;
-    default:
-      EL_ARR.forEach((el) => el?.classList.remove("view"));
+  const NUM = rightAnswerCount;
+  
+  if(NUM === 1 || NUM === 5 || NUM === 9) {
+    EL_FIRST?.classList.add("view");
+  } 
+  if(NUM === 2 || NUM === 6 || NUM === 10) {
+    EL_SECOND?.classList.add("view");
+  } 
+  if(NUM === 3 || NUM === 7 || NUM >= 11) {
+    EL_THIRD?.classList.add("view");
+  } 
+  if (NUM === 0 || NUM === 4 || NUM === 8) {
+    EL_ARR.forEach((el) => el?.classList.remove("view"));
   }
 };
 
@@ -356,7 +359,7 @@ const newStatistic = async (
 export {
   getWordsFromGroup,
   randomNum,
-  makeTreeRandomPage,
+  makeFourRandomPage,
   shuffle,
   createNewUserWord,
   makeAnswersArray,

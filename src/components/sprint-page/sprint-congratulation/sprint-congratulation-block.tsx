@@ -9,9 +9,11 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
   allWords,
   changePageState,
   changeAnswersArray,
-  getWordsForWorkFromTextBook
+  getWordsForWorkFromTextBook,
+  changeState
 }) => {
   let id = 100;
+
   const ELEMEMENTS = answersArray.map((el: IRandomWordInGame) => {
     const { ...items } = el;
     return (
@@ -20,7 +22,7 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
       </li>
     );
   });
-
+  
   return (
     <div className='congratulation-container'>
       <div className='girl-image'>
@@ -33,6 +35,7 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
           changePageState={changePageState}
           changeAnswersArray={changeAnswersArray}
           getWordsForWorkFromTextBook={getWordsForWorkFromTextBook}
+          changeState={changeState}
         />
         <div className='congratulation-list-block'>
           <div className="congratulation-list-block__description">

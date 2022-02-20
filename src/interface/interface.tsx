@@ -124,6 +124,7 @@ export interface ICongratulationBlock {
   changePageState: (name: string) => void;
   changeAnswersArray:(arr: Array<IRandomWordInGame>) => void;
   getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
+  changeState:(state:any)=> void
 }
 
 export interface ICongratulationNavi {
@@ -132,7 +133,7 @@ export interface ICongratulationNavi {
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
   getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
-  
+  changeState:(state:any)=> void
 }
 
 export interface IWordInGame {
