@@ -112,12 +112,10 @@ const TextBook: React.FC = () => {
   //+darin-dei
   const getDifficultWordsE = async () => {
     if (group === COMPLEX_GROUP_INDEX) {
-      console.log("getDifficultWordsE");
       if (userAuthData && userAuthData.userId && userAuthData.token) {
         const { userId, token } = userAuthData;
         const data = await httpClient.getDifficultWords({ userId, token });
         const difficultWords = data[0]["paginatedResults"];
-        console.log(difficultWords);
         const adaptedComplexWords = difficultWords.map((wordData: any) => {
           const adaptWordData = Object.assign({}, wordData, {
             id: wordData._id,

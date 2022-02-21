@@ -34,8 +34,6 @@ const MainBlock: React.FC = () => {
   if (location.state) {
     const locationState = location.state as any;
     const { group, page } = locationState;
-    console.log("group", group);
-    console.log("page", page);
   }
 
   const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {

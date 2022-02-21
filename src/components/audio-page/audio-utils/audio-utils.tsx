@@ -557,7 +557,6 @@ export async function createArrayOfQuestionsFromDifficultWords(
   AUDIO_STAT.length = 0;
 
   await getDifficultUserWords(userAuthData);
-  console.log(wordsArrayDifficult);
 
   for (let i = 0; i < wordsArrayDifficult.length; i++) {
     const item = wordsArrayDifficult[i];
@@ -575,8 +574,6 @@ export async function createArrayOfQuestionsFromDifficultWords(
 
     wordsArray.push(word);
   }
-
-  console.log(wordsArray);
 
   const wordsForQuestions: Array<IWordAudio> = [];
 

@@ -56,10 +56,8 @@ const WordCard: React.FC<WordCardComponent> = ({
         if (posProgress.optional.successCounter !== undefined) {
           if (posProgress.difficulty) {
             setRate(`${posProgress.optional.successCounter}/5`);
-            console.log(word, rate);
           }
           setRate(`${posProgress.optional.successCounter}/3`);
-          console.log(word, rate);
         }
       }
     };
