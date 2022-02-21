@@ -198,7 +198,6 @@ export function Audiochallenge(props: IProps) {
 
   useEffect(() => {
     if (answerReceived && userAuthorized && !showResult && !isTimerOn) {
-      console.log("useEffect");
       createUpdateUserWord(
         paramQuestion.questionWord,
         rightAnswer,

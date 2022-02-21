@@ -86,7 +86,6 @@ export function createUpdateUserWord(
   isRightAnswer: boolean,
   userAuthData: AuthData
 ) {
-  console.log("createUpdateUserWord", word.word);
   const userWordArr = AUDIO_USER_WORDS_ARRAY_FOR_GAME.filter(
     (item) => item.wordId === word.id
   );
@@ -362,7 +361,6 @@ export async function getPutAudioUserStatistic(
   userAuthData: AuthData,
   statisticState: IAudioGameStatistic
 ) {
-  console.log("getPutAudioUserStatistic");
   const getStat = getUserStatistic(userAuthData);
 
   let newStat: ILongTerm;
