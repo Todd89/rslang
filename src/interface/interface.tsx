@@ -158,12 +158,19 @@ export interface WordContentComponent {
   textExampleTranslate: string;
   textMeaning: string;
   textMeaningTranslate: string;
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  isPlayAudio: boolean;
+  playAudioHandler: (paths: string[]) => void;
 } 
 
 export type WordCardComponent = WordData & {
   difficulty: boolean; 
   learned: boolean;
   hasUserWord: boolean;
+  isPlayAudio: boolean;
+  playAudioHandler: (paths: string[]) => void;
 }
 
 type LState = {

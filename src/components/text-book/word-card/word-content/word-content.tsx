@@ -8,8 +8,15 @@ const WordContent: React.FC<WordContentComponent> = ({
   textExample,
   textExampleTranslate,
   textMeaning,
-  textMeaningTranslate 
+  textMeaningTranslate,
+  audio,
+  audioMeaning,
+  audioExample,
+  isPlayAudio,
+  playAudioHandler 
 }) => {
+  
+  
   return (
     <>
       <ul className="word-card__word-list">
@@ -29,7 +36,15 @@ const WordContent: React.FC<WordContentComponent> = ({
           <span className="word-card__translation">
             {wordTranslate}
           </span> 
-          <button className="word-card__audio-btn">
+          <button 
+              className="word-card__audio-btn"
+              disabled={isPlayAudio}
+              onClick={() => playAudioHandler([
+                audio,
+                audioMeaning,
+                audioExample
+              ])}
+          >
             <span className="visually-hidden">
               Включить аудио
             </span>

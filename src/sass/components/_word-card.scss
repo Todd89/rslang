@@ -131,30 +131,49 @@
 
 
 .word-card__audio-btn {
+  position: relative;
+  padding: 25px;
   display: block;
   margin-left: auto;
   height: 40px;
   width: 40px;
   background-color: transparent;
   border: none;
+  border-radius: 50%;
+  transition: all 0.5s;
 
   @media (min-width: $tablet-width) {
     position: absolute;
     right: 0;
   }
+
+  &:hover:not(:disabled) {
+    background-color: rgb(236, 229, 229);
+  }
 }
 
 .word-card__audio-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   fill: $dark;
   cursor: pointer;
+  transition: all 0.5s;
 
-  &:hover,
-  &:focus {
+
+  .word-card__audio-btn:hover:not(:disabled) &,
+  .word-card__audio-btn:focus:not(:disabled) & {
     fill: $green;
   }
 
-  &:active {
+  .word-card__audio-btn:active:not(:disabled) & {
     fill: #8f8989;
+  }
+
+  .word-card__audio-btn:disabled & {
+    fill: #aaa7a7;
+    cursor: default;
   }
 }
 

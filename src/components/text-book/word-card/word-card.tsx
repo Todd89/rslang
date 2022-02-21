@@ -18,7 +18,12 @@ const WordCard:React.FC<WordCardComponent> = ({
   wordTranslate,
   difficulty, 
   learned,
-  hasUserWord
+  hasUserWord,
+  audio,
+  audioExample,
+  audioMeaning,
+  isPlayAudio,
+  playAudioHandler 
 }) => {
   const userAuthData = useSelector(getUserAuthData);
   const isAuthorize = useSelector(getAuthorizeStatus);
@@ -46,6 +51,11 @@ const WordCard:React.FC<WordCardComponent> = ({
         textExampleTranslate={textExampleTranslate}
         textMeaning={textMeaning}
         textMeaningTranslate={textMeaningTranslate}
+        audio={audio}
+        audioExample={audioExample}
+        audioMeaning={audioMeaning}
+        isPlayAudio={isPlayAudio}
+        playAudioHandler={playAudioHandler}
       />
 
       {

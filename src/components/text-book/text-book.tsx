@@ -11,6 +11,7 @@ import { WordData, IUserWord } from "../../interface/interface";
 import { useDispatch, useSelector } from "react-redux";
 import { addTextbookState } from "../../store/action";
 import { getTextbookState, getUserAuthData} from "../../store/data/selectors";
+import { Url } from "../../const/const";
 
 const COMPLEX_GROUP_INDEX = 6;
 const PAGE_START_INDEX = 0;
@@ -30,6 +31,42 @@ const TextBook: React.FC = () => {
   const [words, setWords] = useState<WordData[] | null>(null);
   const [userWords, setUserWords] = useState(null);
   const userAuthData = useSelector(getUserAuthData);
+  const [audioPath, setAudioPath] = useState<string[]>([]);
+  const [isPlayAudio, setIsPlayAudio] = useState(false);
+
+  useEffect(() => {
+    const startAudio = () => {
+      const audio = new Audio();
+      let idx = 0;
+
+      const playAudio = () => {
+        audio.src = `${Url.DOMEN}/${audioPath[idx]}`;
+        audio.currentTime = 0;
+        audio.play();
+      }
+
+      audio.addEventListener('ended', () => {
+        if (idx !== audioPath.length - 1) {
+          idx++;
+          playAudio();
+          return;
+        }
+        setIsPlayAudio(false);
+      });
+
+      playAudio();
+    }
+    
+    if (isPlayAudio) {
+      startAudio();
+    }
+    
+  }, [isPlayAudio, audioPath])
+
+  const playAudioHandler = (paths: string[]) => {
+    setAudioPath(paths);
+    setIsPlayAudio(true);
+  }
 
   const dispatch = useDispatch();
   const { group, page } = useSelector(getTextbookState);
@@ -169,6 +206,8 @@ const TextBook: React.FC = () => {
                         difficulty={Boolean(difficulty)}
                         learned={learned}
                         hasUserWord={hasUserWord}
+                        isPlayAudio={isPlayAudio}
+                        playAudioHandler={playAudioHandler}
                       />
                     </li>
                   )
