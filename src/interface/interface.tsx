@@ -149,7 +149,6 @@ export interface WordData {
   wordTranslate: string;
 }
 
-
 export interface WordContentComponent {
   word: string;
   wordTranslate: string;
@@ -163,20 +162,26 @@ export interface WordContentComponent {
   audioMeaning: string;
   isPlayAudio: boolean;
   playAudioHandler: (paths: string[]) => void;
-} 
+  //+dairin-dei
+  // getDifficultWords: () => void;
+  //-dairin-dei
+}
 
 export type WordCardComponent = WordData & {
-  difficulty: boolean; 
+  difficulty: boolean;
   learned: boolean;
   hasUserWord: boolean;
   isPlayAudio: boolean;
   playAudioHandler: (paths: string[]) => void;
-}
+  //+dairin-dei
+  getDifficultWordsE: () => void;
+  //-dairin-dei
+};
 
 type LState = {
   fromTextbook: boolean;
-  words: WordData
-}
+  words: WordData;
+};
 export interface LocationState {
   hash: string;
   key: string;
