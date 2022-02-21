@@ -128,21 +128,25 @@ const WordCard: React.FC<WordCardComponent> = ({
           </button>
 
           <button
-            onClick={() => {
+            onClick={async () => {
               if (userAuthData && userAuthData.userId && userAuthData.token) {
                 const { userId, token } = userAuthData;
                 if (hasWord) {
-                  changeLearned(id, { userId, token }, !isLearned);
-                  if (!isLearned) {
-                    changeDifficulty(id, { userId, token }, !isLearned);
-                    setIsDifficulty((prev) => !prev);
+                  await changeLearned(id, { userId, token }, !isLearned);
+                  if (!isLearned && isDifficulty) {
+                    await changeDifficulty(id, { userId, token }, false);
+                    setIsDifficulty(false);
                   }
                   setIsLearned((prev) => !prev);
                 } else {
-                  createUserLearnedWord(id, { userId, token }, !isLearned);
+                  await createUserLearnedWord(
+                    id,
+                    { userId, token },
+                    !isLearned
+                  );
                   if (!isLearned) {
-                    changeDifficulty(id, { userId, token }, !isLearned);
-                    setIsDifficulty((prev) => !prev);
+                    await changeDifficulty(id, { userId, token }, false);
+                    setIsDifficulty(false);
                   }
                   setHasWord(true);
                   setIsLearned((prev) => !prev);
