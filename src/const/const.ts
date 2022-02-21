@@ -87,7 +87,7 @@ export const teamMembers = [
   {
     id: 1,
     name: "Александр Голамонов",
-    work: "Здесь будет написано, что делал каждый из нас. Если хотите текст можете предложить уже сейчас",
+    work: `Игра "Спринт" и долгосрочная статистика.`,
     ghLink: "https://github.com/Todd89",
     avatar: "assets/images/avatar-sasha.jpg",
     role: "Team-lead",
@@ -95,7 +95,7 @@ export const teamMembers = [
   {
     id: 2,
     name: "Ольга Якушева",
-    work: "Здесь будет написано, что делал каждый из нас. Если хотите текст можете предложить уже сейчас",
+    work: `Игра "Аудиовызов" и краткосрочная статистика. Помощь с учебником.`,
     ghLink: "https://github.com/Dairin-dei",
     avatar: "assets/images/avatar-olya.jpg",
     role: "Front-end",
@@ -103,7 +103,7 @@ export const teamMembers = [
   {
     id: 3,
     name: "Роман Гольцман",
-    work: "Здесь будет написано, что делал каждый из нас. Если хотите текст можете предложить уже сейчас",
+    work: "Главная страница, Учебник, авторизация.",
     ghLink: "https://github.com/Romnasi",
     avatar: "assets/images/avatar-roman.jpg",
     role: "Front-end",
