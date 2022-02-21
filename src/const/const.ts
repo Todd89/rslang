@@ -15,9 +15,11 @@ export const enum Methods {
   DELETE = "DELETE",
 }
 
+
 export const enum ResponseStatus {
   OK = 200,
   EXPECTATION_FAILED = 417,
+  UNAUTHORIZE = 401, 
 }
 
 export const enum Url {
@@ -118,39 +120,39 @@ export const enum PaginationData {
 export const DOTS = '...';
 
 export const textbookSections = [
-  { 
+  {
     id: 0,
     name: 1,
-    labelClass: "textbook-nav__label", 
-  }, 
-  { 
+    labelClass: "textbook-nav__label",
+  },
+  {
     id: 1,
     name: 2,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 2,
     name: 3,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 3,
     name: 4,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 4,
     name: 5,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 5,
     name: 6,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 6,
     name: "7 - Сложные слова",
     labelClass: "textbook-nav__label textbook-nav__label--complex",
-  }, 
+  },
 ];

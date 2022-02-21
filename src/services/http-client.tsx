@@ -36,14 +36,20 @@ class HTTPClient {
   }
 
   async getWord(id: string) {
-    const data = await fetch(`${Url.DOMEN}/words/${id}`)
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
+    try {
+      const data = await fetch(`${Url.DOMEN}/words/${id}`, {
+        method: Methods.GET,
+        headers: {
+          Accept: "application/json",
+        },
       });
-    return data;
+      if (data.status === ResponseStatus.OK) {
+        return data.json();
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+      return null;
+    }
   }
 
   //Users
@@ -69,7 +75,7 @@ class HTTPClient {
 
   async getUser({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}`, {
-      method: `${Methods.GET}`,
+      method: Methods.GET,
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -87,7 +93,7 @@ class HTTPClient {
 
   async deleteUser({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}`, {
-      method: `${Methods.DELETE}`,
+      method: Methods.DELETE,
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -104,8 +110,6 @@ class HTTPClient {
   }
 
   async getNewUserToken(userId: string, token: string) {
-    console.log("in getNewToken userId", userId);
-    console.log("in getNewToken token", token);
     try {
       const res = await fetch(
         `${Url.DOMEN}/users/${userId}/tokens`,
@@ -121,6 +125,10 @@ class HTTPClient {
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
+
+      if (res.status === ResponseStatus.UNAUTHORIZE) {
+        return ResponseStatus.UNAUTHORIZE;
+      }
     } catch (err) {
       console.log(err);
     }
@@ -130,7 +138,7 @@ class HTTPClient {
 
   async getAllUserWords({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/words`, {
-      method: `${Methods.GET}`,
+      method: Methods.GET,
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -169,61 +177,78 @@ class HTTPClient {
           Accept: "application/json",
         },
       }
-    ).then((response) => {
-      return response.json();
-    })
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
+    );
+    return await data.json();
   }
 
-  async updateUserWord({ userId, token }: IUserData, userWord:IUserWord, wordId:string) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
-      {
-        method: `${Methods.PUT}`,
+  async updateUserWord(
+    { userId, token }: IUserData,
+    { difficulty, optional}: IUserWord,
+    wordId: string
+  ) {
+    try {
+      const res = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
+        method: Methods.PUT,
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(userWord),
+        body: JSON.stringify({ difficulty, optional }),
+      })
+      if (res.status === ResponseStatus.OK) {
+        return res.json();
       }
-    ).then((response) => {
-      return response.json();
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  }
+
+  async deleteUserWord(
+    { userId, token }: IUserData,
+    userWord: IUserWord,
+    wordId: string
+  ) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
+      method: Methods.DELETE,
+      headers: {
+        Authorization: `Bearer ${userWord}`,
+        Accept: "application/json",
+      },
     })
+
       .catch((error) => {
         console.log(console.log(error));
       });
     return data;
   }
 
-  async deleteUserWord({ userId, token }: IUserData, userWord:IUserWord, wordId:string) {
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
-      {
-        method: `${Methods.DELETE}`,
-        headers: {
-          Authorization: `Bearer ${userWord}`,
-          Accept: "application/json",
-        },
+  // Get difficult user words
+  async getDifficultWords({ userId, token }: IUserData,) {
+    try {
+      const data = await fetch(
+        `${Url.DOMEN}/users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"true"}`, 
+        {
+          method: Methods.GET,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+      if (data.status === ResponseStatus.OK) {
+        return data.json();
       }
-    ).then((response) => {
-      return response.json();
-    })
-
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
+    } catch (error) {
+      console.error("Error: ", error);
+    }
   }
 
   // AggregatedWords
 
   async getUserStatistic({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
-      method: `${Methods.GET}`,
+      method: Methods.GET,
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -240,7 +265,7 @@ class HTTPClient {
 
   async putUserStatistic({ userId, token }: IUserData, statistic: IStatistic) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
-      method: `${Methods.PUT}`,
+      method: Methods.PUT,
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -261,7 +286,7 @@ class HTTPClient {
 
   async getUserSettings({ userId, token }: IUserData) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
-      method: `${Methods.GET}`,
+      method: Methods.GET,
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -278,7 +303,7 @@ class HTTPClient {
 
   async putUserSettings({ userId, token }: IUserData, statistic: ISettings) {
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
-      method: `${Methods.PUT}`,
+      method: Methods.PUT,
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
