@@ -144,7 +144,7 @@ const TextBook: React.FC = () => {
     <>
       <Header />
 
-      <main className="textbook is-auth">
+      <main className={userAuthData ? "textbook is-auth" : "textbook"}>
         <div className="textbook__wrapper container">
           <h1 className="textbook__title visually-hidden">Учебник</h1>
 
