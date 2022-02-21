@@ -10,10 +10,7 @@ import {
   AUDIO_STAT,
   AUDIO,
 } from "../../../const/const-audio";
-import {
-  IWordAudio,
-  IAudioResult,
-} from "../../../interface/interface-audio";
+import { IWordAudio, IAudioResult } from "../../../interface/interface-audio";
 import { AudioQuestion } from "../audio-question/audio-question";
 import { Result } from "../audio-result/audio-result";
 import { AudioLives } from "../audio-lives/audio-lives";
@@ -33,6 +30,9 @@ import {
 
 //user
 
+import { useLocation } from "react-router";
+import { LocationState } from "../../../interface/interface";
+
 interface IProps {
   changeState: (isOn: boolean) => void;
   changeGameLoadedStatus: (isLoad: boolean) => void;
@@ -40,9 +40,7 @@ interface IProps {
 
 export function Audiochallenge(props: IProps) {
   const { changeState, changeGameLoadedStatus } = props;
-  //++изменить когда будет загрузка со страниц учебника
   const isLoadFromTextBook = false;
-  //--изменить когда будет загрузка со страниц учебника
 
   const userAuthData = useSelector(getUserAuthData);
   const userAuthorized = useSelector(getAuthorizeStatus);
@@ -69,6 +67,7 @@ export function Audiochallenge(props: IProps) {
   const questionsAmount = AUDIO_QUESTIONS_ARRAY.length;
 
   const questionWord = AUDIO_QUESTIONS_ARRAY[currentQuestion].questionWord;
+  const location = useLocation<LocationState>();
 
   async function resetParameters(isOn: boolean, isLoad: boolean) {
     changeState(isOn);
@@ -84,6 +83,15 @@ export function Audiochallenge(props: IProps) {
     setGameResult(initialStateResult);
     setCurrentSeries(0);
     AUDIO_BEST_SERIES[0] = 0;
+
+    if (!isLoad) {
+      location.state = {
+        hash: "",
+        key: "",
+        pathname: "",
+        search: "",
+      };
+    }
 
     if (userAuthorized) {
       AUDIO_STAT.forEach((item) => {

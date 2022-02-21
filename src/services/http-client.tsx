@@ -167,19 +167,40 @@ class HTTPClient {
       return await rawResponse.json();
   }
 
-  async getUserWord({ userId, token }: IUserData, wordId: string):Promise<IUserWord>{
-    const data = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
-      {
-        method: `${Methods.GET}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-        },
+  // async getUserWord({ userId, token }: IUserData, wordId: string):Promise<IUserWord>{
+  //   const data = await fetch(
+  //     `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+  //     {
+  //       method: `${Methods.GET}`,
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         Accept: "application/json",
+  //       },
+  //     }
+  //   );
+  //   return await data.json();
+  // }
+
+  getUserWord = async ({ userId, token }: IUserData, wordId: string) => {
+    try {
+      const rawResponse = await fetch(
+        `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+        {
+          method: Methods.GET,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        }
+      );
+      if (rawResponse.status === ResponseStatus.OK) {
+        return rawResponse.json();
       }
-    );
-    return await data.json();
-  }
+    } catch (error) {
+      console.error("Error: ", error);
+      return null;
+    }
+  };
 
   async updateUserWord(
     { userId, token }: IUserData,

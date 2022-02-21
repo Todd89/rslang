@@ -6,6 +6,7 @@ import {
   AUDIO_PATH_UTILS_AUDIO,
   AUDIO_PATH_IMAGES,
   AUDIO,
+  DELAY_AUDIO_QUESTION,
 } from "../../../const/const-audio";
 
 import { IWordAudio } from "../../../interface/interface-audio";
@@ -44,7 +45,7 @@ export function AudioQuestion(props: IProps) {
       AUDIO.load();
       setTimeout(() => {
         AUDIO.play();
-      }, 500);
+      }, DELAY_AUDIO_QUESTION);
     }
     if (!answerReceived && isTimerOn) {
       playAudio(questionWord);
@@ -76,7 +77,7 @@ export function AudioQuestion(props: IProps) {
       backgroundImage: `url('${AUDIO_PATH_IMAGES}${questionWord.image}')`,
     };
     return (
-      <div className="question__section">
+      <div className="question__section  answer-scale">
         <div className="question__image question__answered" style={style}></div>
         <span className="questionText">
           {questionWord.word} - {questionWord.transcription} -{" "}
@@ -89,7 +90,7 @@ export function AudioQuestion(props: IProps) {
     );
   } else {
     return (
-      <div className="question__section">
+      <div className="question__section appear">
         <div
           key={Math.random()}
           className="question__image question__unanswered animation"

@@ -3,6 +3,7 @@ import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
 import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
+
 import {
   IWordInArray,
   IRandomWordInGame,
@@ -120,14 +121,13 @@ const MainBlock: React.FC = () => {
     if (user) {
       userWords = await httpClient.getAllUserWords(user as IUserData);
     }
-    console.log(user);
+    console.log(userWords, "userWords");
     if(group < 6) {
       for (let i = page - 1; i >= 0; i--) {
         const WORDS_CHUNK = httpClient.getChunkOfWords(
           i.toString(),
           group.toString()
         );
-        console.log(WORDS_CHUNK, "WORDS_CHUNK");
         let newArr = shuffle(await WORDS_CHUNK);
         
         if (userWords.length) {
@@ -148,7 +148,6 @@ const MainBlock: React.FC = () => {
       const DIFFICULT_WORDS_OBJECT = await httpClient.getDifficultWords(user as IUserData);
       const DIFFICULT_WORDS = DIFFICULT_WORDS_OBJECT[0]["paginatedResults"]
       let newArr = shuffle(await DIFFICULT_WORDS);
-      console.log(newArr, "newArr");
       PROMIS_ARR.push(newArr);
     }
   
@@ -166,8 +165,8 @@ const MainBlock: React.FC = () => {
 
   if (pageState === "game") {
     return (
-      <main className='main-sprint-block'>
-        <div className='sprint-container container'>
+      <main className="main-sprint-block">
+        <div className="sprint-container container">
           <GameBlock
             word={word as IWordInArray}
             randomWordsInGame={randomWordsInGame}
@@ -183,8 +182,8 @@ const MainBlock: React.FC = () => {
     );
   } else if (pageState === "congratulation") {
     return (
-      <main className='main-sprint-block'>
-        <div className='sprint-container container'>
+      <main className="main-sprint-block">
+        <div className="sprint-container container">
           <CongratulationBlock
             answersArray={answersArray}
             makeRandomWordsForWork={makeRandomWordsForWork}
@@ -199,8 +198,8 @@ const MainBlock: React.FC = () => {
     );
   }
   return (
-    <main className='main-sprint-block'>
-      <div className='sprint-container container'>
+    <main className="main-sprint-block">
+      <div className="sprint-container container">
         <SprintrGreetingBlock
           changePageState={changePageState}
           setFirstWord={setFirstWord}

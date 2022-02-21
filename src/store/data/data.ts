@@ -1,14 +1,13 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createReducer } from "@reduxjs/toolkit";
 import {
   addUserIdData,
   addUserAuthData,
   addNewTokens,
   changeAuthorizeStatus,
   resetStore,
-  addTextbookState
-} from '../action';
-import { State } from '../../interface/auth-interface';
-
+  addTextbookState,
+} from "../action";
+import { State } from "../../interface/auth-interface";
 
 export const initialState: State = {
   user: null,
@@ -19,7 +18,6 @@ export const initialState: State = {
     page: 1,
   },
 };
-
 
 const data = createReducer(initialState, (builder) => {
   builder
@@ -32,7 +30,7 @@ const data = createReducer(initialState, (builder) => {
     })
     .addCase(addNewTokens, (state, action) => {
       if (state.userAuthData) {
-        const { token, refreshToken } = action.payload; 
+        const { token, refreshToken } = action.payload;
         state.userAuthData.token = token;
         state.userAuthData.refreshToken = refreshToken;
       }
@@ -44,9 +42,12 @@ const data = createReducer(initialState, (builder) => {
       state = action.payload;
     })
     .addCase(addTextbookState, (state, action) => {
-      state.textBookState = Object.assign({}, state.textBookState, action.payload);
+      state.textBookState = Object.assign(
+        {},
+        state.textBookState,
+        action.payload
+      );
     });
 });
-
 
 export { data };
