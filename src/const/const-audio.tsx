@@ -37,7 +37,6 @@ export const FORMER_STAT: IStatistic = {
       successCounter: 0,
       failCounter: 0,
       newWords: 0,
-      //learnedWords: 0,
     },
     sprint: {
       date: dateTemp,
@@ -45,7 +44,6 @@ export const FORMER_STAT: IStatistic = {
       successCounter: 0,
       failCounter: 0,
       newWords: 0,
-      // learnedWords: 0,
     },
     longTerm: {
       stat: [],

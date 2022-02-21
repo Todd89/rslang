@@ -361,7 +361,7 @@ export async function getPutAudioUserStatistic(
   userAuthData: AuthData,
   statisticState: IAudioGameStatistic
 ) {
-  console.log("getPutAudioUserStatistic")
+  console.log("getPutAudioUserStatistic");
   const getStat = getUserStatistic(userAuthData);
 
   let newStat: ILongTerm;
@@ -381,8 +381,6 @@ export async function getPutAudioUserStatistic(
   FORMER_STAT.optional.audio.successCounter =
     FORMER_STAT.optional.audio.successCounter +
     statisticState.gameSuccessCounter;
-  /*FORMER_STAT.optional.audio.learnedWords =
-    FORMER_STAT.optional.audio.learnedWords + statisticState.gameLearnedWords;*/
 
   if (arrLength === 0) {
     newStat = {
@@ -424,15 +422,13 @@ export const getUserStatistic = async ({ userId, token }: IUserData) => {
 
     if (stat.optional.audio.date === currentData) {
       FORMER_STAT.learnedWords =
-        stat.optional.audio.learnedWords + stat.optional.sprint.learnedWords;
+        stat.learnedWords === undefined ? 0 : stat.learnedWords;
       FORMER_STAT.optional.audio.bestSeries = stat.optional.audio.bestSeries;
       FORMER_STAT.optional.audio.date = stat.optional.audio.date;
       FORMER_STAT.optional.audio.failCounter = stat.optional.audio.failCounter;
       FORMER_STAT.optional.audio.newWords = stat.optional.audio.newWords;
       FORMER_STAT.optional.audio.successCounter =
         stat.optional.audio.successCounter;
-      /*FORMER_STAT.optional.audio.learnedWords =
-        stat.optional.audio.learnedWords;*/
       FORMER_STAT.optional.sprint.bestSeries = stat.optional.sprint.bestSeries;
       FORMER_STAT.optional.sprint.date = stat.optional.sprint.date;
       FORMER_STAT.optional.sprint.failCounter =
@@ -440,8 +436,6 @@ export const getUserStatistic = async ({ userId, token }: IUserData) => {
       FORMER_STAT.optional.sprint.newWords = stat.optional.sprint.newWords;
       FORMER_STAT.optional.sprint.successCounter =
         stat.optional.sprint.successCounter;
-      /*FORMER_STAT.optional.sprint.learnedWords =
-        stat.optional.sprint.learnedWords;*/
     }
     FORMER_STAT.optional.longTerm.stat.length = 0;
     for (let i = 0; i < stat.optional.longTerm.stat.length; i += 1) {
