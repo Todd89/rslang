@@ -1,12 +1,13 @@
 import { Url } from "../../../const/const";
-import { WordData } from "../../../interface/interface";
+import { WordCardComponent } from "../../../interface/interface";
+import { changeDifficulty, changeLearned, createUserDifficultWord, createUserLearnedWord } from "../../../utils/user-word";
+import { useSelector } from "react-redux";
+import { getUserAuthData, getAuthorizeStatus } from "../../../store/data/selectors";
+import { useState } from "react";
+import WordContent from "./word-content/word-content";
 
-
-const createMarkup = (textExample: string) => {
-  return {__html: textExample};
-}
-
-const WordCard:React.FC<WordData> = ({
+const WordCard:React.FC<WordCardComponent> = ({
+  id,
   word,
   image,
   textExample,
@@ -15,7 +16,20 @@ const WordCard:React.FC<WordData> = ({
   textMeaningTranslate,
   transcription,
   wordTranslate,
+  difficulty, 
+  learned,
+  hasUserWord,
+  audio,
+  audioExample,
+  audioMeaning,
+  isPlayAudio,
+  playAudioHandler 
 }) => {
+  const userAuthData = useSelector(getUserAuthData);
+  const isAuthorize = useSelector(getAuthorizeStatus);
+  const [isDifficulty, setIsDifficulty] = useState<boolean>(difficulty);
+  const [isLearned, setIsLearned] = useState<boolean>(learned);
+  const [hasWord, setHasWord] = useState<boolean>(hasUserWord);
 
   return (
     <article className="word-card">
@@ -23,85 +37,84 @@ const WordCard:React.FC<WordData> = ({
       <div className="word-card__image-wrapper">
         <img 
             src={`${Url.DOMEN}/${image}`} 
-            alt="agreement"
+            alt={word}
             width="390"
             height="260"
         />
       </div>
       
-      <ul className="word-card__word-list">
-        <li className="word-card__word-item">
-          <span className="word-card__target-word">
-            {word}
-          </span> 
-        </li>
-        <li className="word-card__word-item">
-          <span className="word-card__transcription">
-            {transcription}
-          </span> 
-        </li>
-        <li className="word-card__word-item word-card__word-item--btn">
-          <span className="word-card__translation">
-            {wordTranslate}
-          </span> 
+      <WordContent
+        word={word}
+        transcription={transcription}
+        wordTranslate={wordTranslate}
+        textExample={textExample}
+        textExampleTranslate={textExampleTranslate}
+        textMeaning={textMeaning}
+        textMeaningTranslate={textMeaningTranslate}
+        audio={audio}
+        audioExample={audioExample}
+        audioMeaning={audioMeaning}
+        isPlayAudio={isPlayAudio}
+        playAudioHandler={playAudioHandler}
+      />
 
-          <button className="word-card__audio-btn">
-            <span className="visually-hidden">
-              Включить аудио
-            </span>
-            <svg className="word-card__audio-icon" width="28" height="28">
-              <use xlinkHref="#audio-icon"></use>
+      {
+        isAuthorize && 
+        <div className="word-card__auth-buttons">
+
+          <button
+              onClick={() => {
+                if (userAuthData && userAuthData.userId && userAuthData.token) {
+                  const { userId, token } = userAuthData;
+                  if (hasWord) {
+                    changeDifficulty(id, { userId, token }, !isDifficulty);
+                    setIsDifficulty((prev) => !prev);
+                  } else {
+                    createUserDifficultWord(id, { userId, token }, !isDifficulty);
+                    setHasWord(true);
+                    setIsDifficulty((prev) => !prev);
+                  }
+                }
+              }} 
+              className={
+                isDifficulty 
+                  ? "word-card__complex-btn word-card__complex-btn--checked" 
+                  : "word-card__complex-btn"
+              }
+          >
+            <svg className="word-card__complex-icon" width="11" height="24">
+              <use xlinkHref="#flash-icon"></use>
             </svg>
+            <span>Cложное</span> 
           </button>
-        </li>
-      </ul>
-
-      
-
-      <ul className="word-card__explanation">
-        <li className="word-card__explanation-item">
-          <p 
-            className="word-card__explanation-en"
-            dangerouslySetInnerHTML={createMarkup(textMeaning)} 
-          />
-        </li>
-        <li className="word-card__explanation-item">
-          <p 
-            className="word-card__explanation-ru"
-            dangerouslySetInnerHTML={createMarkup(textMeaningTranslate)}  
-          />
-        </li>
-      </ul>
-
-      <ul className="word-card__example">
-        <li className="word-card__example-item">
-          <p 
-            className="word-card__example-en"
-            dangerouslySetInnerHTML={createMarkup(textExample)}
-          />
-        </li>
-        <li className="word-card__example-item">
-          <p 
-            className="word-card__example-ru"
-            dangerouslySetInnerHTML={createMarkup(textExampleTranslate)}  
-          />
-        </li>
-      </ul>
-
-      <div className="word-card__auth-buttons">
-        <button className="word-card__complex-btn">
-          <svg className="word-card__complex-icon" width="11" height="24">
-            <use xlinkHref="#flash-icon"></use>
-          </svg>
-          <span>Cложное</span> 
-        </button>
-        <button className="word-card__check-btn">
-          <svg className="word-card__check-icon" width="22" height="16">
-            <use xlinkHref="#check-icon"></use>
-          </svg>
-          <span>Изученное</span> 
-        </button>
-      </div>
+  
+          <button 
+              onClick={() => {
+                if (userAuthData && userAuthData.userId && userAuthData.token) {
+                  const { userId, token } = userAuthData;
+                  if (hasWord) {
+                    changeLearned(id, { userId, token }, !isLearned);
+                    setIsLearned((prev) => !prev);
+                  } else {
+                    createUserLearnedWord(id, { userId, token }, !isDifficulty);
+                    setHasWord(true);
+                    setIsLearned((prev) => !prev);
+                  }
+                }
+              }} 
+              className={
+                isLearned 
+                  ? "word-card__check-btn word-card__check-btn--checked" 
+                  : "word-card__check-btn"
+              }
+          >
+            <svg className="word-card__check-icon" width="22" height="16">
+              <use xlinkHref="#check-icon"></use>
+            </svg>
+            <span>Изученное</span> 
+          </button>
+        </div>
+      }
       
     </article>
   );
