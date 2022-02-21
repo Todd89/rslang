@@ -15,8 +15,6 @@ import {
 import { useEffect, useState } from "react";
 import WordContent from "./word-content/word-content";
 
-import "./word-card.css";
-
 const WordCard: React.FC<WordCardComponent> = ({
   id,
   word,
@@ -62,8 +60,10 @@ const WordCard: React.FC<WordCardComponent> = ({
         }
       }
     };
-    getUserWordData();
-  }, [isDifficulty]);
+    if (hasWord) {
+      getUserWordData();
+    }
+  }, [isDifficulty, hasWord, userAuthData, id]);
 
   return (
     <article className="word-card">
@@ -93,7 +93,13 @@ const WordCard: React.FC<WordCardComponent> = ({
 
       {isAuthorize && (
         <div className="word-card__auth-buttons">
-          <span className="word-card-progress">{rate}</span>
+          {
+            hasWord 
+            && <div className="word-card__progress">
+              <span className="word-card__progress-text">Прогресс изучения: </span>  
+              {rate}
+            </div>
+          }
           <button
             onClick={() => {
               if (userAuthData && userAuthData.userId && userAuthData.token) {
