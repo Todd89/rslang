@@ -419,6 +419,7 @@ export async function getPutAudioUserStatistic(
   userAuthData: AuthData,
   statisticState: IAudioGameStatistic
 ) {
+  console.log("getPutAudioUserStatistic")
   const getStat = getUserStatistic(userAuthData);
 
   let newStat: ILongTerm;

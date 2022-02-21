@@ -12,12 +12,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 65%;
   position: relative;
   margin-top: 2vh;
   z-index: 1;
   color: black;
-  left: 30%;
 }
 
 .congratulation-list-block {
@@ -70,3 +68,32 @@
   width: 23%;
 }
 
+@media (min-width: 375px) {
+  .congratulation-block {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 600px) {
+  .congratulation-block {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 800px) {
+
+  .congratulation-block {
+    font-size: 1.5rem;
+    width: 80%;
+    left: 10%;
+  }
+}
+
+@media (min-width: 1200px) {
+
+  .congratulation-block {
+    font-size: 1.6rem;
+    width: 65%;
+    left: 30%;
+  }
+}
