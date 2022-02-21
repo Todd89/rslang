@@ -1,31 +1,30 @@
-
 export type ILongTerm = {
-  data: any,
-  newWordsInData: number,
-  newLearnedInData: number,
-}
+  data: any;
+  newWordsInData: number;
+  newLearnedInData: number;
+};
 
 export type IStatistic = {
-  learnedWords:number,
-  optional:{
+  learnedWords: number;
+  optional: {
     sprint: {
-    date: any,
-    bestSeries:number,
-    successCounter:number,
-    failCounter:number,
-    newWords:number
-    },
-    audio:{
-    date: Date,
-    bestSeries:number,
-    successCounter:number,
-    failCounter:number,
-    newWords:number
-    },
-    longTerm:{
-     stat:Array<ILongTerm>,
-    }
-  }
+      date: any;
+      bestSeries: number;
+      successCounter: number;
+      failCounter: number;
+      newWords: number;
+    };
+    audio: {
+      date: Date;
+      bestSeries: number;
+      successCounter: number;
+      failCounter: number;
+      newWords: number;
+    };
+    longTerm: {
+      stat: Array<ILongTerm>;
+    };
+  };
 };
 
 export type ISettings = {
@@ -46,8 +45,8 @@ export interface IUserData {
 
 export interface IUserWord {
   difficulty: string;
-  id?:string;
-  wordId?:string;
+  id?: string;
+  wordId?: string;
   optional: {
     learned: boolean;
     group: number;
@@ -102,42 +101,58 @@ export interface IWordsOfArrays {
 
 export interface IGameBlockProps {
   word: IWordInArray;
-  randomWordsInGame:Array<IRandomWordInGame>;
-  loadingUserWords:IUserWord[]
+  randomWordsInGame: Array<IRandomWordInGame>;
+  loadingUserWords: IUserWord[];
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
   changeLoadingUserWords: (arr: IUserWord[]) => void;
-  changeState:(state:any)=> void;
-  state:TextbookState | undefined;
+  changeState: (state: any) => void;
+  state: TextbookState | undefined;
 }
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
-  makeRandomWordsForWork: ((AllwordsInGame: Array<Array<IWordInArray>>) => IWordInArray[]);
+  makeRandomWordsForWork: (
+    AllwordsInGame: Array<Array<IWordInArray>>
+  ) => IWordInArray[];
   changeAllWord: (arr: Array<Array<IWordInArray>>) => void;
   changeLoadingUserWords: (arr: IUserWord[]) => void;
-  changeWordsInGame:(arr:any) => void;
-  getWordsForWorkFromTextBook:(page:number, group: number, user:IUserData | undefined) => Promise<IWordInArray[][]>
-  state:TextbookState | undefined
+  changeWordsInGame: (arr: any) => void;
+  getWordsForWorkFromTextBook: (
+    page: number,
+    group: number,
+    user: IUserData | undefined
+  ) => Promise<IWordInArray[][]>;
+  state: TextbookState | undefined;
 }
 
 export interface ICongratulationBlock {
-  answersArray:IRandomWordInGame[];
-  makeRandomWordsForWork: (AllwordsInGame: Array<Array<IWordInArray>>) => IWordInArray[];
-  allWords: IWordInArray[][];
-  changePageState: (name: string) => void;
-  changeAnswersArray:(arr: Array<IRandomWordInGame>) => void;
-  getWordsForWorkFromTextBook:(page:number, group: number, user:IUserData | undefined) => Promise<IWordInArray[][]>
-  changeState:(state:any)=> void
-}
-
-export interface ICongratulationNavi {
-  makeRandomWordsForWork:(AllwordsInGame: IWordInArray[][]) => IWordInArray[]
+  answersArray: IRandomWordInGame[];
+  makeRandomWordsForWork: (
+    AllwordsInGame: Array<Array<IWordInArray>>
+  ) => IWordInArray[];
   allWords: IWordInArray[][];
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
-  getWordsForWorkFromTextBook:(page:number, group: number, user:IUserData | undefined) => Promise<IWordInArray[][]>
-  changeState:(state:any)=> void
+  getWordsForWorkFromTextBook: (
+    page: number,
+    group: number,
+    user: IUserData | undefined
+  ) => Promise<IWordInArray[][]>;
+  changeState: (state: any) => void;
+}
+
+export interface ICongratulationNavi {
+  makeRandomWordsForWork: (AllwordsInGame: IWordInArray[][]) => IWordInArray[];
+  allWords: IWordInArray[][];
+  changePageState: (name: string) => void;
+  changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
+  getWordsForWorkFromTextBook: (
+    page: number,
+    group: number,
+    user: IUserData | undefined
+  ) => Promise<IWordInArray[][]>;
+  changeState: (state: any) => void;
 }
 
 export interface IWordInGame {
@@ -191,7 +206,6 @@ export interface WordData {
   wordTranslate: string;
 }
 
-
 export interface WordContentComponent {
   word: string;
   wordTranslate: string;
@@ -205,20 +219,21 @@ export interface WordContentComponent {
   audioMeaning: string;
   isPlayAudio: boolean;
   playAudioHandler: (paths: string[]) => void;
-} 
+}
 
 export type WordCardComponent = WordData & {
-  difficulty: boolean; 
+  difficulty: boolean;
   learned: boolean;
   hasUserWord: boolean;
   isPlayAudio: boolean;
   playAudioHandler: (paths: string[]) => void;
-}
+  getDifficultWordsE: () => void;
+};
 
 type LState = {
   fromTextbook: boolean;
-  words: WordData
-}
+  words: WordData;
+};
 export interface LocationState {
   hash: string;
   key: string;
@@ -231,4 +246,3 @@ export interface TextbookState {
   group?: number;
   page?: number;
 }
-

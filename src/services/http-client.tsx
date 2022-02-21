@@ -5,10 +5,9 @@ import {
   IUserData,
   IUserWord,
 } from "../interface/interface";
-import { Url, Methods, ResponseStatus } from '../const/const'
+import { Url, Methods, ResponseStatus } from "../const/const";
 
 class HTTPClient {
-
   // Words
 
   async getWords(): Promise<void> {
@@ -25,8 +24,8 @@ class HTTPClient {
   async getChunkOfWords(pageNum: string, groupNum: string) {
     try {
       const res = await fetch(
-      `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
-      )
+        `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
+      );
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -53,7 +52,7 @@ class HTTPClient {
   }
 
   //Users
-  async createUser (user: IUser) {
+  async createUser(user: IUser) {
     try {
       const res = await fetch(`${Url.DOMEN}/users`, {
         method: Methods.POST,
@@ -111,17 +110,14 @@ class HTTPClient {
 
   async getNewUserToken(userId: string, token: string) {
     try {
-      const res = await fetch(
-        `${Url.DOMEN}/users/${userId}/tokens`,
-        {
-          method: Methods.GET,
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      const res = await fetch(`${Url.DOMEN}/users/${userId}/tokens`, {
+        method: Methods.GET,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -154,17 +150,24 @@ class HTTPClient {
     return data;
   }
 
-  async createUserWord({ userId, token }: IUserData, userWord:IUserWord, wordId:string) {
-    const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(userWord)
-    });
-      return await rawResponse.json();
+  async createUserWord(
+    { userId, token }: IUserData,
+    userWord: IUserWord,
+    wordId: string
+  ) {
+    const rawResponse = await fetch(
+      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userWord),
+      }
+    );
+    return await rawResponse.json();
   }
 
   getUserWord = async ({ userId, token }: IUserData, wordId: string) => {
@@ -190,7 +193,7 @@ class HTTPClient {
 
   async updateUserWord(
     { userId, token }: IUserData,
-    { difficulty, optional}: IUserWord,
+    { difficulty, optional }: IUserWord,
     wordId: string
   ) {
     try {
@@ -202,7 +205,7 @@ class HTTPClient {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ difficulty, optional }),
-      })
+      });
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -222,19 +225,17 @@ class HTTPClient {
         Authorization: `Bearer ${userWord}`,
         Accept: "application/json",
       },
-    })
-
-      .catch((error) => {
-        console.log(console.log(error));
-      });
+    }).catch((error) => {
+      console.log(console.log(error));
+    });
     return data;
   }
 
   // Get difficult user words
-  async getDifficultWords({ userId, token }: IUserData,) {
+  async getDifficultWords({ userId, token }: IUserData) {
     try {
       const data = await fetch(
-        `${Url.DOMEN}/users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"true"}`, 
+        `${Url.DOMEN}/users/${userId}/aggregatedWords?wordsPerPage=3600&filter={"userWord.difficulty":"true"}`,
         {
           method: Methods.GET,
           headers: {
@@ -271,7 +272,6 @@ class HTTPClient {
   }
 
   async putUserStatistic({ userId, token }: IUserData, statistic: IStatistic) {
-    
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
       method: Methods.PUT,
       headers: {

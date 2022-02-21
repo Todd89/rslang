@@ -1,9 +1,8 @@
 import { IUserData, IUserWord } from "../interface/interface";
 import httpClient from "../services/http-client";
 
-
 export const createUserDifficultWord = async (
-  id: string, 
+  id: string,
   userAuthData: IUserData,
   isDifficult: boolean
 ) => {
@@ -19,13 +18,13 @@ export const createUserDifficultWord = async (
       new: false,
     },
   };
-  httpClient.createUserWord(userAuthData, userWord, id);
-}
+  await httpClient.createUserWord(userAuthData, userWord, id);
+};
 
 export const createUserLearnedWord = async (
-  id: string, 
+  id: string,
   userAuthData: IUserData,
-  isLearned: boolean 
+  isLearned: boolean
 ) => {
   const getWord = await httpClient.getWord(id);
   let userWord: IUserWord = {
@@ -40,8 +39,8 @@ export const createUserLearnedWord = async (
     },
   };
   userWord.optional.learned = isLearned;
-  httpClient.createUserWord(userAuthData, userWord, id);
-} 
+  await httpClient.createUserWord(userAuthData, userWord, id);
+};
 
 export async function changeDifficulty(
   id: string,
@@ -49,14 +48,18 @@ export async function changeDifficulty(
   isDifficult: boolean
 ) {
   const response = await httpClient.getUserWord(userAuthData, id);
-  console.log("changeDifficulty - isDifficult", isDifficult)
+  console.log("changeDifficulty - isDifficult", isDifficult);
   if (response === undefined) {
     //новое слово, раньше пользователю не встречалось
     createUserDifficultWord(id, userAuthData, isDifficult);
   } else {
     //уже встречалось, просто меняем признак
     const { optional } = response;
-    httpClient.updateUserWord(userAuthData, { difficulty: String(isDifficult), optional}, id);
+    await httpClient.updateUserWord(
+      userAuthData,
+      { difficulty: String(isDifficult), optional },
+      id
+    );
   }
 }
 
@@ -73,6 +76,21 @@ export async function changeLearned(
     //уже встречалось, просто меняем признак
     const { optional, difficulty } = response;
     optional.learned = isLearned;
-    httpClient.updateUserWord(userAuthData, { difficulty, optional}, id);
+    await httpClient.updateUserWord(userAuthData, { difficulty, optional }, id);
   }
+}
+
+export async function getProgressFromServer(
+  id: string,
+  userAuthData: IUserData
+) {
+  const response = await httpClient.getUserWord(userAuthData, id);
+  if (response === undefined) {
+    return "";
+  }
+  const result = {
+    optional: response.optional,
+    difficulty: response.difficulty,
+  };
+  return result;
 }

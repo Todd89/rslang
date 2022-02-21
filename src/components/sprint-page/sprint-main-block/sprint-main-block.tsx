@@ -122,35 +122,37 @@ const MainBlock: React.FC = () => {
       userWords = await httpClient.getAllUserWords(user as IUserData);
     }
 
-    if(group < 6) {
+    if (group < 6) {
       for (let i = page - 1; i >= 0; i--) {
         const WORDS_CHUNK = httpClient.getChunkOfWords(
           i.toString(),
           group.toString()
         );
         let newArr = shuffle(await WORDS_CHUNK);
-        
+
         if (userWords.length) {
           newArr = newArr.filter((elem) => {
             let word = userWords.find(
               (el) => el.wordId === elem.id && el.optional.learned
             );
-  
+
             if (!word) {
               return elem;
             }
           });
         }
-  
+
         PROMIS_ARR.push(newArr);
       }
     } else if (group === 6) {
-      const DIFFICULT_WORDS_OBJECT = await httpClient.getDifficultWords(user as IUserData);
-      const DIFFICULT_WORDS = DIFFICULT_WORDS_OBJECT[0]["paginatedResults"]
+      const DIFFICULT_WORDS_OBJECT = await httpClient.getDifficultWords(
+        user as IUserData
+      );
+      const DIFFICULT_WORDS = DIFFICULT_WORDS_OBJECT[0]["paginatedResults"];
       let newArr = shuffle(await DIFFICULT_WORDS);
       PROMIS_ARR.push(newArr);
     }
-  
+
     await Promise.all(PROMIS_ARR).then((values) => {
       RESULT = values;
     });

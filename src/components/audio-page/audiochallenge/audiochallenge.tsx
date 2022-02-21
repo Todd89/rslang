@@ -204,7 +204,7 @@ export function Audiochallenge(props: IProps) {
         userAuthData
       );
     }
-  });
+  }, [answerReceived, userAuthorized, showResult, isTimerOn]);
 
   useEffect(() => {
     const checkAnswer = (event: KeyboardEvent) => {

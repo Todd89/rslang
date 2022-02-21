@@ -1,4 +1,7 @@
-import { createArrayOfQuestions } from "../audio-utils/audio-utils";
+import {
+  createArrayOfQuestions,
+  createArrayOfQuestionsFromDifficultWords,
+} from "../audio-utils/audio-utils";
 import { useSelector } from "react-redux";
 
 import {
@@ -26,7 +29,17 @@ export function AudioAuto(props: IProps) {
 
   useEffect(() => {
     (async () => {
-      if (!isGameLoaded) {
+      if (!isGameLoaded && group === 6) {
+        await createArrayOfQuestionsFromDifficultWords(
+          group,
+          page,
+          false,
+          userAuthorized,
+          userAuthData
+        );
+        changeState(true);
+        changeGameLoadedStatus(true);
+      } else if (!isGameLoaded) {
         await createArrayOfQuestions(
           group,
           page,

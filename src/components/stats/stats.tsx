@@ -20,7 +20,7 @@ const Stats: React.FC = () => {
             <div className='stat__section'>
               <h2 className='stat__header'>Статистика</h2>
               <ShortTermStats />
-              <h3>Долгосрочная статистика</h3>
+              <h3>Статистика за весь период</h3>
               <div className='stat__block stat-long'>
                 <LongStatistic />
               </div>

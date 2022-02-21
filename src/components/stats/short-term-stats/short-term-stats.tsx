@@ -52,9 +52,9 @@ function ShortTermStats() {
       (data[1].correct / (data[1].all === 0 ? 1 : data[1].all)) * 100
     );
 
-    dataDay.learnedWords =
-      FORMER_STAT.optional.sprint.learnedWords +
-      FORMER_STAT.optional.audio.learnedWords;
+    dataDay.learnedWords = FORMER_STAT.learnedWords;
+    /*  FORMER_STAT.optional.sprint.learnedWords +
+      FORMER_STAT.optional.audio.learnedWords;*/
 
     dataDay.learnedWords = isNaN(dataDay.learnedWords)
       ? 0
@@ -72,7 +72,7 @@ function ShortTermStats() {
   }
   return (
     <>
-      <h3>Краткосрочная статистика</h3>
+      <h3>Статистика за сегодня</h3>
       <div className="game__wrapper horizontal stat__wrapper">
         <div className="stat__block stat-sprint">
           <h4 className="stat__block-header">Спринт</h4>
