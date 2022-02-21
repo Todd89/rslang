@@ -24,8 +24,8 @@ class HTTPClient {
   async getChunkOfWords(pageNum: string, groupNum: string) {
     try {
       const res = await fetch(
-      `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
-      )
+        `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
+      );
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -34,10 +34,21 @@ class HTTPClient {
     }
   }
 
+  /*async getWord(id: string) {
+    const data = await fetch(`${Url.DOMEN}/words/${id}`)
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(console.log(error));
+      });
+    return data;
+  }*/
+
   async getWord(id: string) {
     try {
       const data = await fetch(`${Url.DOMEN}/words/${id}`, {
-        method: Methods.GET,
+        method: "GET",
         headers: {
           Accept: "application/json",
         },
@@ -155,7 +166,6 @@ class HTTPClient {
     userWord: IUserWord,
     wordId: string
   ) {
-    console.log(userWord);
     const rawResponse = await fetch(
       `${Url.DOMEN}/users/${userId}/words/${wordId}`,
       {
@@ -170,6 +180,19 @@ class HTTPClient {
     );
     return await rawResponse.json();
   }
+
+  /* async getUserWord({ userId, token }: IUserData, wordId: string) {
+    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
+      method: `${Methods.GET}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }).catch((error) => {
+      console.log(console.log(error));
+    });
+    return data;
+  }*/
 
   getUserWord = async ({ userId, token }: IUserData, wordId: string) => {
     try {

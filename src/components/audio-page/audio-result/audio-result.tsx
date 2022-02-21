@@ -39,7 +39,7 @@ export function Result(props: IProps) {
   }, []);
 
   return (
-    <div className="result__section">
+    <div className="result__section eventually">
       <ul className="result">
         {gameResult.map((item, index) => {
           const question = item.questionWord;

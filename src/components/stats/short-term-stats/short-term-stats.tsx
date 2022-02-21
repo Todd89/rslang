@@ -39,18 +39,27 @@ function ShortTermStats() {
     data[0].all =
       FORMER_STAT.optional.sprint.successCounter +
       FORMER_STAT.optional.sprint.failCounter;
-    data[0].rate =
-      (data[0].correct / (data[0].all === 0 ? 1 : data[0].all)) * 100;
+    data[0].rate = Math.ceil(
+      (data[0].correct / (data[0].all === 0 ? 1 : data[0].all)) * 100
+    );
     data[1].new = FORMER_STAT.optional.audio.newWords;
     data[1].best = FORMER_STAT.optional.audio.bestSeries;
     data[1].correct = FORMER_STAT.optional.audio.successCounter;
     data[1].all =
       FORMER_STAT.optional.audio.successCounter +
       FORMER_STAT.optional.audio.failCounter;
-    data[1].rate =
-      (data[1].correct / (data[1].all === 0 ? 1 : data[1].all)) * 100;
+    data[1].rate = Math.ceil(
+      (data[1].correct / (data[1].all === 0 ? 1 : data[1].all)) * 100
+    );
 
-    dataDay.learnedWords = FORMER_STAT.learnedWords;
+    dataDay.learnedWords =
+      FORMER_STAT.optional.sprint.learnedWords +
+      FORMER_STAT.optional.audio.learnedWords;
+
+    dataDay.learnedWords = isNaN(dataDay.learnedWords)
+      ? 0
+      : dataDay.learnedWords;
+
     dataDay.new = data.reduce((sum, item) => {
       return sum + item.new;
     }, 0);
