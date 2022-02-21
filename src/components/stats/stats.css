@@ -38,6 +38,10 @@
   width: 23vw;
 }
 
+.stat__section{
+  width: 65vw;
+}
+
 p {
   color: var(--basic-black);
 }

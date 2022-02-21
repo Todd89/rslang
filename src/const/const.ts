@@ -1,3 +1,5 @@
+import { IStatistic } from '../interface/interface'
+
 export const enum AppRoute {
   ROOT = "/",
   AUDIO_CHALLENGE = "/audio-challenge",
@@ -13,10 +15,11 @@ export const enum Methods {
   DELETE = "DELETE",
 }
 
+
 export const enum ResponseStatus {
   OK = 200,
   EXPECTATION_FAILED = 417,
-  UNAUTHORIZE = 401,
+  UNAUTHORIZE = 401, 
 }
 
 export const enum Url {
@@ -29,11 +32,11 @@ export const enum SprintNums {
   MINUTE = 60,
   MAX_SUCCESS_HARD_MODE = 5,
   MAX_SUCCESS_LIGTH_MODE = 3,
-  MULTIPLIER_TWO = 2,
-  MULTIPLIER_DOTE_FIVE = 1.5,
-  MULTIPLIER_DOTE_TWENTYFIVE = 1.25,
-  PLUS_TO_SCORE = 100,
-  MAX_ANSWERS_LENGTH = 59,
+  MULTIPLIER_TWO = 3,
+  MULTIPLIER_DOTE_FIVE = 2,
+  MULTIPLIER_DOTE_TWENTYFIVE = 1.5,
+  PLUS_TO_SCORE = 10,
+  MAX_ANSWERS_LENGTH = 80,
 }
 
 export const enum SprintColors {
@@ -44,6 +47,37 @@ export const enum SprintColors {
   FIVE = '#3cb10e',
   SIX = '#c808f9',
 }
+
+export const NULL_STATISTIC: IStatistic = {
+  learnedWords: 0,
+  optional: {
+    sprint:
+    {
+      date: new Date().toLocaleDateString(),
+      bestSeries: 0,
+      successCounter: 0,
+      failCounter: 0,
+      newWords: 0,
+    },
+    audio:
+    {
+      date: new Date(),
+      bestSeries: 0,
+      successCounter: 0,
+      failCounter: 0,
+      newWords: 0,
+    },
+    longTerm: {
+      stat: [
+        {
+          data: new Date().toLocaleDateString(),
+          newWordsInData: 0,
+          newLearnedInData: 0,
+        }
+      ]
+    }
+  },
+};
 
 export const SPRINT_RULE = 'В данной игре необходимо ответить правильный или нет дан перевод английского слова. Если ответ правильный, то увеличивается множитель очков. У Вас 60 секунд, попробуйте набрать максимальное количество очков.'
 
@@ -86,39 +120,39 @@ export const enum PaginationData {
 export const DOTS = '...';
 
 export const textbookSections = [
-  { 
+  {
     id: 0,
     name: 1,
-    labelClass: "textbook-nav__label", 
-  }, 
-  { 
+    labelClass: "textbook-nav__label",
+  },
+  {
     id: 1,
     name: 2,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 2,
     name: 3,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 3,
     name: 4,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 4,
     name: 5,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 5,
     name: 6,
     labelClass: "textbook-nav__label",
-   }, 
-  { 
+  },
+  {
     id: 6,
     name: "7 - Сложные слова",
     labelClass: "textbook-nav__label textbook-nav__label--complex",
-  }, 
+  },
 ];

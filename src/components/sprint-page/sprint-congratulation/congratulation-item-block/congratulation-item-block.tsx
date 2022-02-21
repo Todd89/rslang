@@ -1,7 +1,8 @@
 import "./congratulation-item-block.css";
-import { Url } from '../../../../const/const'
+import { Url } from '../../../../const/const';
+import { IRandomWordInGame } from '../../../../interface/interface';
 
-const CongratulationItemBlock: React.FC<any> = ({
+const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
   AUDIO,
   ENGLISH_WORD,
   REAL_TRANSLATE,
@@ -11,6 +12,13 @@ const CongratulationItemBlock: React.FC<any> = ({
 
   const audio = new Audio();
   audio.volume = 0.2;
+
+  let type 
+  if(TYPE_OF_ANSWER) {
+    type = "Верно"
+  } else {
+    type = "Не верно"
+  }
 
   function playAudio(AUDIO:string) {
     const path = `${Url.DOMEN}/${AUDIO}`;
@@ -23,12 +31,12 @@ const CongratulationItemBlock: React.FC<any> = ({
   return (
     <>
       <div className='congratulation-item__audio congratulation-text' onClick={() => playAudio(AUDIO)}>
-        <img src='/assets/images/png/audio.png' alt='звук' />
+        <img src='/assets/images/audio.png' alt='звук' />
       </div>
       <span className='congratulation-item__english-word congratulation-text'>{ENGLISH_WORD}</span>
       <span className='congratulation-item__translation congratulation-text'>{TRANSCRIPTION}</span>
       <span className='congratulation-item__russian-word congratulation-text'>{REAL_TRANSLATE}</span>
-      <span className='congratulation-item__type congratulation-text'>{`${TYPE_OF_ANSWER}`}</span>
+      <span className='congratulation-item__type congratulation-text'>{`${type}`}</span>
     </>
   );
 };

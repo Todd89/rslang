@@ -1,16 +1,19 @@
 import "./sprint-congratulation-block.css";
 import CongratulationItemBlock from "./congratulation-item-block/congratulation-item-block";
 import CongratulationNavigation from "./congratulation-navigation/congratulation-navigation";
-import { IRandomWordInGame } from "../../../interface/interface";
+import { IRandomWordInGame, ICongratulationBlock } from "../../../interface/interface";
 
-const CongratulationBlock: React.FC<any> = ({
+const CongratulationBlock: React.FC<ICongratulationBlock> = ({
   answersArray,
   makeRandomWordsForWork,
   allWords,
   changePageState,
-  changeAnswersArray
+  changeAnswersArray,
+  getWordsForWorkFromTextBook,
+  changeState
 }) => {
   let id = 100;
+
   const ELEMEMENTS = answersArray.map((el: IRandomWordInGame) => {
     const { ...items } = el;
     return (
@@ -19,11 +22,11 @@ const CongratulationBlock: React.FC<any> = ({
       </li>
     );
   });
-
+  
   return (
     <div className='congratulation-container'>
       <div className='girl-image'>
-        <img src='/assets/images/png/sprint_girl.png' alt='девочка' />
+        <img src='/assets/images/sprint_girl.png' alt='девочка' />
       </div>
       <div className='congratulation-block'>
         <CongratulationNavigation
@@ -31,6 +34,8 @@ const CongratulationBlock: React.FC<any> = ({
           allWords={allWords}
           changePageState={changePageState}
           changeAnswersArray={changeAnswersArray}
+          getWordsForWorkFromTextBook={getWordsForWorkFromTextBook}
+          changeState={changeState}
         />
         <div className='congratulation-list-block'>
           <div className="congratulation-list-block__description">

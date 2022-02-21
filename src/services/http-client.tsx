@@ -5,9 +5,10 @@ import {
   IUserData,
   IUserWord,
 } from "../interface/interface";
-import { Url, Methods, ResponseStatus } from "../const/const";
+import { Url, Methods, ResponseStatus } from '../const/const'
 
 class HTTPClient {
+
   // Words
 
   async getWords(): Promise<void> {
@@ -24,8 +25,8 @@ class HTTPClient {
   async getChunkOfWords(pageNum: string, groupNum: string) {
     try {
       const res = await fetch(
-        `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
-      );
+      `${Url.DOMEN}/words/?group=${groupNum}&page=${pageNum}`
+      )
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -34,21 +35,10 @@ class HTTPClient {
     }
   }
 
-  /*async getWord(id: string) {
-    const data = await fetch(`${Url.DOMEN}/words/${id}`)
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        console.log(console.log(error));
-      });
-    return data;
-  }*/
-
   async getWord(id: string) {
     try {
       const data = await fetch(`${Url.DOMEN}/words/${id}`, {
-        method: "GET",
+        method: Methods.GET,
         headers: {
           Accept: "application/json",
         },
@@ -63,7 +53,7 @@ class HTTPClient {
   }
 
   //Users
-  async createUser(user: IUser) {
+  async createUser (user: IUser) {
     try {
       const res = await fetch(`${Url.DOMEN}/users`, {
         method: Methods.POST,
@@ -121,14 +111,17 @@ class HTTPClient {
 
   async getNewUserToken(userId: string, token: string) {
     try {
-      const res = await fetch(`${Url.DOMEN}/users/${userId}/tokens`, {
-        method: Methods.GET,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        `${Url.DOMEN}/users/${userId}/tokens`,
+        {
+          method: Methods.GET,
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      )
       if (res.status === ResponseStatus.OK) {
         return res.json();
       }
@@ -161,38 +154,18 @@ class HTTPClient {
     return data;
   }
 
-  async createUserWord(
-    { userId, token }: IUserData,
-    userWord: IUserWord,
-    wordId: string
-  ) {
-    const rawResponse = await fetch(
-      `${Url.DOMEN}/users/${userId}/words/${wordId}`,
-      {
-        method: Methods.POST,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userWord),
-      }
-    );
-    return await rawResponse.json();
-  }
-
-  /* async getUserWord({ userId, token }: IUserData, wordId: string) {
-    const data = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
-      method: `${Methods.GET}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }).catch((error) => {
-      console.log(console.log(error));
+  async createUserWord({ userId, token }: IUserData, userWord:IUserWord, wordId:string) {
+    const rawResponse = await fetch(`${Url.DOMEN}/users/${userId}/words/${wordId}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userWord)
     });
-    return data;
-  }*/
+      return await rawResponse.json();
+  }
 
   getUserWord = async ({ userId, token }: IUserData, wordId: string) => {
     try {
@@ -250,9 +223,6 @@ class HTTPClient {
         Accept: "application/json",
       },
     })
-      .then((response) => {
-        return response.json();
-      })
 
       .catch((error) => {
         console.log(console.log(error));
@@ -301,6 +271,7 @@ class HTTPClient {
   }
 
   async putUserStatistic({ userId, token }: IUserData, statistic: IStatistic) {
+    
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
       method: Methods.PUT,
       headers: {

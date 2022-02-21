@@ -1,12 +1,29 @@
+export type ILongTerm = {
+  data: any;
+  newWordsInData: number;
+  newLearnedInData: number;
+};
+
 export type IStatistic = {
   learnedWords: number;
   optional: {
-    game: string;
-    date: string;
-    bestSeries: number;
-    succesCounter: number;
-    failCounter: number;
-    newWords: number;
+    sprint: {
+      date: any;
+      bestSeries: number;
+      successCounter: number;
+      failCounter: number;
+      newWords: number;
+    };
+    audio: {
+      date: Date;
+      bestSeries: number;
+      successCounter: number;
+      failCounter: number;
+      newWords: number;
+    };
+    longTerm: {
+      stat: Array<ILongTerm>;
+    };
   };
 };
 
@@ -28,6 +45,7 @@ export interface IUserData {
 
 export interface IUserWord {
   difficulty: string;
+  id?: string;
   wordId?: string;
   optional: {
     learned: boolean;
@@ -50,6 +68,7 @@ export interface IChangeWordCount {
   changeWords: () => void;
 }
 export interface IWordInArray {
+  _id?: string;
   audio: string;
   audioExample: string;
   audioMeaning: string;
@@ -84,18 +103,56 @@ export interface IGameBlockProps {
   word: IWordInArray;
   randomWordsInGame: Array<IRandomWordInGame>;
   loadingUserWords: IUserWord[];
-  changeWordCount: () => void;
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
-  changeWord: () => void;
+  changeLoadingUserWords: (arr: IUserWord[]) => void;
+  changeState: (state: any) => void;
+  state: TextbookState | undefined;
 }
-
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
   setFirstWord: (arr: Array<IWordInArray>) => void;
-  makeRandomWordsForWork: (wordsInGame: any) => any;
+  makeRandomWordsForWork: (
+    AllwordsInGame: Array<Array<IWordInArray>>
+  ) => IWordInArray[];
   changeAllWord: (arr: Array<Array<IWordInArray>>) => void;
   changeLoadingUserWords: (arr: IUserWord[]) => void;
+  changeWordsInGame: (arr: any) => void;
+  getWordsForWorkFromTextBook: (
+    page: number,
+    group: number,
+    user: IUserData | undefined
+  ) => Promise<IWordInArray[][]>;
+  state: TextbookState | undefined;
+}
+
+export interface ICongratulationBlock {
+  answersArray: IRandomWordInGame[];
+  makeRandomWordsForWork: (
+    AllwordsInGame: Array<Array<IWordInArray>>
+  ) => IWordInArray[];
+  allWords: IWordInArray[][];
+  changePageState: (name: string) => void;
+  changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
+  getWordsForWorkFromTextBook: (
+    page: number,
+    group: number,
+    user: IUserData | undefined
+  ) => Promise<IWordInArray[][]>;
+  changeState: (state: any) => void;
+}
+
+export interface ICongratulationNavi {
+  makeRandomWordsForWork: (AllwordsInGame: IWordInArray[][]) => IWordInArray[];
+  allWords: IWordInArray[][];
+  changePageState: (name: string) => void;
+  changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
+  getWordsForWorkFromTextBook: (
+    page: number,
+    group: number,
+    user: IUserData | undefined
+  ) => Promise<IWordInArray[][]>;
+  changeState: (state: any) => void;
 }
 
 export interface IWordInGame {
@@ -105,7 +162,7 @@ export interface IWordInGame {
 }
 
 export interface IRandomWordInGame {
-  ID: string;
+  ID: string | undefined;
   AUDIO: string;
   ENGLISH_WORD: string;
   RUSSIAN_WORD: string;
