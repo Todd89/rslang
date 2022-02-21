@@ -54,15 +54,16 @@ const WordCard: React.FC<WordCardComponent> = ({
           return posProgress;
         }
         if (posProgress.optional.successCounter !== undefined) {
-          if (posProgress.difficulty) {
+          if (isDifficulty) {
             setRate(`${posProgress.optional.successCounter}/5`);
+          } else {
+            setRate(`${posProgress.optional.successCounter}/3`);
           }
-          setRate(`${posProgress.optional.successCounter}/3`);
         }
       }
     };
     getUserWordData();
-  });
+  }, [isDifficulty]);
 
   return (
     <article className="word-card">
@@ -94,18 +95,14 @@ const WordCard: React.FC<WordCardComponent> = ({
         <div className="word-card__auth-buttons">
           <span className="word-card-progress">{rate}</span>
           <button
-            onClick={async () => {
+            onClick={() => {
               if (userAuthData && userAuthData.userId && userAuthData.token) {
                 const { userId, token } = userAuthData;
                 if (hasWord) {
-                  await changeDifficulty(id, { userId, token }, !isDifficulty);
+                  changeDifficulty(id, { userId, token }, !isDifficulty);
                   setIsDifficulty((prev) => !prev);
                 } else {
-                  await createUserDifficultWord(
-                    id,
-                    { userId, token },
-                    !isDifficulty
-                  );
+                  createUserDifficultWord(id, { userId, token }, !isDifficulty);
                   setHasWord(true);
                   setIsDifficulty((prev) => !prev);
                 }
@@ -125,24 +122,24 @@ const WordCard: React.FC<WordCardComponent> = ({
           </button>
 
           <button
-            onClick={async () => {
+            onClick={() => {
               if (userAuthData && userAuthData.userId && userAuthData.token) {
                 const { userId, token } = userAuthData;
                 if (hasWord) {
-                  await changeLearned(id, { userId, token }, !isLearned);
+                  changeLearned(id, { userId, token }, !isLearned);
+                  if (!isLearned) {
+                    changeDifficulty(id, { userId, token }, !isLearned);
+                    setIsDifficulty((prev) => !prev);
+                  }
                   setIsLearned((prev) => !prev);
-                  await changeDifficulty(id, { userId, token }, isLearned);
-                  setIsDifficulty((prev) => !prev);
                 } else {
-                  await createUserLearnedWord(
-                    id,
-                    { userId, token },
-                    !isLearned
-                  ); //dairin-dei changed from isDifficult
+                  createUserLearnedWord(id, { userId, token }, !isLearned);
+                  if (!isLearned) {
+                    changeDifficulty(id, { userId, token }, !isLearned);
+                    setIsDifficulty((prev) => !prev);
+                  }
                   setHasWord(true);
-                  await setIsLearned((prev) => !prev);
-                  changeDifficulty(id, { userId, token }, isLearned);
-                  setIsDifficulty((prev) => !prev);
+                  setIsLearned((prev) => !prev);
                 }
                 getDifficultWordsE();
               }

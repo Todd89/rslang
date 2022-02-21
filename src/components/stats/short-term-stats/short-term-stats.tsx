@@ -52,9 +52,9 @@ function ShortTermStats() {
       (data[1].correct / (data[1].all === 0 ? 1 : data[1].all)) * 100
     );
 
-    dataDay.learnedWords =
-      FORMER_STAT.optional.sprint.learnedWords +
-      FORMER_STAT.optional.audio.learnedWords;
+    dataDay.learnedWords = FORMER_STAT.learnedWords;
+    /*  FORMER_STAT.optional.sprint.learnedWords +
+      FORMER_STAT.optional.audio.learnedWords;*/
 
     dataDay.learnedWords = isNaN(dataDay.learnedWords)
       ? 0

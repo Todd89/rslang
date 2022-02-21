@@ -85,7 +85,6 @@ export function createUpdateUserWord(
   word: IWordAudio,
   isRightAnswer: boolean,
   userAuthData: AuthData
-  // updateGameStatistic: (data: IAudioGameStatistic) => void
 ) {
   const userWordArr = AUDIO_USER_WORDS_ARRAY_FOR_GAME.filter(
     (item) => item.wordId === word.id
@@ -154,67 +153,6 @@ export function createUpdateUserWord(
     AUDIO_USER_WORDS_ARRAY.splice(findWordIndex, 1, userWord);
   }
 }
-
-/*const createUserWord = async (
-  { userId, token }: IUserData,
-  userWord: IUserWord
-) => {
-  const userWordServer = {
-    difficulty: userWord.difficulty,
-    optional: {
-      learned: userWord.optional.learned,
-      group: userWord.optional.group,
-      page: userWord.optional.page,
-      successCounter: userWord.optional.successCounter,
-      failCounter: userWord.optional.failCounter,
-      new: userWord.optional.new,
-    },
-  };
-  const rawResponse = await fetch(
-    `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userWordServer),
-    }
-  );
-  const content = await rawResponse.json();
-};
-
-const updateUserWord = async (
-  { userId, token }: IUserData,
-  userWord: IUserWord
-) => {
-  const userWordServer = {
-    difficulty: userWord.difficulty,
-    optional: {
-      learned: userWord.optional.learned,
-      group: userWord.optional.group,
-      page: userWord.optional.page,
-      successCounter: userWord.optional.successCounter,
-      failCounter: userWord.optional.failCounter,
-      new: userWord.optional.new,
-    },
-  };
-
-  const rawResponse = await fetch(
-    `${Url.DOMEN}/users/${userId}/words/${userWord.wordId}`,
-    {
-      method: `${Methods.PUT}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userWordServer),
-    }
-  );
-  const content = await rawResponse.json();
-};*/
 
 export async function getUserWords(
   userAuthData: AuthData,
@@ -432,7 +370,8 @@ export async function getPutAudioUserStatistic(
   let dataArr = FORMER_STAT.optional.longTerm.stat;
   const arrLength = dataArr.length;
 
-  FORMER_STAT.learnedWords += statisticState.gameLearnedWords;
+  FORMER_STAT.learnedWords =
+    FORMER_STAT.learnedWords + statisticState.gameLearnedWords;
   FORMER_STAT.optional.audio.bestSeries = statisticState.gameBestSeries;
   FORMER_STAT.optional.audio.failCounter =
     FORMER_STAT.optional.audio.failCounter + statisticState.gameFailCounter;
@@ -441,8 +380,8 @@ export async function getPutAudioUserStatistic(
   FORMER_STAT.optional.audio.successCounter =
     FORMER_STAT.optional.audio.successCounter +
     statisticState.gameSuccessCounter;
-  FORMER_STAT.optional.audio.learnedWords =
-    FORMER_STAT.optional.audio.learnedWords + statisticState.gameLearnedWords;
+  /*FORMER_STAT.optional.audio.learnedWords =
+    FORMER_STAT.optional.audio.learnedWords + statisticState.gameLearnedWords;*/
 
   if (arrLength === 0) {
     newStat = {
@@ -482,17 +421,17 @@ export const getUserStatistic = async ({ userId, token }: IUserData) => {
 
     const currentData = new Date().toLocaleDateString();
 
-    FORMER_STAT.learnedWords = stat.learnedWords;
-
     if (stat.optional.audio.date === currentData) {
+      FORMER_STAT.learnedWords =
+        stat.optional.audio.learnedWords + stat.optional.sprint.learnedWords;
       FORMER_STAT.optional.audio.bestSeries = stat.optional.audio.bestSeries;
       FORMER_STAT.optional.audio.date = stat.optional.audio.date;
       FORMER_STAT.optional.audio.failCounter = stat.optional.audio.failCounter;
       FORMER_STAT.optional.audio.newWords = stat.optional.audio.newWords;
       FORMER_STAT.optional.audio.successCounter =
         stat.optional.audio.successCounter;
-      FORMER_STAT.optional.audio.learnedWords =
-        stat.optional.audio.learnedWords;
+      /*FORMER_STAT.optional.audio.learnedWords =
+        stat.optional.audio.learnedWords;*/
       FORMER_STAT.optional.sprint.bestSeries = stat.optional.sprint.bestSeries;
       FORMER_STAT.optional.sprint.date = stat.optional.sprint.date;
       FORMER_STAT.optional.sprint.failCounter =
@@ -500,8 +439,8 @@ export const getUserStatistic = async ({ userId, token }: IUserData) => {
       FORMER_STAT.optional.sprint.newWords = stat.optional.sprint.newWords;
       FORMER_STAT.optional.sprint.successCounter =
         stat.optional.sprint.successCounter;
-      FORMER_STAT.optional.sprint.learnedWords =
-        stat.optional.sprint.learnedWords;
+      /*FORMER_STAT.optional.sprint.learnedWords =
+        stat.optional.sprint.learnedWords;*/
     }
     FORMER_STAT.optional.longTerm.stat.length = 0;
     for (let i = 0; i < stat.optional.longTerm.stat.length; i += 1) {
@@ -597,10 +536,7 @@ export async function createArrayOfQuestionsFromDifficultWords(
     counter += 1;
   }
 
-  console.log(wordsForQuestions);
-
   wordsForQuestions.forEach((word) => {
-    console.log(word);
     AUDIO_QUESTIONS_ARRAY.push({
       questionWord: word,
       answers: getAnswersForQuestion(word),

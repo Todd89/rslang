@@ -162,9 +162,6 @@ export interface WordContentComponent {
   audioMeaning: string;
   isPlayAudio: boolean;
   playAudioHandler: (paths: string[]) => void;
-  //+dairin-dei
-  // getDifficultWords: () => void;
-  //-dairin-dei
 }
 
 export type WordCardComponent = WordData & {
@@ -173,9 +170,7 @@ export type WordCardComponent = WordData & {
   hasUserWord: boolean;
   isPlayAudio: boolean;
   playAudioHandler: (paths: string[]) => void;
-  //+dairin-dei
   getDifficultWordsE: () => void;
-  //-dairin-dei
 };
 
 type LState = {
