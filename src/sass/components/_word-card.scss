@@ -131,30 +131,49 @@
 
 
 .word-card__audio-btn {
+  position: relative;
+  padding: 25px;
   display: block;
   margin-left: auto;
   height: 40px;
   width: 40px;
   background-color: transparent;
   border: none;
+  border-radius: 50%;
+  transition: all 0.5s;
 
   @media (min-width: $tablet-width) {
     position: absolute;
     right: 0;
   }
+
+  &:hover:not(:disabled) {
+    background-color: rgb(236, 229, 229);
+  }
 }
 
 .word-card__audio-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   fill: $dark;
   cursor: pointer;
+  transition: all 0.5s;
 
-  &:hover,
-  &:focus {
+
+  .word-card__audio-btn:hover:not(:disabled) &,
+  .word-card__audio-btn:focus:not(:disabled) & {
     fill: $green;
   }
 
-  &:active {
+  .word-card__audio-btn:active:not(:disabled) & {
     fill: #8f8989;
+  }
+
+  .word-card__audio-btn:disabled & {
+    fill: #aaa7a7;
+    cursor: default;
   }
 }
 
@@ -296,7 +315,7 @@
   box-sizing: border-box;
 
   &:hover {
-    background-color: #b621fe;
+    background-color: rgba(180, 33, 254, 0.4);
     color: $basic-white;
     border: 2px solid #b621fe;
 
@@ -311,6 +330,10 @@
   color: $basic-white;
   border: 2px solid #b621fe;
 
+  &:hover {
+    background-color: rgba(180, 33, 254, 0.7);
+  }
+
   & .word-card__complex-icon {
     fill: $basic-white;
   }
@@ -318,7 +341,7 @@
 
 .word-card__check-btn {
   &:hover {
-    background-color: $green;
+    background-color: rgba(60, 183, 126, 0.5);
     color: $basic-white;
     border: 2px solid $green;
 
@@ -332,6 +355,10 @@
   background-color: $green;
   color: $basic-white;
   border: 2px solid $green;
+
+  &:hover {
+    background-color: rgba(60, 183, 126, 0.7);
+  }
 
   & .word-card__check-icon {
     fill: $basic-white;
