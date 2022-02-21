@@ -5,8 +5,6 @@ import {
   IRandomWordInGame,
   IUserData,
   IStatistic,
-  IWordInArray,
-  LocationState
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 import { getUserAuthData } from "../../../store/data/selectors";
@@ -19,7 +17,6 @@ import {
   newStatistic,
 } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
-import { useLocation } from "react-router";
 
 const GameBlock: React.FC<IGameBlockProps> = ({
   randomWordsInGame,
@@ -27,7 +24,8 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   changePageState,
   changeAnswersArray,
   changeLoadingUserWords,
-  state
+  changeState,
+  state,
 }) => {
   const [answers, setAnswers] = useState<IRandomWordInGame[]>([]);
   const [seconds, setSeconds] = useState<number>(SprintNums.MINUTE);
@@ -46,7 +44,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [rightAnswerCount, setRightAnswerCount] = useState<number>(0);
 
   const USER_DATA = useSelector(getUserAuthData);
-  
+
   const AUDIO_RIGHT = new Audio();
   AUDIO_RIGHT.src = "/assets/sound/right.mp3";
   AUDIO_RIGHT.volume = 0.2;
@@ -58,7 +56,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const AUDIO_END = new Audio();
   AUDIO_END.src = "/assets/sound/end.mp3";
   AUDIO_END.volume = 0.2;
-  // console.log(statistic)
+
+  if (!user) {
+    if (USER_DATA) {
+      const NEW_USER = {
+        userId: USER_DATA.userId,
+        token: USER_DATA.token,
+      };
+      setUser(NEW_USER);
+    }
+  }
+
   const makeEndGame = () => {
     if (user) {
       newStatistic(
@@ -74,15 +82,16 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     AUDIO_END.play();
     changePageState("congratulation");
   };
-  const changeRightAnswersCount = (type:boolean) => {
-    if(type) {
-      setRightAnswerCount(rightAnswerCount + 1)
-    } else {
-      setRightAnswerCount(0)
-    }
-  }
 
-  const getAnswer = async (type:boolean) => {
+  const changeRightAnswersCount = (type: boolean) => {
+    if (type) {
+      setRightAnswerCount(rightAnswerCount + 1);
+    } else {
+      setRightAnswerCount(0);
+    }
+  };
+
+  const getAnswer = async (type: boolean) => {
     setPlayerRealAnswer(type);
     makeAnswersArray(
       randomWordsInGame[count].TYPE_OF_ANSWER,
@@ -109,23 +118,15 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         learnWordsInGame,
         newWordsInGame,
         setNewWordsInGame,
-        setlearnWordsInGame,
+        setlearnWordsInGame
       );
     }
-  } 
+  };
 
-  if (!user) {
-    if (USER_DATA) {
-      const NEW_USER = {
-        userId: USER_DATA.userId,
-        token: USER_DATA.token,
-      };
-      setUser(NEW_USER);
-    }
-  }
+  console.log(state);
 
   if (state) {
-    if(answers.length === ((state.page as number) * 20)) {
+    if (answers.length === randomWordsInGame.length) {
       makeEndGame();
     }
   } else {
@@ -133,7 +134,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       makeEndGame();
     }
   }
-
 
   useEffect(() => {
     if (!answers.length && user) {
@@ -189,41 +189,40 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   };
 
   const changeCount = () => {
-    if(count < randomWordsInGame.length - 1) setCount(count + 1);
+    if (count < randomWordsInGame.length - 1) setCount(count + 1);
   };
 
   const makeBestSeries = () => {
-    setBestSeries(bestSeries + 1)
-  }
+    setBestSeries(bestSeries + 1);
+  };
 
   const nullBestSeries = () => {
-    setBestSeries(0)
-  }
+    setBestSeries(0);
+  };
 
   if (document.getElementById("level-up")) {
     addViewToBonus(rightAnswerCount);
   }
 
-  useEffect(()=>{
-
+  useEffect(() => {
     const checkAnswer = async (e: KeyboardEvent) => {
       if (e.keyCode === 37) {
-        e.stopPropagation()
-        e.stopImmediatePropagation()
-        await getAnswer(false)
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        await getAnswer(false);
       } else if (e.keyCode === 39) {
         e.stopPropagation();
         e.stopImmediatePropagation();
-        await getAnswer(true)
+        await getAnswer(true);
       }
     };
 
-  document.addEventListener("keydown", checkAnswer, false);
+    document.addEventListener("keydown", checkAnswer, false);
 
-  return () => {
-    document.removeEventListener("keydown", checkAnswer, false);
-  };
-})
+    return () => {
+      document.removeEventListener("keydown", checkAnswer, false);
+    };
+  });
 
   return (
     <div>
@@ -233,7 +232,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       <div className='game-sprint-block'>
         <div className='game-sprint-block__top-lights'>
           <div className='game-sprint-block__timer'>
-            <span className='game-sprint-block__text'>{seconds} sec</span>
+            <span className='game-sprint-block__text game-sprint-block__text-time'>{seconds} сек</span>
           </div>
           <div id='level-up' className='game-sprint-block__level-up'>
             <div className='game-sprint-block__cool-symbol'>
@@ -247,14 +246,14 @@ const GameBlock: React.FC<IGameBlockProps> = ({
             </div>
           </div>
           <div className='game-sprint-block__score'>
-            <span className='game-sprint-block__text'>Score:{score}</span>
+            <span className='game-sprint-block__text game-sprint-block__text-score'>Очки: {score}</span>
           </div>
         </div>
         <div className='game-sprint-block__quastion'>
           <div className='game-sprint-block__english-word'>
             {randomWordsInGame[count].ENGLISH_WORD}
           </div>
-          <div className="game-sprint-block__score-x">+{scoreX}</div>
+          <div className='game-sprint-block__score-x' id="score-x">+{scoreX}</div>
           <div className='game-sprint-block__russian-word'>
             {randomWordsInGame[count].RUSSIAN_WORD}
           </div>
@@ -263,8 +262,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={async () => {
-              console.log(count)
-              getAnswer(false)
+              getAnswer(false);
             }}
           >
             Неверно
@@ -272,13 +270,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           <button
             className='game-sprint-block__button game-sprint-block__button_right'
             onClick={async () => {
-              getAnswer(true)
+              getAnswer(true);
             }}
           >
             Правильно
           </button>
         </div>
       </div>
+      <button className="game-sprint-block__button-close" onClick={() => {
+        changePageState("greeting")
+        changeState(undefined)
+        }}></button>
     </div>
   );
 };

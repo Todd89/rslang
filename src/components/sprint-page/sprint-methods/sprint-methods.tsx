@@ -7,7 +7,6 @@ import {
   IUserData,
   IStatistic,
   ILongTerm,
-  TextbookState
 } from "../../../interface/interface";
 
 
@@ -139,6 +138,7 @@ const makeAnswersArray = (
 
 const addViewToBonus = (rightAnswerCount: number) => {
   const EL = document.getElementById("level-up") as HTMLElement;
+  const SCORE_X = document.getElementById("score-x") as HTMLElement
   const EL_FIRST = EL.firstElementChild;
   const EL_SECOND = EL.firstElementChild?.nextElementSibling;
   const EL_THIRD = EL.firstElementChild?.nextElementSibling?.nextElementSibling;
@@ -156,6 +156,12 @@ const addViewToBonus = (rightAnswerCount: number) => {
   } 
   if (NUM === 0 || NUM === 4 || NUM === 8) {
     EL_ARR.forEach((el) => el?.classList.remove("view"));
+    
+  }
+  if (NUM === 4 || NUM === 8 || NUM === 11) {
+    SCORE_X.classList.add("animation-score");
+  } else {
+    SCORE_X.classList.remove("animation-score");
   }
 };
 
@@ -200,7 +206,7 @@ const makeRandomAnswerArray = (
 ): IRandomWordInGame => {
   let maxWord = 59;
   if(state) {
-    maxWord = state.page * 20;
+    maxWord = wordsInGame.length;
   }
   const VALUE = randomNum(9);
 

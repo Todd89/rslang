@@ -13,6 +13,13 @@ const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
   const audio = new Audio();
   audio.volume = 0.2;
 
+  let type 
+  if(TYPE_OF_ANSWER) {
+    type = "Верно"
+  } else {
+    type = "Не верно"
+  }
+
   function playAudio(AUDIO:string) {
     const path = `${Url.DOMEN}/${AUDIO}`;
     audio.src = path;
@@ -29,7 +36,7 @@ const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
       <span className='congratulation-item__english-word congratulation-text'>{ENGLISH_WORD}</span>
       <span className='congratulation-item__translation congratulation-text'>{TRANSCRIPTION}</span>
       <span className='congratulation-item__russian-word congratulation-text'>{REAL_TRANSLATE}</span>
-      <span className='congratulation-item__type congratulation-text'>{`${TYPE_OF_ANSWER}`}</span>
+      <span className='congratulation-item__type congratulation-text'>{`${type}`}</span>
     </>
   );
 };

@@ -10,7 +10,7 @@
   margin-top: 5vh;
   height: 65vh;
   width: 40vw;
-  background-color: rgba(121, 6, 252, .2);
+  background-color: rgba(121, 6, 252, .4);
   z-index: 1;
   border: 2px solid rgb(121, 6, 252);
   border-radius: 20px;
@@ -34,6 +34,7 @@
   margin-right: auto;
   text-align: center;
   color: black;
+  font-size: 1.35rem;
 }
 
 .greeting-sprint-levelchange-block__levels-buttons{
@@ -49,7 +50,7 @@
   width: 40px;
   height: 40px;
   background-color: rgb(183, 0, 255);
-  border: 1px solid rgb(121, 6, 252);
+  border: 1px solid rgb(75, 0, 161);
   border-radius: 25%;
   cursor: pointer;
   transition: .5s;

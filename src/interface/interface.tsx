@@ -106,7 +106,8 @@ export interface IGameBlockProps {
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: IRandomWordInGame[]) => void;
   changeLoadingUserWords: (arr: IUserWord[]) => void;
-  state:TextbookState | undefined
+  changeState:(state:any)=> void;
+  state:TextbookState | undefined;
 }
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
@@ -115,7 +116,7 @@ export interface IGreetingBlockProps {
   changeAllWord: (arr: Array<Array<IWordInArray>>) => void;
   changeLoadingUserWords: (arr: IUserWord[]) => void;
   changeWordsInGame:(arr:any) => void;
-  getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
+  getWordsForWorkFromTextBook:(page:number, group: number, user:IUserData | undefined) => Promise<IWordInArray[][]>
   state:TextbookState | undefined
 }
 
@@ -125,7 +126,7 @@ export interface ICongratulationBlock {
   allWords: IWordInArray[][];
   changePageState: (name: string) => void;
   changeAnswersArray:(arr: Array<IRandomWordInGame>) => void;
-  getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
+  getWordsForWorkFromTextBook:(page:number, group: number, user:IUserData | undefined) => Promise<IWordInArray[][]>
   changeState:(state:any)=> void
 }
 
@@ -134,7 +135,7 @@ export interface ICongratulationNavi {
   allWords: IWordInArray[][];
   changePageState: (name: string) => void;
   changeAnswersArray: (arr: Array<IRandomWordInGame>) => void;
-  getWordsForWorkFromTextBook:(page:number, group: number) => Promise<IWordInArray[][]>
+  getWordsForWorkFromTextBook:(page:number, group: number, user:IUserData | undefined) => Promise<IWordInArray[][]>
   changeState:(state:any)=> void
 }
 

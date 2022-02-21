@@ -1,6 +1,8 @@
 import "./congratulation-navigation.css";
-import { ICongratulationNavi, LocationState } from '../../../../interface/interface';
+import { ICongratulationNavi, LocationState, IUserData } from '../../../../interface/interface';
 import { useLocation } from "react-router";
+import { getUserAuthData } from "../../../../store/data/selectors";
+import { useSelector } from "react-redux";
 
 const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
   makeRandomWordsForWork,
@@ -13,15 +15,24 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
 
   const location = useLocation<LocationState>();
   let state = location.state as any;
+
+  let user: IUserData;
+  const USER_DATA = useSelector(getUserAuthData);
+  if (USER_DATA) {
+    user = {
+      userId: USER_DATA.userId,
+      token: USER_DATA.token,
+    };
+  }
   
 
   return (
     <div>
       <button
-        className='sprint-navigation-block__button-repeat '
+        className='sprint-navigation-block__button button-repeat'
         onClick={async () =>  {
           if(state) {
-            await getWordsForWorkFromTextBook(state.page, state.group);
+            await getWordsForWorkFromTextBook(state.page, state.group, user);
             changePageState("game");
           } else {
             makeRandomWordsForWork(allWords);
@@ -34,7 +45,7 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
         Повторить игру
       </button>
       <button
-        className='sprint-navigation-block__button-change '
+        className='sprint-navigation-block__button button-change'
         onClick={() => {
           changeState(undefined)
           changePageState("greeting")

@@ -9,7 +9,7 @@ import {
   IUserWord,
   LocationState,
   IUserData,
-  TextbookState
+  TextbookState,
 } from "../../../interface/interface";
 import {
   makeFourRandomPage,
@@ -39,11 +39,10 @@ const MainBlock: React.FC = () => {
   const location = useLocation<LocationState>();
   const SourceState = location.state as any;
 
-  useEffect(()=> {
-    changeState(SourceState)
-  },[location])
- 
-    
+  useEffect(() => {
+    changeState(SourceState);
+  }, [location]);
+
   let newUser: IUserData;
   const USER_DATA = useSelector(getUserAuthData);
   if (USER_DATA) {
@@ -52,14 +51,14 @@ const MainBlock: React.FC = () => {
       token: USER_DATA.token,
     };
   }
-
+  console.log(wordsInGame)
   const changeLoadingUserWords = (arr: IUserWord[]) => {
     setLoadingUserWords(arr);
   };
 
-  const changeState = (state:any) => {
-    setState(state)
-  }
+  const changeState = (state: TextbookState | undefined) => {
+    setState(state);
+  };
 
   const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
     const RANDOM_QUASTIONS = gameWords.map((el) => {
@@ -74,7 +73,6 @@ const MainBlock: React.FC = () => {
       makeRandomQuastions(wordsInGame);
     }
   }, [wordsInGame]);
-
 
   const changeAllWord = (arr: Array<Array<IWordInArray>>) => {
     const NEW_ARR = arr.slice();
@@ -96,13 +94,12 @@ const MainBlock: React.FC = () => {
   };
 
   const makeRandomWordsForWork = (
-    AllwordsInGame: Array<Array<IWordInArray>>,
-    state?:any
+    AllwordsInGame: Array<Array<IWordInArray>>
   ) => {
     const WORDS = AllwordsInGame;
     const RANDOM_PAGES_NUMS: number[] = makeFourRandomPage();
     const RESULT_WORDS: IWordInArray[][] = [];
-    
+
     RANDOM_PAGES_NUMS.forEach((el) => RESULT_WORDS.push(WORDS[el]));
 
     const RANDOM_WORDS_FOR_WORK = shuffle(RESULT_WORDS.flat());
@@ -111,27 +108,51 @@ const MainBlock: React.FC = () => {
 
     return RANDOM_WORDS_FOR_WORK;
   };
-  
-  const getWordsForWorkFromTextBook = async (page:number, group: number) => {
+
+  const getWordsForWorkFromTextBook = async (
+    page: number,
+    group: number,
+    user: IUserData | undefined
+  ) => {
     const PROMIS_ARR = [];
     let RESULT: Array<Array<IWordInArray>> = [];
-    
+    let userWords: IUserWord[] = [];
+    if (user) {
+      userWords = await httpClient.getAllUserWords(user as IUserData);
+    }
+    console.log(user);
     for (let i = page - 1; i >= 0; i--) {
-      const WORDS_CHUNK = httpClient.getChunkOfWords(i.toString(), group.toString());
-      const NEW_ARR = shuffle(await WORDS_CHUNK)
-      PROMIS_ARR.push(NEW_ARR);
+      const WORDS_CHUNK = httpClient.getChunkOfWords(
+        i.toString(),
+        group.toString()
+      );
+      let newArr = shuffle(await WORDS_CHUNK);
+
+      if (userWords.length) {
+        newArr = newArr.filter((elem) => {
+          let word = userWords.find(
+            (el) => el.wordId === elem.id && el.optional.learned
+          );
+
+          if (!word) {
+            return elem;
+          }
+        });
+      }
+
+      PROMIS_ARR.push(newArr);
     }
     await Promise.all(PROMIS_ARR).then((values) => {
       RESULT = values;
     });
-    setwordsInGame(RESULT.flat())
+
+    setwordsInGame(RESULT.flat());
     return RESULT;
   };
 
   const changeWordsInGame = (arr: any) => {
     setwordsInGame(arr);
   };
-
 
   if (pageState === "game") {
     return (
@@ -144,6 +165,7 @@ const MainBlock: React.FC = () => {
             changeAnswersArray={changeAnswersArray}
             loadingUserWords={loadingUserWords}
             changeLoadingUserWords={changeLoadingUserWords}
+            changeState={changeState}
             state={state}
           />
         </div>

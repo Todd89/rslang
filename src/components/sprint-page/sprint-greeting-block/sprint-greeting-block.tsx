@@ -1,12 +1,15 @@
 import "./sprint-greeting-block.css";
-import { IGreetingBlockProps, IUserData, TextbookState, LocationState, IWordInArray } from "../../../interface/interface";
+import {
+  IGreetingBlockProps,
+  IUserData,
+  TextbookState,
+} from "../../../interface/interface";
 import { BUTTONS_NUMS, SPRINT_RULE, SprintColors } from "../../../const/const";
 import { getWordsFromGroup, shuffle } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
 import { useSelector } from "react-redux";
 import { getUserAuthData } from "../../../store/data/selectors";
-import { useLocation } from "react-router";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   changePageState,
@@ -15,36 +18,9 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   changeAllWord,
   changeLoadingUserWords,
   getWordsForWorkFromTextBook,
-  state
+  state,
 }) => {
-
-
-  useEffect(()=>{
-    const makeGame = async () => {
-      if (state) {
-        const locationState = state as TextbookState;
-        const { group, page} = locationState;
-        console.log("group", group);
-        console.log("page", page);
-        const WORDS = await getWordsForWorkFromTextBook(page as number, group as number);
-  
-        if (newUser) {
-          const LOADING_WORDS = await httpClient.getAllUserWords(newUser);
-  
-          changeLoadingUserWords(LOADING_WORDS);
-        }
-  
-        changeAllWord(WORDS);
-        setFirstWord(WORDS.flat());
-        changePageState("game");
-      }
-    }
-    makeGame()
-  },[state])
-
- 
-
-  let newUser:IUserData
+  let newUser: IUserData;
   const USER_DATA = useSelector(getUserAuthData);
   if (USER_DATA) {
     newUser = {
@@ -52,7 +28,32 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
       token: USER_DATA.token,
     };
   }
-  
+
+  useEffect(() => {
+    const makeGame = async () => {
+      if (state) {
+        const locationState = state as TextbookState;
+        const { group, page } = locationState;
+        console.log("group", group);
+        console.log("page", page);
+        const WORDS = await getWordsForWorkFromTextBook(
+          page as number,
+          group as number,
+          newUser
+        );
+        if (newUser) {
+          const LOADING_WORDS = await httpClient.getAllUserWords(newUser);
+
+          changeLoadingUserWords(LOADING_WORDS);
+        }
+
+        changeAllWord(WORDS);
+        setFirstWord(WORDS.flat());
+        changePageState("game");
+      }
+    };
+    makeGame();
+  }, [state]);
 
   const BUTTONS = BUTTONS_NUMS.map((item) => {
     const ID = item.toString();
@@ -121,7 +122,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
             {SPRINT_RULE}
           </p>
           <p className='greeting-sprint-levelchange-block__rules-text'>
-            Выберите уровень сложности
+            Выберите уровень сложности:
           </p>
         </div>
         <div className='greeting-sprint-levelchange-block__levels'>
