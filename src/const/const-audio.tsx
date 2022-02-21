@@ -8,9 +8,9 @@ import {
 } from "../interface/interface-audio";
 import { Url } from "../const/const";
 
-export const PAGES_PER_GROUP = 29; //убрать в общие
-export const WORDS_PER_PAGE = 20; //убрать в общие
-export const AUDIO_MAX_QUESTION_AMOUNT = 2;
+export const PAGES_PER_GROUP = 29;
+export const WORDS_PER_PAGE = 20;
+export const AUDIO_MAX_QUESTION_AMOUNT = 20;
 export const AUDIO_ANSWER_AMOUNT = 4;
 export const AUDIO_LIVES_AMOUNT = 5;
 export const RIGHT_ANSWERS_DIFFICULT = 5;
