@@ -60,8 +60,10 @@ const WordCard: React.FC<WordCardComponent> = ({
         }
       }
     };
-    getUserWordData();
-  }, [isDifficulty]);
+    if (hasWord) {
+      getUserWordData();
+    }
+  }, [isDifficulty, hasWord, userAuthData, id]);
 
   return (
     <article className="word-card">
@@ -91,10 +93,13 @@ const WordCard: React.FC<WordCardComponent> = ({
 
       {isAuthorize && (
         <div className="word-card__auth-buttons">
-          <div className="word-card__progress">
-            <span className="word-card__progress-text">Прогресс изучения: </span>  
-            {rate}
-          </div>
+          {
+            hasWord 
+            && <div className="word-card__progress">
+              <span className="word-card__progress-text">Прогресс изучения: </span>  
+              {rate}
+            </div>
+          }
           <button
             onClick={() => {
               if (userAuthData && userAuthData.userId && userAuthData.token) {
