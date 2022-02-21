@@ -43,6 +43,19 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [finish, setFinish] = useState<boolean | undefined>(false);
   const [rightAnswerCount, setRightAnswerCount] = useState<number>(0);
 
+  let englishWord
+  let russianWord
+
+  if(randomWordsInGame.length > 0) {
+    englishWord = randomWordsInGame[count].ENGLISH_WORD;
+    russianWord = randomWordsInGame[count].RUSSIAN_WORD;
+  } else {
+    englishWord = "No words";
+    russianWord = "Нет слов";
+  }
+console.log(randomWordsInGame)
+
+
   const USER_DATA = useSelector(getUserAuthData);
 
   const AUDIO_RIGHT = new Audio();
@@ -150,7 +163,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }, []);
 
   useEffect(() => {
-    let sec = 40;
+    let sec = 60;
     const interval = setInterval(() => {
       sec -= 1;
       if (sec === 0) {
@@ -251,11 +264,11 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         </div>
         <div className='game-sprint-block__quastion'>
           <div className='game-sprint-block__english-word'>
-            {randomWordsInGame[count].ENGLISH_WORD}
+            {englishWord}
           </div>
           <div className='game-sprint-block__score-x' id="score-x">+{scoreX}</div>
           <div className='game-sprint-block__russian-word'>
-            {randomWordsInGame[count].RUSSIAN_WORD}
+            {russianWord}
           </div>
         </div>
         <div className='game-sprint-block__buttons-block'>

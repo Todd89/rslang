@@ -251,7 +251,7 @@ const updateWord = (
     word.optional.learned = false;
     word.optional.successCounter = 0;
   }
-
+  console.log(word, "word")
   return word;
 };
 
