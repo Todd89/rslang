@@ -39,7 +39,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [learnWordsInGame, setlearnWordsInGame] = useState<number>(0);
   const [newWordsInGame, setNewWordsInGame] = useState<number>(0);
   const [statistic, setStatistic] = useState<IStatistic>();
-  const [bestSeries, setBestSeries] = useState<number>(0);
+  const [bestSeries, setBestSeries] = useState<Array<number>>([0]);
   const [finish, setFinish] = useState<boolean | undefined>(false);
   const [rightAnswerCount, setRightAnswerCount] = useState<number>(0);
 
@@ -203,11 +203,15 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   };
 
   const makeBestSeries = () => {
-    setBestSeries(bestSeries + 1);
+    let lastItem = bestSeries.length - 1;
+    bestSeries[lastItem] = bestSeries[lastItem] + 1;
+    setBestSeries(bestSeries);
   };
 
   const nullBestSeries = () => {
-    setBestSeries(0);
+    let newArr = bestSeries.slice()
+    newArr.push(0)
+    setBestSeries(newArr);
   };
 
   if (document.getElementById("level-up")) {

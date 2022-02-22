@@ -61,7 +61,7 @@ export const NULL_STATISTIC: IStatistic = {
     },
     audio:
     {
-      date: new Date(),
+      date: new Date().toLocaleDateString(),
       bestSeries: 0,
       successCounter: 0,
       failCounter: 0,
