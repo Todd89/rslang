@@ -8,14 +8,14 @@ export type IStatistic = {
   learnedWords: number;
   optional: {
     sprint: {
-      date: any;
+      date: string;
       bestSeries: number;
       successCounter: number;
       failCounter: number;
       newWords: number;
     };
     audio: {
-      date: Date;
+      date: string;
       bestSeries: number;
       successCounter: number;
       failCounter: number;

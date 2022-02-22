@@ -311,7 +311,7 @@ const newStatistic = async (
   user: IUserData,
   learnWordsInGame: number,
   newWordsInGame: number,
-  bestSeries: number,
+  bestSeries: number[],
   answers:IRandomWordInGame[]
 ) => {
   let newWords = 0;
@@ -325,6 +325,7 @@ const newStatistic = async (
   let successCounterInGame = successAnswers.length;
   let failCounterInGame = answers.length - successAnswers.length;
 
+  const MAX_BEST = Math.max.apply(null, bestSeries);
 
   if (statistic.optional.sprint.successCounter > 0) {
     successCounter = statistic.optional.sprint.successCounter;
@@ -337,8 +338,8 @@ const newStatistic = async (
     newWords = statistic.optional.sprint.newWords;
   }
 
-  if (bestSeries > statistic.optional.sprint.bestSeries) {
-    best = bestSeries
+  if (MAX_BEST > statistic.optional.sprint.bestSeries) {
+    best = MAX_BEST
   } else {
     best = statistic.optional.sprint.bestSeries
   }
