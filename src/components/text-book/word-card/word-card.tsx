@@ -100,7 +100,7 @@ const WordCard: React.FC<WordCardComponent> = ({
               </span>
               {rate}
             </div>
-          }
+          )}
           <button
             onClick={() => {
               if (userAuthData && userAuthData.userId && userAuthData.token) {
