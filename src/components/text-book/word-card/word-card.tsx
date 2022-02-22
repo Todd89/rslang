@@ -93,10 +93,11 @@ const WordCard: React.FC<WordCardComponent> = ({
 
       {isAuthorize && (
         <div className="word-card__auth-buttons">
-          {
-            hasWord 
-            && <div className="word-card__progress">
-              <span className="word-card__progress-text">Прогресс изучения: </span>  
+          {hasWord && (
+            <div className="word-card__progress">
+              <span className="word-card__progress-text">
+                Прогресс изучения:{" "}
+              </span>
               {rate}
             </div>
           }
@@ -144,11 +145,11 @@ const WordCard: React.FC<WordCardComponent> = ({
                     { userId, token },
                     !isLearned
                   );
+                  setHasWord(true);
                   if (!isLearned) {
                     await changeDifficulty(id, { userId, token }, false);
                     setIsDifficulty(false);
                   }
-                  setHasWord(true);
                   setIsLearned((prev) => !prev);
                 }
                 getDifficultWordsE();
