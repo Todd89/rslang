@@ -329,7 +329,7 @@ const newStatistic = async (
   let failCounterInGame = answers.length - successAnswers.length;
 
   const MAX_BEST = Math.max.apply(null, bestSeries);
-
+  console.log(newWordsInGame)
   if (statistic.optional.sprint.successCounter > 0) {
     successCounter = statistic.optional.sprint.successCounter;
   }
@@ -350,12 +350,12 @@ const newStatistic = async (
   if (statistic.optional.longTerm.stat[lastItem].data !== new Date().toLocaleDateString()) {
         newStat = {
           data: new Date ().toLocaleDateString(),
-          newWordsInData: 0 + newWordsInGame,
+          newWordsInData: newWords + newWordsInGame,
           newLearnedInData: learnWordsInGame,
       }
       dataArr.push(newStat)
   } else {
-      let newWords = dataArr[lastItem].newWordsInData + Math.floor(newWordsInGame / 2)
+      let newWords = dataArr[lastItem].newWordsInData + Math.ceil(newWordsInGame / 2)
       
      dataArr[lastItem].newLearnedInData = statistic.learnedWords + learnWordsInGame;
      dataArr[lastItem].newWordsInData = newWords;
