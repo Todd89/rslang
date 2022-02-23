@@ -111,7 +111,7 @@ export const enum PaginationData {
   START_INDEX = 1,
   TOTAL_COUNT = 600,
   SIBLING_COUNT = 0,
-  PAGE_SIZE = 30,
+  PAGE_SIZE = 20,
 }
 
 export const DOTS = "...";
