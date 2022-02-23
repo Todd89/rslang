@@ -9,7 +9,7 @@ import { getWordsFromGroup, shuffle } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
 import { useSelector } from "react-redux";
 import { getUserAuthData } from "../../../store/data/selectors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   changePageState,
@@ -20,6 +20,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   getWordsForWorkFromTextBook,
   state,
 }) => {
+  const [page, setPage] =useState("empty");
   let newUser: IUserData;
   const USER_DATA = useSelector(getUserAuthData);
   if (USER_DATA) {
@@ -28,6 +29,10 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
       token: USER_DATA.token,
     };
   }
+ 
+  setTimeout(()=> {
+    setPage("real");
+  }, 1000)
 
   useEffect(() => {
     const makeGame = async () => {
@@ -56,6 +61,8 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   }, [state]);
 
   const BUTTONS = BUTTONS_NUMS.map((item) => {
+
+  
     const ID = item.toString();
     let color = "";
     switch (ID) {
@@ -108,31 +115,37 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
     );
   });
 
-  return (
-    <div className='greeting-sprint-block'>
-      <div className='girl-image'>
-        <img src='/assets/images/think_girl.png' alt='девочка' />
-      </div>
-      <div className='greeting-sprint-levelchange-block'>
-        <div className='greeting-sprint-levelchange-block__rules'>
-          <p className='greeting-sprint-levelchange-block__rules-text'>
-            Правила игры
-          </p>
-          <p className='greeting-sprint-levelchange-block__rules-text'>
-            {SPRINT_RULE}
-          </p>
-          <p className='greeting-sprint-levelchange-block__rules-text'>
-            Выберите уровень сложности:
-          </p>
+  if (page === "real") {
+    return (
+      <div className='greeting-sprint-block'>
+        <div className='girl-image'>
+          <img src='/assets/images/think_girl.png' alt='девочка' />
         </div>
-        <div className='greeting-sprint-levelchange-block__levels'>
-          <div className='greeting-sprint-levelchange-block__levels-buttons'>
-            {BUTTONS}
+        <div className='greeting-sprint-levelchange-block'>
+          <div className='greeting-sprint-levelchange-block__rules'>
+            <p className='greeting-sprint-levelchange-block__rules-text'>
+              Правила игры
+            </p>
+            <p className='greeting-sprint-levelchange-block__rules-text'>
+              {SPRINT_RULE}
+            </p>
+            <p className='greeting-sprint-levelchange-block__rules-text'>
+              Выберите уровень сложности:
+            </p>
+          </div>
+          <div className='greeting-sprint-levelchange-block__levels'>
+            <div className='greeting-sprint-levelchange-block__levels-buttons'>
+              {BUTTONS}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } 
+  return (
+    <div></div>
+  )
+  
 };
 
 export default SprintrGreetingBlock;
