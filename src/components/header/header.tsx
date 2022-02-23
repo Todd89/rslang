@@ -69,11 +69,13 @@ const Header: React.FC = () => {
                 </Link>
               </li>
 
-              <li className="nav__item">
-                <Link to={AppRoute.STATS} className="nav__link">
-                  Статистика
-                </Link>
-              </li>
+              {isAuthorize && (
+                <li className="nav__item">
+                  <Link to={AppRoute.STATS} className="nav__link">
+                    Статистика
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
 
