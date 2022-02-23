@@ -19,10 +19,9 @@ import {
 
 import { Url, Methods } from "../../../const/const";
 
-import { IUserWord, IUserData, IUser } from "../../../interface/interface";
+import { IUserWord, IUserData } from "../../../interface/interface";
 
 import { AuthData } from "../../../interface/auth-interface";
-//import { IWord, IUserData } from "../../../interface/interface";
 
 import { WORDS_PER_PAGE, PAGES_PER_GROUP } from "../../../const/const-audio";
 import httpClient from "../../../services/http-client";
@@ -214,7 +213,12 @@ export async function getUserWordsForTheGame(
   const wordsTemp = AUDIO_QUESTIONS_ARRAY.map((item) => item.questionWord);
 
   AUDIO_USER_WORDS_ARRAY_FOR_GAME.length = 0;
-  if (userAuthorized) {
+  if (
+    userAuthorized &&
+    userAuthData &&
+    userAuthData.userId &&
+    userAuthData.token
+  ) {
     const arrTemp = AUDIO_USER_WORDS_ARRAY.filter((userWord) =>
       wordsTemp.map((wordTemp) => wordTemp.id).includes(userWord.wordId)
     );
@@ -240,7 +244,12 @@ export async function createArrayOfQuestions(
   } else {
     await getWords(group, page, true);
   }
-  if (userAuthorized) {
+  if (
+    userAuthorized &&
+    userAuthData &&
+    userAuthData.userId &&
+    userAuthData.token
+  ) {
     //для отбора неизученных слов
     await getUserWords(userAuthData, isLoadFromTextBook); //получить слова пользователя
   }
@@ -267,7 +276,12 @@ export async function createArrayOfQuestions(
       !userLearnedWordsArrayToCheck.includes(question.id)
     ) {
       wordsForQuestions.push(question);
-      if (userAuthorized) {
+      if (
+        userAuthorized &&
+        userAuthData &&
+        userAuthData.userId &&
+        userAuthData.token
+      ) {
         AUDIO_STAT.push({
           id: question.id,
           learned: false,
@@ -287,7 +301,12 @@ export async function createArrayOfQuestions(
       !userLearnedWordsArrayToCheck.includes(question.id)
     ) {
       wordsForQuestions.push(question);
-      if (userAuthorized) {
+      if (
+        userAuthorized &&
+        userAuthData &&
+        userAuthData.userId &&
+        userAuthData.token
+      ) {
         AUDIO_STAT.push({
           id: question.id,
           learned: false,
@@ -304,7 +323,12 @@ export async function createArrayOfQuestions(
     });
   });
 
-  if (userAuthorized) {
+  if (
+    userAuthorized &&
+    userAuthData &&
+    userAuthData.userId &&
+    userAuthData.token
+  ) {
     await getUserWordsForTheGame(userAuthorized, userAuthData);
   }
 
@@ -479,7 +503,14 @@ export async function createArrayOfQuestionsFromDifficultWords(
   userAuthorized: boolean,
   userAuthData: AuthData
 ) {
-  if (!userAuthorized) {
+  if (
+    !(
+      userAuthorized &&
+      userAuthData &&
+      userAuthData.userId &&
+      userAuthData.token
+    )
+  ) {
     return;
   }
 

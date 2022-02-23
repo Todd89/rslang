@@ -9,7 +9,6 @@ import {
   ILongTerm,
 } from "../../../interface/interface";
 
-
 const getWordsFromGroup = async (group: string) => {
   const PROMIS_ARR = [];
   let RESULT: Array<Array<IWordInArray>> = [];
@@ -60,18 +59,18 @@ export const changeScoreX = (
   setScoreX: (num: number) => void
 ) => {
   let NUM = rightAnswerCount;
-  let result
+  let result;
 
-  if(NUM >= 4 && NUM <= 7) {
+  if (NUM >= 4 && NUM <= 7) {
     result = 20;
-  } 
-  if(NUM >= 8 && NUM < 11) {
+  }
+  if (NUM >= 8 && NUM < 11) {
     result = 30;
-  } 
-  if(NUM >= 11) {
+  }
+  if (NUM >= 11) {
     result = 40;
-  } 
-  if (NUM <= 3 ) {
+  }
+  if (NUM <= 3) {
     result = 10;
   }
 
@@ -106,7 +105,7 @@ const makeAnswersArray = (
   playerAnswer: boolean,
   randomWordsInGame: IRandomWordInGame[],
   answers: IRandomWordInGame[],
-  changeRightAnswerCount:(type:boolean) => void,
+  changeRightAnswerCount: (type: boolean) => void,
   setAnswers: (arr: IRandomWordInGame[]) => void,
   makeBestSeries: () => void,
   nullBestSeries: () => void,
@@ -115,7 +114,7 @@ const makeAnswersArray = (
 ) => {
   if (rightAnswer === playerAnswer) {
     changeRightAnswerCount(true);
-    makeBestSeries()
+    makeBestSeries();
     const ANSWER_STATE = { TYPE_OF_ANSWER: true };
     const ANWSER_WORD = { ...randomWordsInGame[count], ...ANSWER_STATE };
     const NEW_ARR = answers.slice();
@@ -138,28 +137,26 @@ const makeAnswersArray = (
   }
 };
 
-
 const addViewToBonus = (rightAnswerCount: number) => {
   const EL = document.getElementById("level-up") as HTMLElement;
-  const SCORE_X = document.getElementById("score-x") as HTMLElement
+  const SCORE_X = document.getElementById("score-x") as HTMLElement;
   const EL_FIRST = EL.firstElementChild;
   const EL_SECOND = EL.firstElementChild?.nextElementSibling;
   const EL_THIRD = EL.firstElementChild?.nextElementSibling?.nextElementSibling;
   const EL_ARR = [EL_FIRST, EL_SECOND, EL_THIRD];
   const NUM = rightAnswerCount;
-  
-  if(NUM === 1 || NUM === 5 || NUM === 9) {
+
+  if (NUM === 1 || NUM === 5 || NUM === 9) {
     EL_FIRST?.classList.add("view");
-  } 
-  if(NUM === 2 || NUM === 6 || NUM === 10) {
+  }
+  if (NUM === 2 || NUM === 6 || NUM === 10) {
     EL_SECOND?.classList.add("view");
-  } 
-  if(NUM === 3 || NUM === 7 || NUM >= 11) {
+  }
+  if (NUM === 3 || NUM === 7 || NUM >= 11) {
     EL_THIRD?.classList.add("view");
-  } 
+  }
   if (NUM === 0 || NUM === 4 || NUM === 8) {
     EL_ARR.forEach((el) => el?.classList.remove("view"));
-    
   }
   if (NUM === 4 || NUM === 8 || NUM === 11) {
     SCORE_X.classList.add("animation-score");
@@ -205,10 +202,10 @@ const makeWord = (
 const makeRandomAnswerArray = (
   word: IWordInArray,
   wordsInGame: Array<IWordInArray>,
-  state:any
+  state: any
 ): IRandomWordInGame => {
   let maxWord = 59;
-  if(state) {
+  if (state) {
     maxWord = wordsInGame.length;
   }
   const VALUE = randomNum(9);
@@ -258,7 +255,7 @@ const updateWord = (
 };
 
 const workWithUserWord = async (
-  type:boolean,
+  type: boolean,
   user: IUserData,
   loadingUserWords: IUserWord[],
   randomWordsInGame: IRandomWordInGame[],
@@ -267,7 +264,7 @@ const workWithUserWord = async (
   learnWordsInGame: number,
   newWordsInGame: number,
   setNewWordsInGame: React.Dispatch<React.SetStateAction<number>>,
-  setlearnWordsInGame: React.Dispatch<React.SetStateAction<number>>,
+  setlearnWordsInGame: React.Dispatch<React.SetStateAction<number>>
 ) => {
   const FIND = loadingUserWords.find(
     (el: IUserWord) => el.wordId === randomWordsInGame[count].ID
@@ -295,7 +292,7 @@ const workWithUserWord = async (
       randomWordsInGame[count].ID as string
     );
 
-    const UPDATE_WORD = updateWord (
+    const UPDATE_WORD = updateWord(
       WORD,
       SUCCESS,
       learnWordsInGame,
@@ -315,11 +312,11 @@ const newStatistic = async (
   learnWordsInGame: number,
   newWordsInGame: number,
   bestSeries: number[],
-  answers:IRandomWordInGame[]
+  answers: IRandomWordInGame[]
 ) => {
   let newWords = 0;
   let best = 0;
-  let newStat:ILongTerm;
+  let newStat: ILongTerm;
   let successCounter = 0;
   let failCounter = 0;
   let dataArr = statistic.optional.longTerm.stat;
@@ -329,7 +326,7 @@ const newStatistic = async (
   let failCounterInGame = answers.length - successAnswers.length;
 
   const MAX_BEST = Math.max.apply(null, bestSeries);
-  console.log(newWordsInGame)
+  console.log(newWordsInGame);
   if (statistic.optional.sprint.successCounter > 0) {
     successCounter = statistic.optional.sprint.successCounter;
   }
@@ -342,39 +339,44 @@ const newStatistic = async (
   }
 
   if (MAX_BEST > statistic.optional.sprint.bestSeries) {
-    best = MAX_BEST
+    best = MAX_BEST;
   } else {
-    best = statistic.optional.sprint.bestSeries
+    best = statistic.optional.sprint.bestSeries;
   }
-  
-  if (statistic.optional.longTerm.stat[lastItem].data !== new Date().toLocaleDateString()) {
-        newStat = {
-          data: new Date ().toLocaleDateString(),
-          newWordsInData: newWords + newWordsInGame,
-          newLearnedInData: learnWordsInGame,
-      }
-      dataArr.push(newStat)
+
+  if (
+    statistic.optional.longTerm.stat[lastItem].data !==
+    new Date().toLocaleDateString()
+  ) {
+    newStat = {
+      data: new Date().toLocaleDateString(),
+      newWordsInData: newWords + newWordsInGame,
+      newLearnedInData: learnWordsInGame,
+    };
+    dataArr.push(newStat);
   } else {
-      let newWords = dataArr[lastItem].newWordsInData + Math.ceil(newWordsInGame / 2)
-      
-     dataArr[lastItem].newLearnedInData = statistic.learnedWords + learnWordsInGame;
-     dataArr[lastItem].newWordsInData = newWords;
+    let newWords =
+      dataArr[lastItem].newWordsInData + Math.ceil(newWordsInGame / 2);
+
+    dataArr[lastItem].newLearnedInData =
+      statistic.learnedWords + learnWordsInGame;
+    dataArr[lastItem].newWordsInData = newWords;
   }
 
   const NEW_STATISTIC: IStatistic = {
     learnedWords: statistic.learnedWords + learnWordsInGame,
     optional: {
-      sprint:{ 
+      sprint: {
         date: new Date().toLocaleDateString(),
         bestSeries: best,
         successCounter: successCounter + successCounterInGame,
         failCounter: failCounter + failCounterInGame,
         newWords: newWords + newWordsInGame,
       },
-      audio:statistic.optional.audio,
-      longTerm:{
+      audio: statistic.optional.audio,
+      longTerm: {
         stat: dataArr,
-       }
+      },
     },
   };
   console.log(NEW_STATISTIC);
@@ -392,5 +394,5 @@ export {
   makeWord,
   makeRandomAnswerArray,
   workWithUserWord,
-  newStatistic
+  newStatistic,
 };

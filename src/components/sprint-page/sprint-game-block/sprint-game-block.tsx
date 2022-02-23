@@ -231,43 +231,43 @@ const GameBlock: React.FC<IGameBlockProps> = ({
 
   return (
     <div>
-      <div className='girl-image'>
-        <img src='/assets/images/rocket-girl.png' alt='девочка' />
+      <div className="girl-image">
+        <img src="/assets/images/rocket-girl.png" alt="девочка" />
       </div>
-      <div className='game-sprint-block'>
-        <div className='game-sprint-block__top-lights'>
-          <div className='game-sprint-block__timer'>
-            <span className='game-sprint-block__text game-sprint-block__text-time'>
+      <div className="game-sprint-block">
+        <div className="game-sprint-block__top-lights">
+          <div className="game-sprint-block__timer">
+            <span className="game-sprint-block__text game-sprint-block__text-time">
               {seconds} сек
             </span>
           </div>
-          <div id='level-up' className='game-sprint-block__level-up'>
-            <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/cool.png' alt='класс' />
+          <div id="level-up" className="game-sprint-block__level-up">
+            <div className="game-sprint-block__cool-symbol">
+              <img src="/assets/images/cool.png" alt="класс" />
             </div>
-            <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/cool.png' alt='класс' />
+            <div className="game-sprint-block__cool-symbol">
+              <img src="/assets/images/cool.png" alt="класс" />
             </div>
-            <div className='game-sprint-block__cool-symbol'>
-              <img src='/assets/images/cool.png' alt='класс' />
+            <div className="game-sprint-block__cool-symbol">
+              <img src="/assets/images/cool.png" alt="класс" />
             </div>
           </div>
-          <div className='game-sprint-block__score'>
-            <span className='game-sprint-block__text game-sprint-block__text-score'>
+          <div className="game-sprint-block__score">
+            <span className="game-sprint-block__text game-sprint-block__text-score">
               Очки: {score}
             </span>
           </div>
         </div>
-        <div className='game-sprint-block__quastion'>
-          <div className='game-sprint-block__english-word'>{englishWord}</div>
-          <div className='game-sprint-block__score-x' id='score-x'>
+        <div className="game-sprint-block__quastion">
+          <div className="game-sprint-block__english-word">{englishWord}</div>
+          <div className="game-sprint-block__score-x" id="score-x">
             +{scoreX}
           </div>
-          <div className='game-sprint-block__russian-word'>{russianWord}</div>
+          <div className="game-sprint-block__russian-word">{russianWord}</div>
         </div>
-        <div className='game-sprint-block__buttons-block'>
+        <div className="game-sprint-block__buttons-block">
           <button
-            className='game-sprint-block__button game-sprint-block__button_wrong'
+            className="game-sprint-block__button game-sprint-block__button_wrong"
             onClick={async () => {
               getAnswer(false);
             }}
@@ -275,7 +275,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
             Неверно
           </button>
           <button
-            className='game-sprint-block__button game-sprint-block__button_right'
+            className="game-sprint-block__button game-sprint-block__button_right"
             onClick={async () => {
               getAnswer(true);
             }}
@@ -285,7 +285,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         </div>
       </div>
       <button
-        className='game-sprint-block__button-close'
+        className="game-sprint-block__button-close"
         onClick={() => {
           changePageState("greeting");
           changeState(undefined);

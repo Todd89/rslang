@@ -9,7 +9,6 @@ import {
   getAuthorizeStatus,
 } from "../../../store/data/selectors";
 
-import { AuthData } from "../../../interface/auth-interface";
 import { useEffect } from "react";
 
 interface IProps {
