@@ -29,7 +29,12 @@ function ShortTermStats() {
     await getStat;
   }
 
-  if (userAuthorized) {
+  if (
+    userAuthorized &&
+    userAuthData &&
+    userAuthData.userId &&
+    userAuthData.token
+  ) {
     getShortTermStat("sprint");
     getShortTermStat("audio");
 
