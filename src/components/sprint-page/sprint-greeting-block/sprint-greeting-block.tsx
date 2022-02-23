@@ -20,7 +20,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   getWordsForWorkFromTextBook,
   state,
 }) => {
-  const [page, setPage] =useState("empty");
+  const [page, setPage] = useState("empty");
   let newUser: IUserData;
   const USER_DATA = useSelector(getUserAuthData);
   if (USER_DATA) {
@@ -29,10 +29,10 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
       token: USER_DATA.token,
     };
   }
- 
-  setTimeout(()=> {
+
+  setTimeout(() => {
     setPage("real");
-  }, 1000)
+  }, 1000);
 
   useEffect(() => {
     const makeGame = async () => {
@@ -61,8 +61,6 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   }, [state]);
 
   const BUTTONS = BUTTONS_NUMS.map((item) => {
-
-  
     const ID = item.toString();
     let color = "";
     switch (ID) {
@@ -93,7 +91,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
       <button
         key={ID}
         style={{ backgroundColor: color }}
-        className='greeting-sprint-block__button'
+        className="greeting-sprint-block__button"
         onClick={async () => {
           const WORDS = await getWordsFromGroup((Number(ID) - 1).toString());
           if (newUser) {
@@ -117,35 +115,32 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
 
   if (page === "real") {
     return (
-      <div className='greeting-sprint-block'>
-        <div className='girl-image'>
-          <img src='/assets/images/think_girl.png' alt='девочка' />
+      <div className="greeting-sprint-block">
+        <div className="girl-image">
+          <img src="/assets/images/think_girl.png" alt="девочка" />
         </div>
-        <div className='greeting-sprint-levelchange-block'>
-          <div className='greeting-sprint-levelchange-block__rules'>
-            <p className='greeting-sprint-levelchange-block__rules-text'>
+        <div className="greeting-sprint-levelchange-block">
+          <div className="greeting-sprint-levelchange-block__rules">
+            <p className="greeting-sprint-levelchange-block__rules-text">
               Правила игры
             </p>
-            <p className='greeting-sprint-levelchange-block__rules-text'>
+            <p className="greeting-sprint-levelchange-block__rules-text">
               {SPRINT_RULE}
             </p>
-            <p className='greeting-sprint-levelchange-block__rules-text'>
+            <p className="greeting-sprint-levelchange-block__rules-text">
               Выберите уровень сложности:
             </p>
           </div>
-          <div className='greeting-sprint-levelchange-block__levels'>
-            <div className='greeting-sprint-levelchange-block__levels-buttons'>
+          <div className="greeting-sprint-levelchange-block__levels">
+            <div className="greeting-sprint-levelchange-block__levels-buttons">
               {BUTTONS}
             </div>
           </div>
         </div>
       </div>
     );
-  } 
-  return (
-    <div></div>
-  )
-  
+  }
+  return <div></div>;
 };
 
 export default SprintrGreetingBlock;

@@ -1,4 +1,4 @@
-import { IStatistic } from '../interface/interface'
+import { IStatistic } from "../interface/interface";
 
 export const enum AppRoute {
   ROOT = "/",
@@ -15,17 +15,15 @@ export const enum Methods {
   DELETE = "DELETE",
 }
 
-
 export const enum ResponseStatus {
   OK = 200,
   EXPECTATION_FAILED = 417,
-  UNAUTHORIZE = 401, 
+  UNAUTHORIZE = 401,
 }
 
 export const enum Url {
   DOMEN = "https://react-app-learnwords.herokuapp.com",
 }
-
 
 export const enum SprintNums {
   PAGE_COUNT = 30,
@@ -40,27 +38,25 @@ export const enum SprintNums {
 }
 
 export const enum SprintColors {
-  ONE = '#e2faed',
-  TWO = '#a0db8e',
-  THREE = '#3cb77e',
-  FOUR = '#ffba01',
-  FIVE = '#3cb10e',
-  SIX = '#c808f9',
+  ONE = "#e2faed",
+  TWO = "#a0db8e",
+  THREE = "#3cb77e",
+  FOUR = "#ffba01",
+  FIVE = "#3cb10e",
+  SIX = "#c808f9",
 }
 
 export const NULL_STATISTIC: IStatistic = {
   learnedWords: 0,
   optional: {
-    sprint:
-    {
+    sprint: {
       date: new Date().toLocaleDateString(),
       bestSeries: 0,
       successCounter: 0,
       failCounter: 0,
       newWords: 0,
     },
-    audio:
-    {
+    audio: {
       date: new Date().toLocaleDateString(),
       bestSeries: 0,
       successCounter: 0,
@@ -73,13 +69,14 @@ export const NULL_STATISTIC: IStatistic = {
           data: new Date().toLocaleDateString(),
           newWordsInData: 0,
           newLearnedInData: 0,
-        }
-      ]
-    }
+        },
+      ],
+    },
   },
 };
 
-export const SPRINT_RULE = 'В данной игре необходимо ответить правильный или нет дан перевод английского слова. Если ответ правильный, то увеличивается множитель очков. У Вас 60 секунд, попробуйте набрать максимальное количество очков.'
+export const SPRINT_RULE =
+  "В данной игре необходимо ответить правильный или нет дан перевод английского слова. Если ответ правильный, то увеличивается множитель очков. У Вас 60 секунд, попробуйте набрать максимальное количество очков.";
 
 export const BUTTONS_NUMS = [1, 2, 3, 4, 5, 6];
 
@@ -107,8 +104,8 @@ export const teamMembers = [
     ghLink: "https://github.com/Romnasi",
     avatar: "assets/images/avatar-roman.jpg",
     role: "Front-end",
-  }
-]
+  },
+];
 
 export const enum PaginationData {
   START_INDEX = 1,
@@ -117,7 +114,7 @@ export const enum PaginationData {
   PAGE_SIZE = 30,
 }
 
-export const DOTS = '...';
+export const DOTS = "...";
 
 export const textbookSections = [
   {

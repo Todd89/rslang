@@ -13,13 +13,13 @@ const MainPage: React.FC = () => {
         <MainFirstScreen />
 
         <MainFeature />
-    
+
         <OurTeam />
       </main>
 
       <Footer />
     </>
   );
-}
+};
 
 export default MainPage;
