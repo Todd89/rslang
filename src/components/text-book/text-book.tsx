@@ -107,7 +107,7 @@ const TextBook: React.FC = () => {
     } else {
       getWords();
     }
-  }, [group, page]);
+  }, [group, page, userAuthData]);
 
   //+darin-dei
   const getDifficultWordsE = async () => {
