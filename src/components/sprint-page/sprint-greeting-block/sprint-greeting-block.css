@@ -9,7 +9,6 @@
   margin-right: auto;
   margin-top: 5vh;
   height: 65vh;
-  width: 40vw;
   background-color: rgba(121, 6, 252, .4);
   z-index: 1;
   border: 2px solid rgb(121, 6, 252);
@@ -34,7 +33,6 @@
   margin-right: auto;
   text-align: center;
   color: black;
-  font-size: 1.35rem;
 }
 
 .greeting-sprint-levelchange-block__levels-buttons{
@@ -59,3 +57,38 @@
 .greeting-sprint-block__button:hover{
   transform: scale(1.1);
 }
+
+
+@media (min-width: 375px) {
+  .greeting-sprint-levelchange-block__rules-text {
+    font-size: 1rem;
+  }
+  .greeting-sprint-levelchange-block{
+    width: 80vw;
+
+  }
+}
+
+@media (min-width: 600px) {
+  .greeting-sprint-levelchange-block__rules-text {
+    font-size: 1.3rem;
+  }
+}
+
+@media (min-width: 800px) {
+  .greeting-sprint-levelchange-block__rules-text {
+    font-size: 1.4rem;
+  }
+  .greeting-sprint-levelchange-block{
+    width: 60vw;
+
+  }
+}
+
+@media (min-width: 1200px) {
+  .greeting-sprint-levelchange-block{
+    width: 40vw;
+
+  }
+}
+

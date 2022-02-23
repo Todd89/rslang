@@ -69,6 +69,7 @@ export interface IChangeWordCount {
   changeWords: () => void;
 }
 export interface IWordInArray {
+  _id?: string;
   audio: string;
   audioExample: string;
   audioMeaning: string;
@@ -146,7 +147,7 @@ export interface IWordInGame {
 }
 
 export interface IRandomWordInGame {
-  ID: string;
+  ID: string | undefined;
   AUDIO: string;
   ENGLISH_WORD: string;
   RUSSIAN_WORD: string;

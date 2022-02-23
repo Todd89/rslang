@@ -1,10 +1,10 @@
 .game-sprint-block {
   background-color:  rgba(255, 186, 67, .4);
-  position: absolute;
-  margin-left: 29vw;
-  margin-top: 5vh;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top:5vh;
   height: 65vh;
-  width: 40vw;
   border: 2px solid #ffba43;
   border-radius: 20px;
 }
@@ -143,8 +143,8 @@
 
 .game-sprint-block__button-close{
   position: absolute;
-  top: 21vh;
-  right: 21vw;
+  bottom: 5vh;
+  right: 48vw;
   width: 40px;
   height: 40px;
   border: none;
@@ -157,4 +157,29 @@
 
 .game-sprint-block__button-close:hover{
   transform: rotate(180deg);
+}
+
+@media (min-width: 375px) {
+  .game-sprint-block{
+    width: 90vw;
+  }
+}
+
+@media (min-width: 600px) {
+  .game-sprint-block{
+    width: 80vw;
+  }
+}
+
+@media (min-width: 800px) {
+  .game-sprint-block{
+    width: 60vw;
+  }
+}
+
+@media (min-width: 1200px) {
+  .game-sprint-block{
+    width: 40vw;
+
+  }
 }

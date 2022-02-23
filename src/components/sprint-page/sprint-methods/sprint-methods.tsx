@@ -251,7 +251,6 @@ const updateWord = (
     word.optional.learned = false;
     word.optional.successCounter = 0;
   }
-  console.log(word, "word")
   return word;
 };
 
@@ -285,12 +284,12 @@ const workWithUserWord = async (
     await httpClient.createUserWord(
       user as IUserData,
       NEW_WORD,
-      randomWordsInGame[count].ID
+      randomWordsInGame[count].ID as string
     );
   } else {
     const WORD = await httpClient.getUserWord(
       user as IUserData,
-      randomWordsInGame[count].ID
+      randomWordsInGame[count].ID as string
     );
 
     const UPDATE_WORD = updateWord (
@@ -302,7 +301,7 @@ const workWithUserWord = async (
     await httpClient.updateUserWord(
       user as IUserData,
       UPDATE_WORD,
-      randomWordsInGame[count].ID
+      randomWordsInGame[count].ID as string
     );
   }
 };
@@ -347,13 +346,15 @@ const newStatistic = async (
   if (statistic.optional.longTerm.stat[lastItem].data !== new Date().toLocaleDateString()) {
         newStat = {
           data: new Date ().toLocaleDateString(),
-          newWordsInData: newWordsInGame,
+          newWordsInData: 0 + newWordsInGame,
           newLearnedInData: learnWordsInGame,
       }
       dataArr.push(newStat)
   } else {
+      let newWords = dataArr[lastItem].newWordsInData + Math.floor(newWordsInGame / 2)
+      
      dataArr[lastItem].newLearnedInData = statistic.learnedWords + learnWordsInGame;
-     dataArr[lastItem].newWordsInData = newWords + newWordsInGame;
+     dataArr[lastItem].newWordsInData = newWords;
   }
 
   const NEW_STATISTIC: IStatistic = {

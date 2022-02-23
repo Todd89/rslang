@@ -52,7 +52,7 @@ const MainBlock: React.FC = () => {
       token: USER_DATA.token,
     };
   }
-  console.log(wordsInGame)
+
   const changeLoadingUserWords = (arr: IUserWord[]) => {
     setLoadingUserWords(arr);
   };
@@ -121,7 +121,7 @@ const MainBlock: React.FC = () => {
     if (user) {
       userWords = await httpClient.getAllUserWords(user as IUserData);
     }
-    console.log(userWords, "userWords");
+
     if(group < 6) {
       for (let i = page - 1; i >= 0; i--) {
         const WORDS_CHUNK = httpClient.getChunkOfWords(

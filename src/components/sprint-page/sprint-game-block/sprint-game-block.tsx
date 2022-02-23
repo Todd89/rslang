@@ -53,8 +53,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     englishWord = "No words";
     russianWord = "Нет слов";
   }
-console.log(randomWordsInGame)
-
 
   const USER_DATA = useSelector(getUserAuthData);
 
@@ -136,7 +134,6 @@ console.log(randomWordsInGame)
     }
   };
 
-  console.log(state);
 
   if (state) {
     if (answers.length === randomWordsInGame.length) {

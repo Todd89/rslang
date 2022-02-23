@@ -167,20 +167,6 @@ class HTTPClient {
       return await rawResponse.json();
   }
 
-  // async getUserWord({ userId, token }: IUserData, wordId: string):Promise<IUserWord>{
-  //   const data = await fetch(
-  //     `${Url.DOMEN}/users/${userId}/words/${wordId}`,
-  //     {
-  //       method: `${Methods.GET}`,
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         Accept: "application/json",
-  //       },
-  //     }
-  //   );
-  //   return await data.json();
-  // }
-
   getUserWord = async ({ userId, token }: IUserData, wordId: string) => {
     try {
       const rawResponse = await fetch(
@@ -285,6 +271,7 @@ class HTTPClient {
   }
 
   async putUserStatistic({ userId, token }: IUserData, statistic: IStatistic) {
+    
     const data = await fetch(`${Url.DOMEN}/users/${userId}/statistics`, {
       method: Methods.PUT,
       headers: {
