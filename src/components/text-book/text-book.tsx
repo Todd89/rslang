@@ -109,7 +109,6 @@ const TextBook: React.FC = () => {
     }
   }, [group, page, userAuthData]);
 
-  //+darin-dei
   const getDifficultWordsE = async () => {
     if (group === COMPLEX_GROUP_INDEX) {
       if (userAuthData && userAuthData.userId && userAuthData.token) {
@@ -127,7 +126,7 @@ const TextBook: React.FC = () => {
       }
     }
   };
-  //-dairin-dei
+
   useEffect(() => {
     const getUserWord = async () => {
       if (userAuthData && userAuthData.userId && userAuthData.token) {
