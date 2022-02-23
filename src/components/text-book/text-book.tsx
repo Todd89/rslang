@@ -138,7 +138,7 @@ const TextBook: React.FC = () => {
     };
 
     getUserWord();
-  }, [userAuthData]);
+  }, [userAuthData, group, page]);
 
   return (
     <>
@@ -231,9 +231,7 @@ const TextBook: React.FC = () => {
                         hasUserWord={hasUserWord}
                         isPlayAudio={isPlayAudio}
                         playAudioHandler={playAudioHandler}
-                        //+dairin-dei
                         getDifficultWordsE={getDifficultWordsE}
-                        //-dairin-dei
                       />
                     </li>
                   );
