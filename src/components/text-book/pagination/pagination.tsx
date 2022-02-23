@@ -1,23 +1,22 @@
-import usePagination from './usePagination';
-import { PaginationData, DOTS } from '../../../const/const';
-import { PaginationComponentProps } from '../../../interface/interface';
+import usePagination from "./usePagination";
+import { PaginationData, DOTS } from "../../../const/const";
+import { PaginationComponentProps } from "../../../interface/interface";
 
 const Pagination: React.FC<PaginationComponentProps> = ({
-    onPageChange,
-    totalCount,
-    siblingCount,
-    currentPage,
-    pageSize,
-  }) => {
-
+  onPageChange,
+  totalCount,
+  siblingCount,
+  currentPage,
+  pageSize,
+}) => {
   const paginationRange = usePagination({
     currentPage,
     totalCount,
     siblingCount,
-    pageSize
+    pageSize,
   });
 
-  if  (!paginationRange) {
+  if (!paginationRange) {
     return null;
   }
 
@@ -37,14 +36,12 @@ const Pagination: React.FC<PaginationComponentProps> = ({
 
   let lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <ul
-      className='pagination-container'
-    >
+    <ul className="pagination-container">
       <li
         className={
-          currentPage === PaginationData.START_INDEX 
-            ? 'pagination-item disabled' 
-            : 'pagination-item'
+          currentPage === PaginationData.START_INDEX
+            ? "pagination-item disabled"
+            : "pagination-item"
         }
         onClick={onPrevious}
       >
@@ -53,7 +50,10 @@ const Pagination: React.FC<PaginationComponentProps> = ({
       {paginationRange.map((pageNumber, i) => {
         if (pageNumber === DOTS) {
           return (
-            <li key={pageNumber + paginationRange[i-1]} className="pagination-item dots">
+            <li
+              key={pageNumber + paginationRange[i - 1]}
+              className="pagination-item dots"
+            >
               &#8230;
             </li>
           );
@@ -62,9 +62,9 @@ const Pagination: React.FC<PaginationComponentProps> = ({
         return (
           <li
             className={
-              pageNumber === currentPage 
-                ? 'pagination-item selected' 
-                : 'pagination-item'
+              pageNumber === currentPage
+                ? "pagination-item selected"
+                : "pagination-item"
             }
             onClick={() => onPageChange(pageNumber)}
             key={pageNumber}
@@ -75,9 +75,9 @@ const Pagination: React.FC<PaginationComponentProps> = ({
       })}
       <li
         className={
-          currentPage === lastPage 
-            ? 'pagination-item disabled' 
-            : 'pagination-item'
+          currentPage === lastPage
+            ? "pagination-item disabled"
+            : "pagination-item"
         }
         onClick={onNext}
       >

@@ -107,7 +107,7 @@ const TextBook: React.FC = () => {
     } else {
       getWords();
     }
-  }, [group, page]);
+  }, [group, page, userAuthData]);
 
   //+darin-dei
   const getDifficultWordsE = async () => {
@@ -155,7 +155,7 @@ const TextBook: React.FC = () => {
                 <Link
                   className="game-link__link"
                   to={{
-                    pathname: AppRoute.SPRINT,               
+                    pathname: AppRoute.SPRINT,
                     state: { group, page },
                   }}
                 >
