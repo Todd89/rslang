@@ -4,7 +4,6 @@ import {
   IUserWord,
   IAudioStat,
   IStatistic,
-  ILongTerm,
 } from "../interface/interface-audio";
 import { Url } from "../const/const";
 

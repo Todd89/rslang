@@ -30,7 +30,10 @@ const Stats: React.FC = () => {
             />
             <div className="stat__section">
               <h2 className="stat__header">Статистика</h2>
-              {userAuthorized ? (
+              {userAuthorized &&
+              userAuthData &&
+              userAuthData.userId &&
+              userAuthData.token ? (
                 <>
                   <ShortTermStats />
                   <h3>Статистика за весь период</h3>
