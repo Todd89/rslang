@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import httpClient from "../../../services/http-client";
 import { getUserAuthData } from "../../../store/data/selectors";
 import { useSelector } from "react-redux";
-import { IStatistic, IUserData } from '../../../interface/interface'
+import { IStatistic, IUserData } from '../../../interface/interface';
+import { NULL_STATISTIC } from "../../../const/const";
 
 const LongStatistic: React.FC = () => {
   const [user, setUser] = useState<IUserData>();
@@ -24,8 +25,13 @@ const LongStatistic: React.FC = () => {
   useEffect(() => {
     
     const getStatistic = async () => {;
-      const STATISTIC:IStatistic = await httpClient.getUserStatistic(user as IUserData);
-      let { stat } = STATISTIC.optional.longTerm;
+      let statisitc:IStatistic = await httpClient.getUserStatistic(user as IUserData);
+      if(!statisitc) {
+        await httpClient.putUserStatistic(user as IUserData, NULL_STATISTIC);
+        statisitc = await httpClient.getUserStatistic(user as IUserData);
+      }
+      
+      let { stat } = statisitc.optional.longTerm;
       let labels:string[] = stat.map((el) => el.data);
       let newWords:number[] = stat.map((el) => el.newWordsInData);
       let learnedWords:number[] = stat.map((el) => el.newLearnedInData);
