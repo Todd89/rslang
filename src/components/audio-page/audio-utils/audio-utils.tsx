@@ -19,10 +19,9 @@ import {
 
 import { Url, Methods } from "../../../const/const";
 
-import { IUserWord, IUserData, IUser } from "../../../interface/interface";
+import { IUserWord, IUserData } from "../../../interface/interface";
 
 import { AuthData } from "../../../interface/auth-interface";
-//import { IWord, IUserData } from "../../../interface/interface";
 
 import { WORDS_PER_PAGE, PAGES_PER_GROUP } from "../../../const/const-audio";
 import httpClient from "../../../services/http-client";
