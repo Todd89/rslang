@@ -110,8 +110,7 @@ const makeAnswersArray = (
   setAnswers: (arr: IRandomWordInGame[]) => void,
   makeBestSeries: () => void,
   nullBestSeries: () => void,
-  AUDIO_RIGHT: HTMLAudioElement,
-  AUDIO_WRONG: HTMLAudioElement,
+  AUDIO: HTMLAudioElement,
   count: number
 ) => {
   if (rightAnswer === playerAnswer) {
@@ -122,7 +121,9 @@ const makeAnswersArray = (
     const NEW_ARR = answers.slice();
     NEW_ARR.push(ANWSER_WORD);
     setAnswers(NEW_ARR);
-    AUDIO_RIGHT.play();
+    AUDIO.src = "/assets/sound/right.mp3";
+    AUDIO.volume = 0.2;
+    AUDIO.play();
   } else {
     changeRightAnswerCount(false);
     nullBestSeries();
@@ -131,7 +132,9 @@ const makeAnswersArray = (
     const NEW_ARR = answers.slice();
     NEW_ARR.push(ANWSER_WORD);
     setAnswers(NEW_ARR);
-    AUDIO_WRONG.play();
+    AUDIO.src = "/assets/sound/wrong.mp3";
+    AUDIO.volume = 0.2;
+    AUDIO.play();
   }
 };
 

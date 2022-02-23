@@ -9,6 +9,7 @@ import {
 import { useState, useEffect } from "react";
 import { getUserAuthData } from "../../../store/data/selectors";
 import { SprintNums, NULL_STATISTIC } from "../../../const/const";
+import { AUDIO } from "../../../const/const-audio";
 import {
   changeScoreX,
   makeAnswersArray,
@@ -43,10 +44,10 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   const [finish, setFinish] = useState<boolean | undefined>(false);
   const [rightAnswerCount, setRightAnswerCount] = useState<number>(0);
 
-  let englishWord
-  let russianWord
+  let englishWord;
+  let russianWord;
 
-  if(randomWordsInGame.length > 0) {
+  if (randomWordsInGame.length > 0) {
     englishWord = randomWordsInGame[count].ENGLISH_WORD;
     russianWord = randomWordsInGame[count].RUSSIAN_WORD;
   } else {
@@ -55,18 +56,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   }
 
   const USER_DATA = useSelector(getUserAuthData);
-
-  const AUDIO_RIGHT = new Audio();
-  AUDIO_RIGHT.src = "/assets/sound/right.mp3";
-  AUDIO_RIGHT.volume = 0.2;
-
-  const AUDIO_WRONG = new Audio();
-  AUDIO_WRONG.src = "/assets/sound/wrong.mp3";
-  AUDIO_WRONG.volume = 0.2;
-
-  const AUDIO_END = new Audio();
-  AUDIO_END.src = "/assets/sound/end.mp3";
-  AUDIO_END.volume = 0.2;
 
   if (!user) {
     if (USER_DATA) {
@@ -90,7 +79,9 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       );
     }
     changeAnswersArray(answers);
-    AUDIO_END.play();
+    AUDIO.src = "/assets/sound/end.mp3";
+    AUDIO.volume = 0.2;
+    AUDIO.play();
     changePageState("congratulation");
   };
 
@@ -113,8 +104,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       setAnswers,
       makeBestSeries,
       nullBestSeries,
-      AUDIO_RIGHT,
-      AUDIO_WRONG,
+      AUDIO,
       count
     );
     changeCount();
@@ -133,7 +123,6 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       );
     }
   };
-
 
   if (state) {
     if (answers.length === randomWordsInGame.length) {
@@ -167,7 +156,9 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         setFinish(true);
         clearInterval(interval);
         changePageState("congratulation");
-        AUDIO_END.play();
+        AUDIO.src = "/assets/sound/end.mp3";
+        AUDIO.volume = 0.2;
+        AUDIO.play();
       }
       setSeconds(sec);
     }, 1000);
@@ -209,8 +200,8 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   };
 
   const nullBestSeries = () => {
-    let newArr = bestSeries.slice()
-    newArr.push(0)
+    let newArr = bestSeries.slice();
+    newArr.push(0);
     setBestSeries(newArr);
   };
 
@@ -246,7 +237,9 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       <div className='game-sprint-block'>
         <div className='game-sprint-block__top-lights'>
           <div className='game-sprint-block__timer'>
-            <span className='game-sprint-block__text game-sprint-block__text-time'>{seconds} сек</span>
+            <span className='game-sprint-block__text game-sprint-block__text-time'>
+              {seconds} сек
+            </span>
           </div>
           <div id='level-up' className='game-sprint-block__level-up'>
             <div className='game-sprint-block__cool-symbol'>
@@ -260,17 +253,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
             </div>
           </div>
           <div className='game-sprint-block__score'>
-            <span className='game-sprint-block__text game-sprint-block__text-score'>Очки: {score}</span>
+            <span className='game-sprint-block__text game-sprint-block__text-score'>
+              Очки: {score}
+            </span>
           </div>
         </div>
         <div className='game-sprint-block__quastion'>
-          <div className='game-sprint-block__english-word'>
-            {englishWord}
+          <div className='game-sprint-block__english-word'>{englishWord}</div>
+          <div className='game-sprint-block__score-x' id='score-x'>
+            +{scoreX}
           </div>
-          <div className='game-sprint-block__score-x' id="score-x">+{scoreX}</div>
-          <div className='game-sprint-block__russian-word'>
-            {russianWord}
-          </div>
+          <div className='game-sprint-block__russian-word'>{russianWord}</div>
         </div>
         <div className='game-sprint-block__buttons-block'>
           <button
@@ -291,10 +284,13 @@ const GameBlock: React.FC<IGameBlockProps> = ({
           </button>
         </div>
       </div>
-      <button className="game-sprint-block__button-close" onClick={() => {
-        changePageState("greeting")
-        changeState(undefined)
-        }}></button>
+      <button
+        className='game-sprint-block__button-close'
+        onClick={() => {
+          changePageState("greeting");
+          changeState(undefined);
+        }}
+      ></button>
     </div>
   );
 };
