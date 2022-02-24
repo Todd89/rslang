@@ -106,7 +106,7 @@ export const teamMembers = [
   {
     id: 3,
     name: "Роман Гольцман",
-    work: "Главная страница, Учебник, авторизация.",
+    work: "Главная страница, учебник, авторизация. Верстка статистики.",
     ghLink: "https://github.com/Romnasi",
     avatar: "assets/images/avatar-roman.jpg",
     role: "Front-end",

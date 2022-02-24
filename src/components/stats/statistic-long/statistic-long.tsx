@@ -45,12 +45,12 @@ const LongStatistic: React.FC = () => {
           labels: labels,
           datasets: [
             {
-              label: "New Words",
+              label: "Новые слова",
               data: newWords,
               backgroundColor: "rgba(54, 162, 235)",
             },
             {
-              label: "Learned Words",
+              label: "Изученные слова",
               data: learnedWords,
               backgroundColor: "rgba(255, 99, 132)",
             },
@@ -72,7 +72,7 @@ const LongStatistic: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="stats__graph-wrapper">
       <canvas id="myChart" width="400" height="200"></canvas>
     </div>
   );
