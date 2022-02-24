@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
-import { DOTS } from '../../../const/const';
-import { UsePagination } from '../../../interface/interface';
+import { useMemo } from "react";
+import { DOTS } from "../../../const/const";
+import { UsePagination } from "../../../interface/interface";
 
 const range = (start: number, end: number) => {
   let length = end - start + 1;
@@ -11,7 +11,7 @@ const usePagination = ({
   totalCount,
   pageSize,
   siblingCount,
-  currentPage
+  currentPage,
 }: UsePagination) => {
   return useMemo(() => {
     const totalPageCount = Math.ceil(totalCount / pageSize);

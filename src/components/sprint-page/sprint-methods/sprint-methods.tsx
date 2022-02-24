@@ -269,9 +269,9 @@ const workWithUserWord = async (
   const FIND = loadingUserWords.find(
     (el: IUserWord) => el.wordId === randomWordsInGame[count].ID
   );
-
+  
   const SUCCESS = randomWordsInGame[count].TYPE_OF_ANSWER === type;
-
+    console.log(newWordsInGame, "newWordsInGame")
   if (!FIND) {
     const NEW_WORD = createNewUserWord(
       { ...randomWordsInGame[count] },
@@ -379,7 +379,7 @@ const newStatistic = async (
       },
     },
   };
-  console.log(NEW_STATISTIC);
+  
   await httpClient.putUserStatistic(user as IUserData, NEW_STATISTIC);
 };
 

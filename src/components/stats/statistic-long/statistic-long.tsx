@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import httpClient from "../../../services/http-client";
 import { getUserAuthData } from "../../../store/data/selectors";
 import { useSelector } from "react-redux";
-import { IStatistic, IUserData } from '../../../interface/interface';
+import { IStatistic, IUserData } from "../../../interface/interface";
 import { NULL_STATISTIC } from "../../../const/const";
 
 const LongStatistic: React.FC = () => {
@@ -21,21 +21,20 @@ const LongStatistic: React.FC = () => {
     }
   }
 
- 
   useEffect(() => {
-    
-    const getStatistic = async () => {;
-      let statisitc:IStatistic = await httpClient.getUserStatistic(user as IUserData);
-      if(!statisitc) {
+    const getStatistic = async () => {
+      let statisitc: IStatistic = await httpClient.getUserStatistic(
+        user as IUserData
+      );
+      if (!statisitc) {
         await httpClient.putUserStatistic(user as IUserData, NULL_STATISTIC);
         statisitc = await httpClient.getUserStatistic(user as IUserData);
       }
-      
-      let { stat } = statisitc.optional.longTerm;
-      let labels:string[] = stat.map((el) => el.data);
-      let newWords:number[] = stat.map((el) => el.newWordsInData);
-      let learnedWords:number[] = stat.map((el) => el.newLearnedInData);
 
+      let { stat } = statisitc.optional.longTerm;
+      let labels: string[] = stat.map((el) => el.data);
+      let newWords: number[] = stat.map((el) => el.newWordsInData);
+      let learnedWords: number[] = stat.map((el) => el.newLearnedInData);
 
       let canvas = document.getElementById("myChart") as HTMLCanvasElement;
       let ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
@@ -46,15 +45,15 @@ const LongStatistic: React.FC = () => {
           labels: labels,
           datasets: [
             {
-              label: "New Words",
+              label: "Новые слова",
               data: newWords,
               backgroundColor: "rgba(54, 162, 235)",
             },
             {
-            label: "Learned Words",
-            data: learnedWords,
-            backgroundColor: "rgba(255, 99, 132)",
-          },
+              label: "Изученные слова",
+              data: learnedWords,
+              backgroundColor: "rgba(255, 99, 132)",
+            },
           ],
         },
         options: {
@@ -65,18 +64,16 @@ const LongStatistic: React.FC = () => {
           },
         },
       });
-    return () => {
-      myChart.destroy()
-    }
-
-    }
-    getStatistic()
-
+      return () => {
+        myChart.destroy();
+      };
+    };
+    getStatistic();
   }, []);
 
   return (
-    <div>
-      <canvas id='myChart' width='400' height='200'></canvas>
+    <div className="stats__graph-wrapper">
+      <canvas id="myChart" width="400" height="200"></canvas>
     </div>
   );
 };

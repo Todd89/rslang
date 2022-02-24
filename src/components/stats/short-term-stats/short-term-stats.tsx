@@ -79,53 +79,53 @@ function ShortTermStats() {
     <>
       {isStat && (
         <>
-          <h3>Статистика за сегодня</h3>
-          <div className="game__wrapper horizontal stat__wrapper">
-            <div className="stat__block stat-sprint">
-              <h4 className="stat__block-header">Спринт</h4>
-              <p>
+          <h3 className="stats__title">Статистика за сегодня</h3>
+          <div className="stats__info-wrapper">
+            <div className="stats__block">
+              <h4 className="stats__block-header">Спринт</h4>
+              <p className="stats__description">
                 Количество новых слов:
-                <span className="stat__line stat-new">{data[0].new}</span>
+                <span className="stats__line stat-new"> {data[0].new}</span>
               </p>
-              <p>
+              <p className="stats__description">
                 Правильных ответов:
-                <span className="stat__line stat-correct">{data[0].rate}%</span>
+                <span className="stats__line stats__line--proc stat-correct"> {data[0].rate}%</span>
               </p>
-              <p>
+              <p className="stats__description">
                 Cамая длинная серия:
-                <span className="stat__line stat-best">{data[0].best}</span>
+                <span className="stats__line stat-best"> {data[0].best}</span>
               </p>
             </div>
-            <div className="stat__block stat-audio">
-              <h4 className="stat__block-header">Аудиовызов</h4>
-              <p>
+            <div className="stats__block">
+              <h4 className="stats__block-header">Аудиовызов</h4>
+              <p className="stats__description">
                 Количество новых слов:
-                <span className="stat__line stat-new">{data[1].new}</span>
+                <span className="stats__line stat-new"> {data[1].new}</span>
               </p>
-              <p>
+              <p className="stats__description">
                 Правильных ответов:
-                <span className="stat__line stat-correct">{data[1].rate}%</span>
+                <span className="stats__line stats__line--proc stat-correct"> {data[1].rate}%</span>
               </p>
-              <p>
+              <p className="stats__description">
                 Cамая длинная серия:
-                <span className="stat__line stat-best">{data[1].best}</span>
+                <span className="stats__line stat-best"> {data[1].best}</span>
               </p>
             </div>
-            <div className="stat__block stat-day">
-              <h4 className="stat__block-header">Всего за день</h4>
-              <p>
+            <div className="stats__block">
+              <h4 className="stats__block-header">Всего за день</h4>
+              <p className="stats__description">
                 Количество новых слов:
-                <span className="stat__line stat-new">{dataDay.new}</span>
+                <span className="stats__line stat-new"> {dataDay.new}</span>
               </p>
-              <p>
+              <p className="stats__description">
                 Изученных слов:
-                <span className="stat__line stat-new">
+                <span className="stats__line stat-new">
                   {dataDay.learnedWords}
                 </span>
               </p>
-              <p>
+              <p className="stats__description">
                 Правильных ответов:
-                <span className="stat__line stat-correct">{dataDay.rate}%</span>
+                <span className="stats__line stats__line--proc stat-correct">{dataDay.rate}%</span>
               </p>
             </div>
           </div>

@@ -1,8 +1,13 @@
 import "./congratulation-navigation.css";
-import { ICongratulationNavi, LocationState, IUserData } from '../../../../interface/interface';
+import {
+  ICongratulationNavi,
+  LocationState,
+  IUserData,
+} from "../../../../interface/interface";
 import { useLocation } from "react-router";
 import { getUserAuthData } from "../../../../store/data/selectors";
 import { useSelector } from "react-redux";
+import { SprintPages } from "../../../../const/const"
 
 const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
   makeRandomWordsForWork,
@@ -10,9 +15,8 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
   changePageState,
   changeAnswersArray,
   getWordsForWorkFromTextBook,
-  changeState
+  changeState,
 }) => {
-
   const location = useLocation<LocationState>();
   let state = location.state as any;
 
@@ -24,31 +28,30 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
       token: USER_DATA.token,
     };
   }
-  
 
   return (
     <div>
       <button
-        className='sprint-navigation-block__button button-repeat'
-        onClick={async () =>  {
-          if(state) {
+        className="sprint-navigation-block__button button-repeat"
+        onClick={async () => {
+          if (state) {
             await getWordsForWorkFromTextBook(state.page, state.group, user);
-            changePageState("game");
+            changePageState(SprintPages.GAME_PAGE);
           } else {
             makeRandomWordsForWork(allWords);
-            changePageState("game");
+            changePageState(SprintPages.GAME_PAGE);
           }
 
-          changeAnswersArray([])
+          changeAnswersArray([]);
         }}
       >
         Повторить игру
       </button>
       <button
-        className='sprint-navigation-block__button button-change'
+        className="sprint-navigation-block__button button-change"
         onClick={() => {
-          changeState(undefined)
-          changePageState("greeting")
+          changeState(undefined);
+          changePageState(SprintPages.GREETING_PAGE);
         }}
       >
         Выбрать уровень

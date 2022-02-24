@@ -1,6 +1,6 @@
 import "./congratulation-item-block.css";
-import { Url } from '../../../../const/const';
-import { IRandomWordInGame } from '../../../../interface/interface';
+import { Url, ANSWER_TYPE } from "../../../../const/const";
+import { IRandomWordInGame } from "../../../../interface/interface";
 
 const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
   AUDIO,
@@ -9,18 +9,17 @@ const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
   TRANSCRIPTION,
   TYPE_OF_ANSWER,
 }) => {
-
   const audio = new Audio();
   audio.volume = 0.2;
 
-  let type 
-  if(TYPE_OF_ANSWER) {
-    type = "Верно"
+  let type;
+  if (TYPE_OF_ANSWER) {
+    type = ANSWER_TYPE.RIGHT;
   } else {
-    type = "Не верно"
+    type = ANSWER_TYPE.WRONG;
   }
 
-  function playAudio(AUDIO:string) {
+  function playAudio(AUDIO: string) {
     const path = `${Url.DOMEN}/${AUDIO}`;
     audio.src = path;
     audio.load();
@@ -30,13 +29,22 @@ const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
   }
   return (
     <>
-      <div className='congratulation-item__audio congratulation-text' onClick={() => playAudio(AUDIO)}>
-        <img src='/assets/images/audio.png' alt='звук' />
+      <div
+        className="congratulation-item__audio congratulation-text"
+        onClick={() => playAudio(AUDIO)}
+      >
+        <img src="/assets/images/audio.png" alt="звук" />
       </div>
-      <span className='congratulation-item__english-word congratulation-text'>{ENGLISH_WORD}</span>
-      <span className='congratulation-item__translation congratulation-text'>{TRANSCRIPTION}</span>
-      <span className='congratulation-item__russian-word congratulation-text'>{REAL_TRANSLATE}</span>
-      <span className='congratulation-item__type congratulation-text'>{`${type}`}</span>
+      <span className="congratulation-item__english-word congratulation-text">
+        {ENGLISH_WORD}
+      </span>
+      <span className="congratulation-item__translation congratulation-text">
+        {TRANSCRIPTION}
+      </span>
+      <span className="congratulation-item__russian-word congratulation-text">
+        {REAL_TRANSLATE}
+      </span>
+      <span className="congratulation-item__type congratulation-text">{`${type}`}</span>
     </>
   );
 };
