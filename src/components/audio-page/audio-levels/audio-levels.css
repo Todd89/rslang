@@ -117,3 +117,9 @@
     align-self: center;
   }
 }
+
+@media (max-width: 500px) {
+  .game__levels-image {
+    display: none;
+  }
+}

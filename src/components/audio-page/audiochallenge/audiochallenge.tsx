@@ -93,10 +93,12 @@ export function Audiochallenge(props: IProps) {
       };
     }
 
-    if (userAuthorized &&
+    if (
+      userAuthorized &&
       userAuthData &&
       userAuthData.userId &&
-      userAuthData.token) {
+      userAuthData.token
+    ) {
       AUDIO_STAT.forEach((item) => {
         item.learned = false;
         item.new = false;
@@ -131,18 +133,22 @@ export function Audiochallenge(props: IProps) {
 
     if (answer === correctAnswer) {
       setRightAnswer(true);
-      if (userAuthorized &&
+      if (
+        userAuthorized &&
         userAuthData &&
         userAuthData.userId &&
-        userAuthData.token) {
+        userAuthData.token
+      ) {
         setCurrentSeries((currentSeries) => currentSeries + 1);
       }
     } else {
       setLives(lives - 1);
-      if (userAuthorized &&
+      if (
+        userAuthorized &&
         userAuthData &&
         userAuthData.userId &&
-        userAuthData.token) {
+        userAuthData.token
+      ) {
         AUDIO_BEST_SERIES[0] = Math.max(AUDIO_BEST_SERIES[0], currentSeries);
         setCurrentSeries(0);
       }
@@ -172,10 +178,12 @@ export function Audiochallenge(props: IProps) {
         };
       });
       setGameResult(arrResult);
-      if (userAuthorized &&
+      if (
+        userAuthorized &&
         userAuthData &&
         userAuthData.userId &&
-        userAuthData.token) {
+        userAuthData.token
+      ) {
         AUDIO_BEST_SERIES[0] = Math.max(AUDIO_BEST_SERIES[0], currentSeries);
         const gameStatistic = {
           gameLearnedWords: AUDIO_STAT.reduce((sum, item) => {
@@ -209,10 +217,15 @@ export function Audiochallenge(props: IProps) {
   };
 
   useEffect(() => {
-    if (answerReceived && userAuthorized &&
+    if (
+      answerReceived &&
+      userAuthorized &&
       userAuthData &&
       userAuthData.userId &&
-      userAuthData.token && !showResult && !isTimerOn) {
+      userAuthData.token &&
+      !showResult &&
+      !isTimerOn
+    ) {
       createUpdateUserWord(
         paramQuestion.questionWord,
         rightAnswer,
@@ -224,16 +237,24 @@ export function Audiochallenge(props: IProps) {
   useEffect(() => {
     const checkAnswer = (event: KeyboardEvent) => {
       if (event.key === "1") {
-        return afterAnswer(paramQuestion.answers[0], questionWord);
+        if (!answerReceived) {
+          return afterAnswer(paramQuestion.answers[0], questionWord);
+        }
       }
       if (event.key === "2") {
-        return afterAnswer(paramQuestion.answers[1], questionWord);
+        if (!answerReceived) {
+          return afterAnswer(paramQuestion.answers[1], questionWord);
+        }
       }
       if (event.key === "3") {
-        return afterAnswer(paramQuestion.answers[2], questionWord);
+        if (!answerReceived) {
+          return afterAnswer(paramQuestion.answers[2], questionWord);
+        }
       }
       if (event.key === "4") {
-        return afterAnswer(paramQuestion.answers[3], questionWord);
+        if (!answerReceived) {
+          return afterAnswer(paramQuestion.answers[3], questionWord);
+        }
       }
       if (event.key === "ArrowRight") {
         if (answerReceived) {
