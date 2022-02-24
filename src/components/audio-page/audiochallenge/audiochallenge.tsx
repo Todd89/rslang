@@ -237,16 +237,24 @@ export function Audiochallenge(props: IProps) {
   useEffect(() => {
     const checkAnswer = (event: KeyboardEvent) => {
       if (event.key === "1") {
-        return afterAnswer(paramQuestion.answers[0], questionWord);
+        if (!answerReceived) {
+          return afterAnswer(paramQuestion.answers[0], questionWord);
+        }
       }
       if (event.key === "2") {
-        return afterAnswer(paramQuestion.answers[1], questionWord);
+        if (!answerReceived) {
+          return afterAnswer(paramQuestion.answers[1], questionWord);
+        }
       }
       if (event.key === "3") {
-        return afterAnswer(paramQuestion.answers[2], questionWord);
+        if (!answerReceived) {
+          return afterAnswer(paramQuestion.answers[2], questionWord);
+        }
       }
       if (event.key === "4") {
-        return afterAnswer(paramQuestion.answers[3], questionWord);
+        if (!answerReceived) {
+          return afterAnswer(paramQuestion.answers[3], questionWord);
+        }
       }
       if (event.key === "ArrowRight") {
         if (answerReceived) {

@@ -104,25 +104,45 @@ export function createUpdateUserWord(
     userWord.difficulty = "false";
     userWord.optional.group = word.group;
     userWord.optional.page = word.page;
+    userWord.optional.successCounter = 0;
+    userWord.optional.failCounter = 0;
     AUDIO_STAT[indStat].new = true;
   }
   userWord.optional.failCounter = Number(!isRightAnswer);
   const learnedBefore = userWord.optional.learned;
   if (userWord.difficulty === "true") {
-    userWord.optional.successCounter = isRightAnswer
+    if (isRightAnswer) {
+      if (userWord.optional.successCounter + 1 >= RIGHT_ANSWERS_DIFFICULT) {
+        userWord.optional.successCounter = RIGHT_ANSWERS_DIFFICULT;
+      } else {
+        userWord.optional.successCounter = userWord.optional.successCounter + 1;
+      }
+    } else {
+      userWord.optional.successCounter = 0;
+    }
+    /*  userWord.optional.successCounter = isRightAnswer
       ? userWord.optional.successCounter === RIGHT_ANSWERS_DIFFICULT
         ? RIGHT_ANSWERS_DIFFICULT
         : (userWord.optional.successCounter += 1)
-      : 0;
+      : 0;*/
     userWord.optional.learned =
       isRightAnswer &&
       userWord.optional.successCounter === RIGHT_ANSWERS_DIFFICULT;
   } else {
-    userWord.optional.successCounter = isRightAnswer
+    if (isRightAnswer) {
+      if (userWord.optional.successCounter + 1 >= RIGHT_ANSWERS_NOT_DIFFICULT) {
+        userWord.optional.successCounter = RIGHT_ANSWERS_NOT_DIFFICULT;
+      } else {
+        userWord.optional.successCounter = userWord.optional.successCounter + 1;
+      }
+    } else {
+      userWord.optional.successCounter = 0;
+    }
+    /*   userWord.optional.successCounter = isRightAnswer
       ? userWord.optional.successCounter === RIGHT_ANSWERS_NOT_DIFFICULT
         ? RIGHT_ANSWERS_NOT_DIFFICULT
         : (userWord.optional.successCounter += 1)
-      : 0;
+      : 0;*/
     userWord.optional.learned =
       isRightAnswer &&
       userWord.optional.successCounter === RIGHT_ANSWERS_NOT_DIFFICULT;
@@ -267,7 +287,7 @@ export async function createArrayOfQuestions(
 
   while (
     wordsForQuestions.length < questionAmount &&
-    counter < WORDS_PER_PAGE
+    counter < WORDS_PER_PAGE * 5
   ) {
     const question = getRandomWord();
 
@@ -291,6 +311,26 @@ export async function createArrayOfQuestions(
     }
     counter += 1;
   }
+
+  arrAvailableWords.forEach((item) => {
+    if (
+      !wordsForQuestions.includes(item) &&
+      !userLearnedWordsArrayToCheck.includes(item.id)
+    )
+      wordsForQuestions.push(item);
+    if (
+      userAuthorized &&
+      userAuthData &&
+      userAuthData.userId &&
+      userAuthData.token
+    ) {
+      AUDIO_STAT.push({
+        id: item.id,
+        learned: false,
+        new: false,
+      });
+    }
+  });
 
   if (wordsForQuestions.length < AUDIO_MAX_QUESTION_AMOUNT) {
     await getWords(group, page - 1, false);
