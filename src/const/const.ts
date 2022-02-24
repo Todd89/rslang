@@ -46,6 +46,12 @@ export const enum SprintColors {
   SIX = "#c808f9",
 }
 
+export const enum TextbookData {
+  COMPLEX_GROUP_INDEX = 6,
+  PAGINATION_START_INDEX = 1,
+  PAGE_START_INDEX = 0,
+}
+
 export const NULL_STATISTIC: IStatistic = {
   learnedWords: 0,
   optional: {
@@ -100,7 +106,7 @@ export const teamMembers = [
   {
     id: 3,
     name: "Роман Гольцман",
-    work: "Главная страница, Учебник, авторизация.",
+    work: "Главная страница, учебник, авторизация. Верстка статистики.",
     ghLink: "https://github.com/Romnasi",
     avatar: "assets/images/avatar-roman.jpg",
     role: "Front-end",

@@ -1,6 +1,6 @@
 import Header from "../header/header";
 import { Link } from "react-router-dom";
-import { AppRoute, PaginationData, textbookSections } from "../../const/const";
+import { AppRoute, PaginationData, textbookSections, Url, TextbookData } from "../../const/const";
 import WordCard from "./word-card/word-card";
 import Footer from "../footer/footer";
 import Pagination from "./pagination/pagination";
@@ -10,11 +10,8 @@ import LoadingScreen from "../loading-screen/loading-screen";
 import { WordData, IUserWord } from "../../interface/interface";
 import { useDispatch, useSelector } from "react-redux";
 import { addTextbookState } from "../../store/action";
-import { getTextbookState, getUserAuthData } from "../../store/data/selectors";
-import { Url } from "../../const/const";
+import { getTextbookState, getUserAuthData, getAuthorizeStatus } from "../../store/data/selectors";
 
-const COMPLEX_GROUP_INDEX = 6;
-const PAGE_START_INDEX = 0;
 const PAGINATION_START_INDEX = 1;
 
 const checkWord = (
@@ -75,10 +72,11 @@ const TextBook: React.FC = () => {
 
   const dispatch = useDispatch();
   const { group, page } = useSelector(getTextbookState);
+  const authStatus = useSelector(getAuthorizeStatus);
 
   useEffect(() => {
     const getWords = async () => {
-      const pageIndex = page ? String(page - 1) : String(PAGE_START_INDEX);
+      const pageIndex = page ? String(page - 1) : String(TextbookData.PAGE_START_INDEX);
       const groupIndex = String(group);
 
       const data = await httpClient.getChunkOfWords(pageIndex, groupIndex);
@@ -102,7 +100,7 @@ const TextBook: React.FC = () => {
       }
     };
 
-    if (group === COMPLEX_GROUP_INDEX) {
+    if (group === TextbookData.COMPLEX_GROUP_INDEX) {
       getDifficultWords();
     } else {
       getWords();
@@ -110,7 +108,7 @@ const TextBook: React.FC = () => {
   }, [group, page, userAuthData]);
 
   const getDifficultWordsE = async () => {
-    if (group === COMPLEX_GROUP_INDEX) {
+    if (group === TextbookData.COMPLEX_GROUP_INDEX) {
       if (userAuthData && userAuthData.userId && userAuthData.token) {
         const { userId, token } = userAuthData;
         const data = await httpClient.getDifficultWords({ userId, token });
@@ -143,7 +141,7 @@ const TextBook: React.FC = () => {
     <>
       <Header />
 
-      <main className={userAuthData ? "textbook is-auth" : "textbook"}>
+      <main className={authStatus ? "textbook is-auth" : "textbook"}>
         <div className="textbook__wrapper container">
           <h1 className="textbook__title visually-hidden">Учебник</h1>
 
@@ -239,7 +237,7 @@ const TextBook: React.FC = () => {
             </section>
           )}
 
-          {group !== COMPLEX_GROUP_INDEX &&
+          {group !== TextbookData.COMPLEX_GROUP_INDEX &&
             words &&
             (!userAuthData || userWords) && (
               <Pagination
