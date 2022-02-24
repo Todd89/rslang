@@ -26,6 +26,7 @@ export const enum Url {
 }
 
 export const enum SprintNums {
+  ONE_LENGTH = 0,
   PAGE_COUNT = 30,
   MINUTE = 60,
   MAX_SUCCESS_HARD_MODE = 5,
@@ -35,6 +36,18 @@ export const enum SprintNums {
   MULTIPLIER_DOTE_TWENTYFIVE = 1.5,
   PLUS_TO_SCORE = 10,
   MAX_ANSWERS_LENGTH = 80,
+  NOT_DIFFICULT_NUM = 6,
+  NEW_WORDS_FIRST_PAGE = 19,
+  NEW_WORDS_SECOND_PAGE = 39,
+  NEW_WORDS_THIRD_PAGE = 59,
+  LEFT_ARROW = 37,
+  RIGHT_ARROW = 39,
+  ID_ONE_HUNDRED = 100
+}
+
+export const ANSWER_TYPE = {
+  RIGHT: "Верно",
+  WRONG: "Не верно",
 }
 
 export const enum SprintColors {
@@ -44,6 +57,14 @@ export const enum SprintColors {
   FOUR = "#ffba01",
   FIVE = "#3cb10e",
   SIX = "#c808f9",
+}
+
+export const enum SprintPages {
+  GAME_PAGE = "game",
+  CONGRATULATION_PAGE = "congratulation",
+  GREETING_PAGE = "greeting",
+  EMPTY_PAGE = "empty",
+  REAL_PAGE = "real"
 }
 
 export const enum TextbookData {

@@ -1,6 +1,7 @@
 import "./sprint-congratulation-block.css";
 import CongratulationItemBlock from "./congratulation-item-block/congratulation-item-block";
 import CongratulationNavigation from "./congratulation-navigation/congratulation-navigation";
+import { SprintNums } from '../../../const/const'
 import {
   IRandomWordInGame,
   ICongratulationBlock,
@@ -14,8 +15,9 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
   changeAnswersArray,
   getWordsForWorkFromTextBook,
   changeState,
+  score
 }) => {
-  let id = 100;
+  let id = SprintNums.ID_ONE_HUNDRED;
 
   const ELEMEMENTS = answersArray.map((el: IRandomWordInGame) => {
     const { ...items } = el;
@@ -41,6 +43,7 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
           changeState={changeState}
         />
         <div className="congratulation-list-block">
+          <div className="congratulation-list-block__score-text">Очки: {score}</div>
           <div className="congratulation-list-block__description">
             <span className="congratulation-list-block__audio describe-block">
               Звук
@@ -55,7 +58,7 @@ const CongratulationBlock: React.FC<ICongratulationBlock> = ({
               Перевод
             </span>
             <span className="congratulation-list-block__type describe-block">
-              Верно
+              Верно?
             </span>
           </div>
           <ul className="congratulation-list-block__list">{ELEMEMENTS}</ul>
