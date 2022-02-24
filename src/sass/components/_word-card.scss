@@ -39,6 +39,13 @@
   }
 }
 
+.word-card--complex {
+  box-shadow: 
+      0 0 0px 2px #b621fe,
+      12px -8px 28px 0px rgb(58 50 157 / 10%),
+      0 10px 10px rgb(0 0 0 / 10%);
+}
+
 .word-card__image-wrapper {
   display: flex;
   margin-bottom: 10px;
@@ -298,11 +305,12 @@
 .word-card__check-btn {
   display: flex;
   align-items: center;
+  
 
   min-height: 40px;
 
   padding-top: 4px;
-  padding-bottom: 4px;
+  padding-bottom: 8px;
   padding-left: 6%;
   padding-right: 12px;
 
