@@ -1,5 +1,5 @@
 import { Url } from "../../../const/const";
-import { WordCardComponent } from "../../../interface/interface";
+import { WordCardComponent, IUserData, IStatistic } from "../../../interface/interface";
 import {
   changeDifficulty,
   changeLearned,
@@ -14,6 +14,23 @@ import {
 } from "../../../store/data/selectors";
 import { useEffect, useState } from "react";
 import WordContent from "./word-content/word-content";
+import httpClient from "../../../services/http-client";
+
+const updateStat = async (userAuth: IUserData, learnedStatus: boolean ) => {
+  const { learnedWords: curLearned, optional } = await httpClient.getUserStatistic(userAuth);
+  let updatedLearnedCount = curLearned;
+  if (learnedStatus) {
+    updatedLearnedCount--;
+  } else {
+    updatedLearnedCount++;
+  }
+  const statData: IStatistic = { learnedWords: updatedLearnedCount, optional }
+  const res = await httpClient.putUserStatistic(
+    userAuth, 
+    statData
+  )
+  console.log(res);
+}
 
 const WordCard: React.FC<WordCardComponent> = ({
   id,
@@ -66,7 +83,7 @@ const WordCard: React.FC<WordCardComponent> = ({
   }, [isDifficulty, hasWord, userAuthData, id]);
 
   return (
-    <article className="word-card">
+    <article className={isDifficulty ? "word-card word-card--complex" : "word-card"}>
       <div className="word-card__image-wrapper">
         <img
           src={`${Url.DOMEN}/${image}`}
@@ -143,7 +160,9 @@ const WordCard: React.FC<WordCardComponent> = ({
           <button
             onClick={async () => {
               if (userAuthData && userAuthData.userId && userAuthData.token) {
+                const learnedStatus = isLearned;
                 const { userId, token } = userAuthData;
+                
                 if (hasWord) {
                   await changeLearned(id, { userId, token }, !isLearned);
                   if (!isLearned && isDifficulty) {
@@ -165,6 +184,10 @@ const WordCard: React.FC<WordCardComponent> = ({
                   setIsLearned((prev) => !prev);
                 }
                 getDifficultWordsE();
+
+                // update statistics
+                
+                updateStat({ userId, token }, learnedStatus);
               }
             }}
             className={
