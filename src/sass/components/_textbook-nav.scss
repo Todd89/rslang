@@ -65,6 +65,7 @@
 }
 
 .textbook-nav__label {
+  position: relative;
   display: block;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -85,6 +86,71 @@
   transition: 0.3s all;
 
   cursor: pointer;
+  overflow: hidden;
+
+  &::after {
+    position: absolute;
+    top: 10px;
+    right: -20px;
+    content: "";
+    text-align: center;
+    vertical-align: bottom;
+    width: 100px;
+    height: 95px;
+    border-radius: 50%;
+    color: white;
+    transition: 0.5s all;
+  }
+
+  .textbook-nav__control:checked+&::after {
+    top: 5px;
+    font-size: 29px;  
+    width: 130px;
+    height: 95px;
+  }
+
+  .textbook-nav__item:nth-child(1) &::after {
+    background-color: #ACE1AF;
+    content: "A1";
+  }
+
+  .textbook-nav__item:nth-child(2) &::after {
+    background-color: #DADD98;
+    content: "A2";
+  }
+
+  .textbook-nav__item:nth-child(3) &::after {
+    background-color: #8FBC8B;
+    content: "B1";
+  }
+
+  .textbook-nav__item:nth-child(4) &::after {
+    background-color: #8cc751;
+    content: "B2";
+  }
+
+  .textbook-nav__item:nth-child(5) &::after {
+    background-color: #17B169;
+    content: "C1";
+  }
+  
+  .textbook-nav__item:nth-child(6) &::after {
+    background-color: #66CDAA;
+    content: "C2";
+  }
+
+  .textbook-nav__item:nth-child(7) .textbook-nav__control:checked+&::after {
+    top: 5px;
+    font-size: 29px;
+    width: 180px;
+    height: 95px;
+  }
+  
+  .textbook-nav__item:nth-child(7) &::after {
+    background-color: #008B8B;
+    content: "Словарь";
+    width: 140px;
+  }
 }
 
 .textbook-nav__label--complex {
