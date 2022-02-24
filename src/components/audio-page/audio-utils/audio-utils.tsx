@@ -120,11 +120,7 @@ export function createUpdateUserWord(
     } else {
       userWord.optional.successCounter = 0;
     }
-    /*  userWord.optional.successCounter = isRightAnswer
-      ? userWord.optional.successCounter === RIGHT_ANSWERS_DIFFICULT
-        ? RIGHT_ANSWERS_DIFFICULT
-        : (userWord.optional.successCounter += 1)
-      : 0;*/
+
     userWord.optional.learned =
       isRightAnswer &&
       userWord.optional.successCounter === RIGHT_ANSWERS_DIFFICULT;
@@ -138,11 +134,7 @@ export function createUpdateUserWord(
     } else {
       userWord.optional.successCounter = 0;
     }
-    /*   userWord.optional.successCounter = isRightAnswer
-      ? userWord.optional.successCounter === RIGHT_ANSWERS_NOT_DIFFICULT
-        ? RIGHT_ANSWERS_NOT_DIFFICULT
-        : (userWord.optional.successCounter += 1)
-      : 0;*/
+
     userWord.optional.learned =
       isRightAnswer &&
       userWord.optional.successCounter === RIGHT_ANSWERS_NOT_DIFFICULT;
@@ -315,7 +307,8 @@ export async function createArrayOfQuestions(
   arrAvailableWords.forEach((item) => {
     if (
       !wordsForQuestions.includes(item) &&
-      !userLearnedWordsArrayToCheck.includes(item.id)
+      !userLearnedWordsArrayToCheck.includes(item.id) &&
+      wordsForQuestions.length < questionAmount
     )
       wordsForQuestions.push(item);
     if (
