@@ -1,5 +1,5 @@
 import "./congratulation-item-block.css";
-import { Url } from "../../../../const/const";
+import { Url, ANSWER_TYPE } from "../../../../const/const";
 import { IRandomWordInGame } from "../../../../interface/interface";
 
 const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
@@ -14,9 +14,9 @@ const CongratulationItemBlock: React.FC<IRandomWordInGame> = ({
 
   let type;
   if (TYPE_OF_ANSWER) {
-    type = "Верно";
+    type = ANSWER_TYPE.RIGHT;
   } else {
-    type = "Не верно";
+    type = ANSWER_TYPE.WRONG;
   }
 
   function playAudio(AUDIO: string) {

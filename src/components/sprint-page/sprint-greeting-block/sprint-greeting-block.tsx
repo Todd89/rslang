@@ -4,8 +4,8 @@ import {
   IUserData,
   TextbookState,
 } from "../../../interface/interface";
-import { BUTTONS_NUMS, SPRINT_RULE, SprintColors } from "../../../const/const";
-import { getWordsFromGroup, shuffle } from "../sprint-methods/sprint-methods";
+import { BUTTONS_NUMS, SPRINT_RULE, SprintColors, SprintPages } from "../../../const/const";
+import { getWordsFromGroup } from "../sprint-methods/sprint-methods";
 import httpClient from "../../../services/http-client";
 import { useSelector } from "react-redux";
 import { getUserAuthData } from "../../../store/data/selectors";
@@ -31,7 +31,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
   }
 
   setTimeout(() => {
-    setPage("real");
+    setPage(SprintPages.REAL_PAGE);
   }, 1000);
 
   useEffect(() => {
@@ -39,8 +39,6 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
       if (state) {
         const locationState = state as TextbookState;
         const { group, page } = locationState;
-        console.log("group", group);
-        console.log("page", page);
         const WORDS = await getWordsForWorkFromTextBook(
           page as number,
           group as number,
@@ -54,7 +52,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
 
         changeAllWord(WORDS);
         setFirstWord(WORDS.flat());
-        changePageState("game");
+        changePageState(SprintPages.GAME_PAGE);
       }
     };
     makeGame();
@@ -105,7 +103,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
           const WORDS_FOR_WORK = await makeRandomWordsForWork(WORDS);
 
           setFirstWord(WORDS_FOR_WORK);
-          changePageState("game");
+          changePageState(SprintPages.GAME_PAGE);
         }}
       >
         {ID}
@@ -113,7 +111,7 @@ const SprintrGreetingBlock: React.FC<IGreetingBlockProps> = ({
     );
   });
 
-  if (page === "real") {
+  if (page === SprintPages.REAL_PAGE) {
     return (
       <div className="greeting-sprint-block">
         <div className="girl-image">

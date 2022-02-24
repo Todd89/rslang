@@ -3,6 +3,7 @@ import GameBlock from "../sprint-game-block/sprint-game-block";
 import SprintrGreetingBlock from "../sprint-greeting-block/sprint-greeting-block";
 import CongratulationBlock from "../sprint-congratulation/sprint-congratulation-block";
 import "./sprint-main-block.css";
+import { SprintNums, SprintPages } from '../../../const/const';
 
 import {
   IWordInArray,
@@ -36,6 +37,7 @@ const MainBlock: React.FC = () => {
     []
   );
   const [state, setState] = useState<TextbookState | undefined>();
+  const [score, setScore]  = useState<number>(0);
 
   const location = useLocation<LocationState>();
   const SourceState = location.state as any;
@@ -60,6 +62,10 @@ const MainBlock: React.FC = () => {
   const changeState = (state: TextbookState | undefined) => {
     setState(state);
   };
+
+  const changeMainScore = (num:number) => {
+    setScore(num);
+  }
 
   const makeRandomQuastions = (gameWords: Array<IWordInArray>) => {
     const RANDOM_QUASTIONS = gameWords.map((el) => {
@@ -122,7 +128,7 @@ const MainBlock: React.FC = () => {
       userWords = await httpClient.getAllUserWords(user as IUserData);
     }
 
-    if (group < 6) {
+    if (group < SprintNums.NOT_DIFFICULT_NUM) {
       for (let i = page - 1; i >= 0; i--) {
         const WORDS_CHUNK = httpClient.getChunkOfWords(
           i.toString(),
@@ -144,7 +150,7 @@ const MainBlock: React.FC = () => {
 
         PROMIS_ARR.push(newArr);
       }
-    } else if (group === 6) {
+    } else if (group === SprintNums.NOT_DIFFICULT_NUM) {
       const DIFFICULT_WORDS_OBJECT = await httpClient.getDifficultWords(
         user as IUserData
       );
@@ -165,7 +171,7 @@ const MainBlock: React.FC = () => {
     setwordsInGame(arr);
   };
 
-  if (pageState === "game") {
+  if (pageState === SprintPages.GAME_PAGE) {
     return (
       <main className="main-sprint-block">
         <div className="sprint-container container">
@@ -178,11 +184,12 @@ const MainBlock: React.FC = () => {
             changeLoadingUserWords={changeLoadingUserWords}
             changeState={changeState}
             state={state}
+            changeMainScore={changeMainScore}
           />
         </div>
       </main>
     );
-  } else if (pageState === "congratulation") {
+  } else if (pageState === SprintPages.CONGRATULATION_PAGE) {
     return (
       <main className="main-sprint-block">
         <div className="sprint-container container">
@@ -194,6 +201,7 @@ const MainBlock: React.FC = () => {
             changeAnswersArray={changeAnswersArray}
             getWordsForWorkFromTextBook={getWordsForWorkFromTextBook}
             changeState={changeState}
+            score={score}
           />
         </div>
       </main>

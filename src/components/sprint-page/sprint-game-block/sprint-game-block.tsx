@@ -8,7 +8,7 @@ import {
 } from "../../../interface/interface";
 import { useState, useEffect } from "react";
 import { getUserAuthData } from "../../../store/data/selectors";
-import { SprintNums, NULL_STATISTIC } from "../../../const/const";
+import { SprintNums, NULL_STATISTIC, SprintPages } from "../../../const/const";
 import { AUDIO } from "../../../const/const-audio";
 import {
   changeScoreX,
@@ -27,6 +27,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
   changeLoadingUserWords,
   changeState,
   state,
+  changeMainScore,
 }) => {
   const [answers, setAnswers] = useState<IRandomWordInGame[]>([]);
   const [seconds, setSeconds] = useState<number>(SprintNums.MINUTE);
@@ -51,8 +52,8 @@ const GameBlock: React.FC<IGameBlockProps> = ({
     englishWord = randomWordsInGame[count].ENGLISH_WORD;
     russianWord = randomWordsInGame[count].RUSSIAN_WORD;
   } else {
-    englishWord = "No words";
-    russianWord = "Нет слов";
+    englishWord = "";
+    russianWord = "";
   }
 
   const USER_DATA = useSelector(getUserAuthData);
@@ -79,10 +80,11 @@ const GameBlock: React.FC<IGameBlockProps> = ({
       );
     }
     changeAnswersArray(answers);
+    changeMainScore(score);
     AUDIO.src = "/assets/sound/end.mp3";
     AUDIO.volume = 0.2;
     AUDIO.play();
-    changePageState("congratulation");
+    changePageState(SprintPages.CONGRATULATION_PAGE);
   };
 
   const changeRightAnswersCount = (type: boolean) => {
@@ -211,9 +213,17 @@ const GameBlock: React.FC<IGameBlockProps> = ({
 
   useEffect(() => {
     const checkAnswer = async (e: KeyboardEvent) => {
+      if (
+        newWordsInGame === SprintNums.NEW_WORDS_FIRST_PAGE ||
+        newWordsInGame === SprintNums.NEW_WORDS_SECOND_PAGE ||
+        newWordsInGame === SprintNums.NEW_WORDS_THIRD_PAGE
+      ) {
+        setNewWordsInGame(newWordsInGame + 1);
+      }
       if (e.keyCode === 37) {
         e.stopPropagation();
         e.stopImmediatePropagation();
+
         await getAnswer(false);
       } else if (e.keyCode === 39) {
         e.stopPropagation();
@@ -231,43 +241,43 @@ const GameBlock: React.FC<IGameBlockProps> = ({
 
   return (
     <div>
-      <div className="girl-image">
-        <img src="/assets/images/rocket-girl.png" alt="девочка" />
+      <div className='girl-image'>
+        <img src='/assets/images/rocket-girl.png' alt='девочка' />
       </div>
-      <div className="game-sprint-block">
-        <div className="game-sprint-block__top-lights">
-          <div className="game-sprint-block__timer">
-            <span className="game-sprint-block__text game-sprint-block__text-time">
+      <div className='game-sprint-block'>
+        <div className='game-sprint-block__top-lights'>
+          <div className='game-sprint-block__timer'>
+            <span className='game-sprint-block__text game-sprint-block__text-time'>
               {seconds} сек
             </span>
           </div>
-          <div id="level-up" className="game-sprint-block__level-up">
-            <div className="game-sprint-block__cool-symbol">
-              <img src="/assets/images/cool.png" alt="класс" />
+          <div id='level-up' className='game-sprint-block__level-up'>
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
-            <div className="game-sprint-block__cool-symbol">
-              <img src="/assets/images/cool.png" alt="класс" />
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
-            <div className="game-sprint-block__cool-symbol">
-              <img src="/assets/images/cool.png" alt="класс" />
+            <div className='game-sprint-block__cool-symbol'>
+              <img src='/assets/images/cool.png' alt='класс' />
             </div>
           </div>
-          <div className="game-sprint-block__score">
-            <span className="game-sprint-block__text game-sprint-block__text-score">
+          <div className='game-sprint-block__score'>
+            <span className='game-sprint-block__text game-sprint-block__text-score'>
               Очки: {score}
             </span>
           </div>
         </div>
-        <div className="game-sprint-block__quastion">
-          <div className="game-sprint-block__english-word">{englishWord}</div>
-          <div className="game-sprint-block__score-x" id="score-x">
+        <div className='game-sprint-block__quastion'>
+          <div className='game-sprint-block__english-word'>{englishWord}</div>
+          <div className='game-sprint-block__score-x' id='score-x'>
             +{scoreX}
           </div>
-          <div className="game-sprint-block__russian-word">{russianWord}</div>
+          <div className='game-sprint-block__russian-word'>{russianWord}</div>
         </div>
-        <div className="game-sprint-block__buttons-block">
+        <div className='game-sprint-block__buttons-block'>
           <button
-            className="game-sprint-block__button game-sprint-block__button_wrong"
+            className='game-sprint-block__button game-sprint-block__button_wrong'
             onClick={async () => {
               getAnswer(false);
             }}
@@ -275,7 +285,7 @@ const GameBlock: React.FC<IGameBlockProps> = ({
             Неверно
           </button>
           <button
-            className="game-sprint-block__button game-sprint-block__button_right"
+            className='game-sprint-block__button game-sprint-block__button_right'
             onClick={async () => {
               getAnswer(true);
             }}
@@ -285,9 +295,9 @@ const GameBlock: React.FC<IGameBlockProps> = ({
         </div>
       </div>
       <button
-        className="game-sprint-block__button-close"
+        className='game-sprint-block__button-close'
         onClick={() => {
-          changePageState("greeting");
+          changePageState(SprintPages.GREETING_PAGE);
           changeState(undefined);
         }}
       ></button>

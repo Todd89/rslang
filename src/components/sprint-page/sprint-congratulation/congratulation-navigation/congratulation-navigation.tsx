@@ -7,6 +7,7 @@ import {
 import { useLocation } from "react-router";
 import { getUserAuthData } from "../../../../store/data/selectors";
 import { useSelector } from "react-redux";
+import { SprintPages } from "../../../../const/const"
 
 const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
   makeRandomWordsForWork,
@@ -35,10 +36,10 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
         onClick={async () => {
           if (state) {
             await getWordsForWorkFromTextBook(state.page, state.group, user);
-            changePageState("game");
+            changePageState(SprintPages.GAME_PAGE);
           } else {
             makeRandomWordsForWork(allWords);
-            changePageState("game");
+            changePageState(SprintPages.GAME_PAGE);
           }
 
           changeAnswersArray([]);
@@ -50,7 +51,7 @@ const CongratulationNavigation: React.FC<ICongratulationNavi> = ({
         className="sprint-navigation-block__button button-change"
         onClick={() => {
           changeState(undefined);
-          changePageState("greeting");
+          changePageState(SprintPages.GREETING_PAGE);
         }}
       >
         Выбрать уровень

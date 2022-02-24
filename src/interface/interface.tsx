@@ -108,6 +108,7 @@ export interface IGameBlockProps {
   changeLoadingUserWords: (arr: IUserWord[]) => void;
   changeState: (state: any) => void;
   state: TextbookState | undefined;
+  changeMainScore:(num:number) => void
 }
 export interface IGreetingBlockProps {
   changePageState: (name: string) => void;
@@ -140,6 +141,7 @@ export interface ICongratulationBlock {
     user: IUserData | undefined
   ) => Promise<IWordInArray[][]>;
   changeState: (state: any) => void;
+  score:number
 }
 
 export interface ICongratulationNavi {
