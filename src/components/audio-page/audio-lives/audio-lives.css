@@ -1,0 +1,53 @@
+:root {
+  --basic-white: #ffffff;
+  --basic-black: #000000;
+  --light-mint: #effcf5;
+  --mint-color: #e2faed;
+  --orange: #ffba43;
+  --green: #3cb77e;
+  --dark: #635f5f;
+  --violet: #b621fe;
+}
+
+.game__lives {
+  align-self: flex-start;
+  display: flex;
+  column-gap: 10px;
+}
+
+.game__life {
+  width: 40px;
+  height: 40px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.life-left {
+  background-image: url("/public/assets/icons/life.png");
+}
+
+.life-lost {
+  background-image: url("/public/assets/icons/life-lost.png");
+}
+
+@media (max-width: 1440px) {
+  .game__life {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .game__life {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .game__life {
+    width: 25px;
+    height: 25px;
+  }
+}

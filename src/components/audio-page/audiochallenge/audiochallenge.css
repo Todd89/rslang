@@ -1,0 +1,93 @@
+:root {
+  --basic-white: #ffffff;
+  --basic-black: #000000;
+  --light-mint: #effcf5;
+  --mint-color: #e2faed;
+  --orange: #ffba43;
+  --green: #3cb77e;
+  --dark: #635f5f;
+  --violet: #b621fe;
+}
+.game__section {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.game__wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.vertical {
+  flex-direction: column;
+  align-items: center;
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.game__finish-image {
+  height: 40vh;
+  width: 40vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/public/assets/images/sprint_girl.png");
+}
+
+.btn-repeate {
+  align-self: flex-start;
+  margin: 10px;
+}
+
+.game__left-img {
+  width: 350px;
+}
+
+.game__container {
+  display: flex;
+  flex-direction: column;
+  width: 60vw;
+  margin: 20px 0;
+  padding: 20px;
+  background-color: var(--basic-white);
+  border: 2px solid var(--violet);
+  border-radius: 20px;
+}
+
+@media (min-width: 1920px) {
+  .game__container {
+    width: 1000px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .game__left-img {
+    width: 300px;
+  }
+
+  #btn-repeate {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .game__left-img {
+    width: 200px;
+  }
+
+  #btn-repeate {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  #btn-repeate {
+    font-size: 16px;
+  }
+
+  .game__left-img {
+    width: 150px;
+  }
+}

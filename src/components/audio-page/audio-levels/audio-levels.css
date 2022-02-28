@@ -1,0 +1,125 @@
+.game__wrapper {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.vertical {
+  flex-direction: column;
+  align-items: center;
+}
+
+.horizontal {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.game__levels-image {
+  height: 70vh;
+  width: 35%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("/public/assets/images/girl-sitting-with-headphones.png");
+}
+
+.game__rules-section {
+  width: 55%;
+  border: 3px solid var(--violet);
+  border-radius: 10px;
+  background-color: var(--mint-color);
+}
+
+.game_rules-text {
+  padding: 20px;
+  margin-bottom: 0;
+  color: var(--dark);
+  border-bottom: 3px solid var(--violet);
+  font-size: 26px;
+}
+
+.game__leves {
+  display: flex;
+  padding: 30px;
+  column-gap: 10px;
+}
+
+.btn__level {
+  width: 40px;
+  height: 40px;
+}
+
+.game__section {
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.game__loading {
+  width: 60%;
+  height: 80px;
+  align-self: center;
+  background-image: url("/public/assets/icons/spinner.gif");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.wrapper-screen {
+  height: 70vh;
+  width: 100%;
+}
+
+@media (max-width: 1440px) {
+  .game__leves {
+    display: flex;
+    padding: 20px;
+  }
+
+  .game_rules-text {
+    padding: 10px;
+    font-size: 22px;
+  }
+  .btn__level {
+    width: 35px;
+    height: 35px;
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .game_rules-text {
+    padding: 10px;
+    font-size: 18px;
+  }
+  .btn__level {
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .game_rules-text {
+    padding: 10px;
+    font-size: 16px;
+  }
+  .btn__level {
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .game__section {
+    margin: 10px 0;
+    align-self: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .game__levels-image {
+    display: none;
+  }
+}

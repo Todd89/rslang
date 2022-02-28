@@ -1,0 +1,27 @@
+* {
+  font-size: .97em
+}
+
+.button-repeat {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.button-change {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.sprint-navigation-block__button{
+  padding: 12px;
+  background: #b621fe;
+  outline: none;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  transition: .3s;
+}
+
+.sprint-navigation-block__button:hover {
+  transform: scale(1.05);
+}

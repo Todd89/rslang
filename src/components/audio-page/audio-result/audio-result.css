@@ -1,0 +1,120 @@
+:root {
+  --basic-white: #ffffff;
+  --basic-black: #000000;
+  --light-mint: #effcf5;
+  --mint-color: #e2faed;
+  --orange: #ffba43;
+  --green: #3cb77e;
+  --dark: #635f5f;
+  --violet: #b621fe;
+}
+
+.result__section {
+  width: 50vw;
+  padding: 10px;
+  background-color: var(--basic-white);
+  border: 2px solid var(--violet);
+  border-radius: 20px;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  font-size: 20px;
+  color: var(--dark);
+}
+
+.result__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.result__icon {
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.result__audio {
+  margin: 15px;
+  background-color: transparent;
+  border: 1px solid var(--violet);
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("/public/assets/icons/sound-result.svg");
+}
+
+.result__word {
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--green);
+  margin-right: 10px;
+}
+
+.result__translation {
+  font-size: 25px;
+}
+
+.icon-correct {
+  background-image: url("/public/assets/icons/correct.png");
+}
+
+.icon-incorrect {
+  background-image: url("/public/assets/icons/incorrect.png");
+}
+
+.btn-audio {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.eventually {
+  animation: eventually-appear 2s ease-in-out;
+}
+
+@keyframes eventually-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1200px) {
+  .result {
+    font-size: 18px;
+  }
+
+  .result__word,
+  .result__translation {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .result {
+    font-size: 16px;
+  }
+
+  .result__word,
+  .result__translation {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .result__section {
+    width: 70vw;
+  }
+  .game__finish-image {
+    width: 0;
+  }
+}

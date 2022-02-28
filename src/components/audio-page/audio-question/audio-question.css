@@ -1,0 +1,102 @@
+:root {
+  --basic-white: #ffffff;
+  --basic-black: #000000;
+  --light-mint: #effcf5;
+  --mint-color: #e2faed;
+  --orange: #ffba43;
+  --green: #3cb77e;
+  --dark: #635f5f;
+  --violet: #b621fe;
+}
+
+.question__section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.appear {
+  animation: question-rotate 1s ease-in-out;
+}
+
+@keyframes question-rotate {
+  from {
+    transform: rotateY(180deg);
+  }
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+.answer-scale {
+  animation: question-scale 0.5s ease-in-out;
+}
+
+@keyframes question-scale {
+  from {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.question__image {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: 1px var(--basic-white) solid;
+  border-radius: 10px;
+}
+
+.animation {
+  animation: sound-resize 1.5s ease-in-out;
+}
+
+@keyframes sound-resize {
+  from {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+#btn__next {
+  align-self: center;
+  margin: 0 auto;
+}
+
+.question__unanswered {
+  background-image: url("/public/assets/icons/sound.svg");
+}
+
+.question__answered {
+  background-size: cover;
+  background-position: center center;
+}
+
+.questionText {
+  margin: 20px 0;
+  font-size: 30px;
+  color: var(--dark);
+  text-transform: capitalize;
+}
+
+.answers__section {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 50px 20px 0 20px;
+}
+
+@media (max-width: 768px) {
+  .answers__section {
+    flex-direction: column;
+  }
+}
