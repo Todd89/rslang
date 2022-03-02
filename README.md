@@ -1,7 +1,8 @@
-rslang
-Application for studing english words
+#rslang
 
-Used technoligies:
+##Application for studing english words
+
+###Used technoligies:
 
 HTML
 CSS
@@ -10,11 +11,13 @@ TypeScript
 React
 Redux
 Thunk
-Libraries:
+
+###Libraries:
 
 Cart js
 react toolkit
-Instruments:
+
+###Instruments:
 
 Prettier
 Eslint
